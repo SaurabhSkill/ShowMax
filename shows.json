@@ -1,0 +1,1226 @@
+{
+    "cinemas":,
+        "movies_showing":}
+            ]
+          },
+          {
+            "title": "Housefull 5",
+            "language": "Hindi",
+            "genre": null,
+            "certification": "UA16+",
+            "duration": null,
+            "release_date": null,
+            "showtimes":}
+            ]
+          },
+          {
+            "title": "Metro... In Dino",
+            "language": "Hindi",
+            "genre": null,
+            "certification": "UA16+",
+            "duration": null,
+            "release_date": null,
+            "showtimes":}
+            ]
+          },
+          {
+            "title": "Sitaare Zameen Par",
+            "language": "Hindi",
+            "genre": null,
+            "certification": "UA13+",
+            "duration": null,
+            "release_date": null,
+            "showtimes":},
+              {"time": "03:15 PM", "format": "2D", "screen": "GEMINI", "special_features":},
+              {"time": "06:30 PM", "format": "2D", "screen": "GEMINI", "special_features":},
+              {"time": "09:45 PM", "format": "2D", "screen": "GEMINI", "special_features":}
+            ]
+          },
+          {
+            "title": "Jurassic World: Rebirth",
+            "language": "Hindi",
+            "genre": null,
+            "certification": "UA13+",
+            "duration": null,
+            "release_date": null,
+            "showtimes":},
+              {"time": "03:45 PM", "format": "2D", "screen": "GAIETY", "special_features":},
+              {"time": "06:45 PM", "format": "2D", "screen": "GAIETY", "special_features":},
+              {"time": "09:45 PM", "format": "2D", "screen": "GAIETY", "special_features":}
+            ]
+          },
+          {
+            "title": "Maa",
+            "language": "Hindi",
+            "genre": null,
+            "certification": "UA16+",
+            "duration": null,
+            "release_date": null,
+            "showtimes":},
+              {"time": "04:00 PM", "format": "2D", "screen": "GOSSIP", "special_features":},
+              {"time": "06:45 PM", "format": "2D", "screen": "GOSSIP", "special_features":},
+              {"time": "10:00 PM", "format": "2D", "screen": "GOSSIP", "special_features":}
+            ]
+          },
+          {
+            "title": "Kannappa",
+            "language": "Hindi",
+            "genre": null,
+            "certification": "UA13+",
+            "duration": null,
+            "release_date": null,
+            "showtimes":}
+            ]
+          },
+          {
+            "title": "Jarann",
+            "language": "Marathi",
+            "genre": null,
+            "certification": "UA16+",
+            "duration": null,
+            "release_date": null,
+            "showtimes":},
+              {"time": "09:45 PM", "format": "2D", "screen": "GEM", "special_features":}
+            ]
+          },
+          {
+            "title": "Nafratein",
+            "language": "Hindi",
+            "genre": null,
+            "certification": "UA16+",
+            "duration": null,
+            "release_date": null,
+            "showtimes":}
+            ]
+          },
+          {
+            "title": "Akshardham: Operation Vajra Shakti",
+            "language": "Hindi",
+            "genre": null,
+            "certification": "UA16+",
+            "duration": null,
+            "release_date": null,
+            "showtimes":}
+            ]
+          }
+        ]
+      },
+      {
+        "cinema_id": "movietime_cubic_chembur",
+        "name": "Movie Time Cinemas Cubic Mall Chembur",
+        "address": "Old Basant Cinema, Wadavali Village, Vasant Vihar Complex Road, Vasant Vihar Complex, Chembur, Mumbai, Maharashtra 400074, India",
+        "latitude": null,
+        "longitude": null,
+        "contact_number": null,
+        "website": null,
+        "overall_rating": null,
+        "rating_source": null,
+        "total_ratings": null,
+        "operational_hours": null,
+        "key_features":,
+        "movies_showing":},
+              {"time": "11:45 AM", "format": "3D", "screen": null, "special_features":},
+              {"time": "01:45 PM", "format": "3D", "screen": null, "special_features": ["Atmos"]},
+              {"time": "08:00 PM", "format": "3D", "screen": null, "special_features":},
+              {"time": "10:15 PM", "format": "3D", "screen": null, "special_features": ["Atmos"]}
+            ]
+          },
+          {
+            "title": "Superman",
+            "language": "Hindi",
+            "genre": null,
+            "certification": "UA13+",
+            "duration": null,
+            "release_date": null,
+            "showtimes":},
+              {"time": "05:15 PM", "format": "3D", "screen": null, "special_features":},
+              {"time": "07:15 PM", "format": "3D", "screen": null, "special_features": ["Atmos"]},
+              {"time": "11:00 PM", "format": "3D", "screen": null, "special_features":}
+            ]
+          },
+          {
+            "title": "Superman",
+            "language": "English",
+            "genre": null,
+            "certification": "UA13+",
+            "duration": null,
+            "release_date": null,
+            "showtimes":}
+            ]
+          },
+          {
+            "title": "Jurassic World: Rebirth",
+            "language": "English",
+            "genre": null,
+            "certification": "UA13+",
+            "duration": null,
+            "release_date": null,
+            "showtimes":}
+            ]
+          },
+          {
+            "title": "Jurassic World: Rebirth",
+            "language": "Hindi",
+            "genre": null,
+            "certification": "UA13+",
+            "duration": null,
+            "release_date": null,
+            "showtimes":},
+              {"time": "04:30 PM", "format": "3D", "screen": null, "special_features":},
+              {"time": "08:00 PM", "format": "3D", "screen": null, "special_features":}
+            ]
+          },
+          {
+            "title": "Maalik",
+            "language": "Hindi",
+            "genre": null,
+            "certification": "A",
+            "duration": null,
+            "release_date": null,
+            "showtimes":},
+              {"time": "10:00 AM", "format": "2D", "screen": null, "special_features":},
+              {"time": "01:00 PM", "format": "2D", "screen": null, "special_features":},
+              {"time": "04:00 PM", "format": "2D", "screen": null, "special_features":},
+              {"time": "07:00 PM", "format": "2D", "screen": null, "special_features":},
+              {"time": "10:00 PM", "format": "2D", "screen": null, "special_features":}
+            ]
+          },
+          {
+            "title": "Metro... In Dino",
+            "language": "Hindi",
+            "genre": null,
+            "certification": "UA16+",
+            "duration": null,
+            "release_date": null,
+            "showtimes":},
+              {"time": "04:30 PM", "format": "2D", "screen": null, "special_features":},
+              {"time": "07:45 PM", "format": "2D", "screen": null, "special_features":},
+              {"time": "11:00 PM", "format": "2D", "screen": null, "special_features":}
+            ]
+          },
+          {
+            "title": "Aankhon Ki Gustaakhiyan",
+            "language": "Hindi",
+            "genre": null,
+            "certification": "UA16+",
+            "duration": null,
+            "release_date": null,
+            "showtimes":},
+              {"time": "08:10 PM", "format": "2D", "screen": null, "special_features":}
+            ]
+          },
+          {
+            "title": "Sitaare Zameen Par",
+            "language": "Hindi",
+            "genre": null,
+            "certification": "UA13+",
+            "duration": null,
+            "release_date": null,
+            "showtimes":},
+              {"time": "10:45 PM", "format": "2D", "screen": null, "special_features":}
+            ]
+          },
+          {
+            "title": "Maa",
+            "language": "Hindi",
+            "genre": null,
+            "certification": "UA16+",
+            "duration": null,
+            "release_date": null,
+            "showtimes":},
+              {"time": "05:25 PM", "format": "2D", "screen": null, "special_features":}
+            ]
+          },
+          {
+            "title": "Soothravakyam",
+            "language": "Malayalam",
+            "genre": null,
+            "certification": "UA",
+            "duration": null,
+            "release_date": null,
+            "showtimes":}
+            ]
+          },
+          {
+            "title": "F1: The Movie",
+            "language": "English",
+            "genre": null,
+            "certification": "UA16+",
+            "duration": null,
+            "release_date": null,
+            "showtimes":}
+            ]
+          }
+        ]
+      },
+      {
+        "cinema_id": "inox_cr2_nariman_point",
+        "name": "INOX Laserplex: CR2, Nariman Point",
+        "address": "CR 2 Mall, 2nd Floor, Barrister Rajni Patel Marg, Nariman Point, Opposite Bajaj Bhavan, Mumbai, Maharashtra 400021, India",
+        "latitude": null,
+        "longitude": null,
+        "contact_number": "+91 22 6622 9300",
+        "website": "http://www.peninsula.co.in/cr2.php",
+        "overall_rating": 4.0,
+        "rating_source": "Wanderlog",
+        "total_ratings": "8150",
+        "operational_hours": "11:00 AM–9:30 PM (Mall)",
+        "key_features":,
+        "movies_showing":},
+              {"time": "08:20 PM", "format": "3D", "screen": null, "special_features":},
+              {"time": "11:10 PM", "format": "3D", "screen": null, "special_features":}
+            ]
+          },
+          {
+            "title": "Movie Title 2",
+            "language": "Hindi",
+            "genre": null,
+            "certification": null,
+            "duration": null,
+            "release_date": null,
+            "showtimes":},
+              {"time": "12:30 PM", "format": "2D", "screen": null, "special_features":},
+              {"time": "01:30 PM", "format": "2D", "screen": null, "special_features": ["Atmos"]},
+              {"time": "03:30 PM", "format": "2D", "screen": null, "special_features":},
+              {"time": "04:30 PM", "format": "2D", "screen": null, "special_features": ["Atmos"]},
+              {"time": "06:30 PM", "format": "2D", "screen": null, "special_features":},
+              {"time": "07:30 PM", "format": "2D", "screen": null, "special_features": ["Atmos"]},
+              {"time": "08:30 PM", "format": "2D", "screen": null, "special_features":},
+              {"time": "09:30 PM", "format": "2D", "screen": null, "special_features":},
+              {"time": "10:30 PM", "format": "2D", "screen": null, "special_features": ["Atmos"]}
+            ]
+          },
+          {
+            "title": "Movie Title 3",
+            "language": "Hindi",
+            "genre": null,
+            "certification": null,
+            "duration": null,
+            "release_date": null,
+            "showtimes":},
+              {"time": "10:40 PM", "format": "2D", "screen": null, "special_features":}
+            ]
+          }
+        ]
+      },
+      {
+        "cinema_id": "pvr_dynamix_juhu",
+        "name": "PVR: Dynamix, Juhu",
+        "address": "5th Floor, Dynamix Mall, Near Chandan Cinema, J M Marg, Juhu, Mumbai, Maharashtra 400049, India",
+        "latitude": null,
+        "longitude": null,
+        "contact_number": null,
+        "website": null,
+        "overall_rating": 4.1,
+        "rating_source": "JustDial",
+        "total_ratings": "32.8k",
+        "operational_hours": null,
+        "key_features": ["Cutting-edge technology", "Exceptional service"],
+        "movies_showing":},
+              {"time": "01:25 PM", "format": "2D", "screen": null, "special_features":},
+              {"time": "04:35 PM", "format": "2D", "screen": null, "special_features":},
+              {"time": "07:45 PM", "format": "2D", "screen": null, "special_features":},
+              {"time": "10:55 PM", "format": "2D", "screen": null, "special_features":}
+            ]
+          },
+          {
+            "title": "Superman",
+            "language": "Hindi",
+            "genre": "Action, Adventure, Fantasy, Sci-Fi",
+            "certification": null,
+            "duration": "2 hrs 10 mins",
+            "release_date": null,
+            "showtimes":},
+              {"time": "10:20 AM", "format": "2D", "screen": null, "special_features":}
+            ]
+          },
+          {
+            "title": "F1",
+            "language": "English",
+            "genre": null,
+            "certification": null,
+            "duration": null,
+            "release_date": null,
+            "showtimes":
+          }
+        ]
+      },
+      {
+        "cinema_id": "pvr_infiniti_malad",
+        "name": "PVR: Infiniti, Malad Mumbai",
+        "address": "Survey No 504, Link Road, Malad (W), Near D-Mart, Mumbai, Maharashtra 400065, India",
+        "latitude": null,
+        "longitude": null,
+        "contact_number": null,
+        "website": null,
+        "overall_rating": 4.0,
+        "rating_source": "JustDial",
+        "total_ratings": "28.9k",
+        "operational_hours": "12:00 AM - 01:00 AM",
+        "key_features": ["Fast Food available", "Located inside stylish Infiniti Mall"],
+        "movies_showing":},
+              {"time": "02:45 PM", "format": "4DX", "screen": null, "special_features":},
+              {"time": "11:10 PM", "format": "4DX", "screen": null, "special_features":}
+            ]
+          },
+          {
+            "title": "Mahavatar Narsimha",
+            "language": "Hindi",
+            "genre": null,
+            "certification": "UA13+",
+            "duration": null,
+            "release_date": null,
+            "showtimes":},
+              {"time": "12:05 PM", "format": "3D", "screen": null, "special_features":},
+              {"time": "01:55 PM", "format": "3D", "screen": null, "special_features":},
+              {"time": "02:55 PM", "format": "3D", "screen": null, "special_features":},
+              {"time": "05:45 PM", "format": "3D", "screen": null, "special_features":},
+              {"time": "07:35 PM", "format": "3D", "screen": null, "special_features":},
+              {"time": "08:35 PM", "format": "3D", "screen": null, "special_features":},
+              {"time": "11:25 PM", "format": "3D", "screen": null, "special_features":},
+              {"time": "11:05 AM", "format": "2D", "screen": null, "special_features":},
+              {"time": "04:45 PM", "format": "2D", "screen": null, "special_features":},
+              {"time": "10:25 PM", "format": "2D", "screen": null, "special_features":}
+            ]
+          },
+          {
+            "title": "Weapons",
+            "language": "English",
+            "genre": null,
+            "certification": "A",
+            "duration": null,
+            "release_date": null,
+            "showtimes":},
+              {"time": "12:00 PM", "format": "4DX", "screen": null, "special_features":},
+              {"time": "08:25 PM", "format": "4DX", "screen": null, "special_features":}
+            ]
+          },
+          {
+            "title": "Saiyaara",
+            "language": "Hindi",
+            "genre": null,
+            "certification": "UA16+",
+            "duration": null,
+            "release_date": null,
+            "showtimes":},
+              {"time": "01:25 PM", "format": "2D", "screen": null, "special_features":},
+              {"time": "07:30 PM", "format": "2D", "screen": null, "special_features":},
+              {"time": "10:40 PM", "format": "2D", "screen": null, "special_features":}
+            ]
+          },
+          {
+            "title": "Son of Sardaar 2",
+            "language": "Hindi",
+            "genre": null,
+            "certification": "UA13+",
+            "duration": null,
+            "release_date": null,
+            "showtimes":},
+              {"time": "11:30 PM", "format": "2D", "screen": null, "special_features":}
+            ]
+          },
+          {
+            "title": "Freakier Friday",
+            "language": "English",
+            "genre": null,
+            "certification": "UA13+",
+            "duration": null,
+            "release_date": null,
+            "showtimes":}
+            ]
+          },
+          {
+            "title": "Su From So",
+            "language": "Kannada",
+            "genre": null,
+            "certification": "UA16+",
+            "duration": null,
+            "release_date": null,
+            "showtimes":}
+            ]
+          },
+          {
+            "title": "The Fantastic Four: First Steps",
+            "language": "English",
+            "genre": null,
+            "certification": null,
+            "duration": null,
+            "release_date": null,
+            "showtimes":}
+            ]
+          },
+          {
+            "title": "Together",
+            "language": "English",
+            "genre": null,
+            "certification": "A",
+            "duration": null,
+            "release_date": null,
+            "showtimes":}
+            ]
+          }
+        ]
+      },
+      {
+        "cinema_id": "regal_cinema_colaba",
+        "name": "Regal Cinema: Colaba",
+        "address": "Old Custom House Road, Apollo Bunder, Opposite Prince of Wales Museum, Colaba, Mumbai, Maharashtra 400005, India",
+        "latitude": null,
+        "longitude": null,
+        "contact_number": null,
+        "website": null,
+        "overall_rating": 3.9,
+        "rating_source": "Wanderlog (Subway Regal Cinema Colaba)",
+        "total_ratings": "845",
+        "operational_hours": null,
+        "key_features":,
+        "movies_showing":
+          },
+          {
+            "title": "Mumbai Local",
+            "language": "Marathi",
+            "genre": null,
+            "certification": null,
+            "duration": null,
+            "release_date": null,
+            "showtimes":
+          }
+        ]
+      },
+      {
+        "cinema_id": "maratha_mandir_mumbai_central",
+        "name": "Maratha Mandir Cinema",
+        "address": "22, Maratha Mandir Marg, Agripada, Opp. Nayar Dental Hospital, Near Mumbai Central ST Depot, Mumbai, Maharashtra 400008, India",
+        "latitude": 18.971183,
+        "longitude": 72.822134,
+        "contact_number": null,
+        "website": null,
+        "overall_rating": 3.9,
+        "rating_source": "JustDial",
+        "total_ratings": "13.1k",
+        "operational_hours": "9:00 am - 9:00 pm (estimated)",
+        "key_features":,
+        "movies_showing":
+          },
+          {
+            "title": "Bhool Chuk Maaf",
+            "language": null,
+            "genre": null,
+            "certification": null,
+            "duration": null,
+            "release_date": null,
+            "showtimes":
+          },
+          {
+            "title": "HIT: The Third Case",
+            "language": null,
+            "genre": null,
+            "certification": null,
+            "duration": null,
+            "release_date": null,
+            "showtimes":
+          },
+          {
+            "title": "Tourist Family",
+            "language": null,
+            "genre": null,
+            "certification": null,
+            "duration": null,
+            "release_date": null,
+            "showtimes":
+          },
+          {
+            "title": "Retro",
+            "language": null,
+            "genre": null,
+            "certification": null,
+            "duration": null,
+            "release_date": null,
+            "showtimes":
+          },
+          {
+            "title": "Thunderbolts*",
+            "language": null,
+            "genre": null,
+            "certification": null,
+            "duration": null,
+            "release_date": null,
+            "showtimes":
+          },
+          {
+            "title": "Kesari Chapter 2: The Untold Story of Jallianwala Bagh",
+            "language": null,
+            "genre": null,
+            "certification": null,
+            "duration": null,
+            "release_date": null,
+            "showtimes":
+          },
+          {
+            "title": "Thudarum",
+            "language": null,
+            "genre": null,
+            "certification": null,
+            "duration": null,
+            "release_date": null,
+            "showtimes":
+          },
+          {
+            "title": "Gulkand",
+            "language": null,
+            "genre": null,
+            "certification": null,
+            "duration": null,
+            "release_date": null,
+            "showtimes":
+          },
+          {
+            "title": "The Bhootnii",
+            "language": null,
+            "genre": null,
+            "certification": null,
+            "duration": null,
+            "release_date": null,
+            "showtimes":
+          },
+          {
+            "title": "Dilwale Dulhania Le Jayenge",
+            "language": null,
+            "genre": null,
+            "certification": null,
+            "duration": null,
+            "release_date": "20 October 1995",
+            "showtimes":
+          }
+        ]
+      },
+      {
+        "cinema_id": "pvr_icon_oberoi_goregaon_e",
+        "name": "PVR ICON: Oberoi Mall, Goregaon (E)",
+        "address": "3rd Floor, Oberoi Mall, Off Western Express Highway, Goregaon(E), Near Indian Oil Petrol Pump, Mumbai, Maharashtra 400063, India",
+        "latitude": 19.155,
+        "longitude": 72.85,
+        "contact_number": null,
+        "website": null,
+        "overall_rating": 4.2,
+        "rating_source": "JustDial",
+        "total_ratings": "38.5k",
+        "operational_hours": null,
+        "key_features":,
+        "movies_showing":}
+            ]
+          },
+          {
+            "title": "F1 The Movie",
+            "language": "English",
+            "genre": "Sport, Action, Drama",
+            "certification": "UA16+",
+            "duration": null,
+            "release_date": null,
+            "showtimes":}
+            ]
+          },
+          {
+            "title": "Dhadak 2",
+            "language": "Hindi",
+            "genre": null,
+            "certification": "UA16+",
+            "duration": null,
+            "release_date": null,
+            "showtimes":}
+            ]
+          },
+          {
+            "title": "Son Of Sardaar 2",
+            "language": "Hindi",
+            "genre": "Action",
+            "certification": "UA13+",
+            "duration": null,
+            "release_date": null,
+            "showtimes":}
+            ]
+          },
+          {
+            "title": "Saiyaara",
+            "language": "Hindi",
+            "genre": null,
+            "certification": null,
+            "duration": null,
+            "release_date": null,
+            "showtimes":},
+              {"time": "04:50 PM", "format": "2D", "screen": null, "special_features":},
+              {"time": "10:30 PM", "format": "2D", "screen": null, "special_features":}
+            ]
+          }
+        ]
+      },
+      {
+        "cinema_id": "eros_cinema_churchgate",
+        "name": "Eros Cinema Churchgate",
+        "address": "42, Cambata Building, Opposite Churchgate Station, Maharishi Karve Road, Churchgate-400020, Mumbai, Maharashtra 400020, India",
+        "latitude": null,
+        "longitude": null,
+        "contact_number": null,
+        "website": null,
+        "overall_rating": 3.8,
+        "rating_source": "JustDial",
+        "total_ratings": "9.5k",
+        "operational_hours": null,
+        "key_features":,
+        "movies_showing": [
+          {
+            "title": "F1",
+            "language": null,
+            "genre": null,
+            "certification": null,
+            "duration": null,
+            "release_date": null,
+            "showtimes":
+          }
+        ]
+      },
+      {
+        "cinema_id": "maxus_cinemas_saki_naka",
+        "name": "Maxus Cinemas: Saki Naka",
+        "address": "90 Feet Road, Sakinaka Andheri(East), Opposite Jarimari Bus Stop, Mumbai, Maharashtra 400072, India",
+        "latitude": null,
+        "longitude": null,
+        "contact_number": null,
+        "website": "www.maxuscinemas.com",
+        "overall_rating": 3.8,
+        "rating_source": "JustDial",
+        "total_ratings": "20.3k",
+        "operational_hours": "9:00 am - 11:00 pm",
+        "key_features":,
+        "movies_showing":
+      },
+      {
+        "cinema_id": "mukta_a2_jai_hind_lalbaugh",
+        "name": "Mukta A2 Cinemas: Jai Hind, Lalbaugh",
+        "address": "Lal Baug, Dr.B.R.Ambedkar Road, Near Voltas Building, Mumbai, Maharashtra 400033, India",
+        "latitude": null,
+        "longitude": null,
+        "contact_number": "+(91)-9773557111",
+        "website": null,
+        "overall_rating": 4.1,
+        "rating_source": "JustDial",
+        "total_ratings": "9k",
+        "operational_hours": "9:00 am - 9:00 pm",
+        "key_features":,
+        "movies_showing":
+      },
+      {
+        "cinema_id": "cinepolis_fun_republic_andheri_w",
+        "name": "Cinepolis: Fun Republic Mall, Andheri (W)",
+        "address": "Plot No.844/4,Level 4, Shah Industrial Estate, Veera Desai Road, Andheri(West), Near ICICI Bank ATM, Mumbai, Maharashtra 400053, India",
+        "latitude": null,
+        "longitude": null,
+        "contact_number": "+91 9513244317",
+        "website": "https://www.funrepublic.in/",
+        "overall_rating": 4.1,
+        "rating_source": "JustDial",
+        "total_ratings": "31.5k",
+        "operational_hours": "9:30 AM to 1:30 AM (Mall)",
+        "key_features":,
+        "movies_showing":},
+              {"time": "06:00 PM", "format": "2D", "screen": null, "special_features":}
+            ]
+          }
+        ]
+      },
+      {
+        "cinema_id": "inox_megaplex_inorbit_malad",
+        "name": "INOX: Megaplex, Inorbit Mall, Malad",
+        "address": "Inorbit Mall, Goregaon Malad Link Road, Near Shoppers Stop, Malad West, Mumbai, Maharashtra 400064, India",
+        "latitude": null,
+        "longitude": null,
+        "contact_number": null,
+        "website": null,
+        "overall_rating": 4.1,
+        "rating_source": "JustDial",
+        "total_ratings": "38.4k",
+        "operational_hours": "12:00 AM - 01:00 AM",
+        "key_features":,
+        "movies_showing":},
+              {"time": "12:00 PM", "format": "IMAX 2D", "screen": "IMAX", "special_features":},
+              {"time": "03:30 PM", "format": "IMAX 2D", "screen": "IMAX", "special_features":},
+              {"time": "07:00 PM", "format": "IMAX 2D", "screen": "IMAX", "special_features":},
+              {"time": "10:30 PM", "format": "IMAX 2D", "screen": "IMAX", "special_features":},
+              {"time": "09:00 AM", "format": "2D", "screen": null, "special_features":},
+              {"time": "12:30 PM", "format": "2D", "screen": null, "special_features":},
+              {"time": "04:00 PM", "format": "2D", "screen": null, "special_features":},
+              {"time": "07:30 PM", "format": "2D", "screen": null, "special_features":},
+              {"time": "09:00 PM", "format": "2D", "screen": null, "special_features":},
+              {"time": "11:00 PM", "format": "2D", "screen": null, "special_features":},
+              {"time": "11:00 AM", "format": "2D SCREEN X", "screen": "SCREEN X", "special_features":},
+              {"time": "02:30 PM", "format": "2D SCREEN X", "screen": "SCREEN X", "special_features":},
+              {"time": "06:00 PM", "format": "2D SCREEN X", "screen": "SCREEN X", "special_features":},
+              {"time": "09:30 PM", "format": "2D SCREEN X", "screen": "SCREEN X", "special_features":},
+              {"time": "10:00 PM", "format": "MX4D", "screen": null, "special_features":}
+            ]
+          },
+          {
+            "title": "Mission: Impossible - The Final Reckoning",
+            "language": "Hindi",
+            "genre": null,
+            "certification": "UA13+",
+            "duration": null,
+            "release_date": null,
+            "showtimes":},
+              {"time": "04:00 PM", "format": "MX4D", "screen": null, "special_features":}
+            ]
+          },
+          {
+            "title": "Paddington in Peru",
+            "language": "English",
+            "genre": null,
+            "certification": "U",
+            "duration": null,
+            "release_date": null,
+            "showtimes":}
+            ]
+          },
+          {
+            "title": "Devil's Double Next Level",
+            "language": "Tamil",
+            "genre": null,
+            "certification": "UA13+",
+            "duration": null,
+            "release_date": null,
+            "showtimes":}
+            ]
+          },
+          {
+            "title": "#Single",
+            "language": "Telugu",
+            "genre": null,
+            "certification": "UA16+",
+            "duration": null,
+            "release_date": null,
+            "showtimes":}
+            ]
+          },
+          {
+            "title": "Final Destination Bloodlines",
+            "language": "English",
+            "genre": null,
+            "certification": "A",
+            "duration": null,
+            "release_date": null,
+            "showtimes":},
+              {"time": "07:30 PM", "format": "MX4D", "screen": null, "special_features":},
+              {"time": "12:30 PM", "format": "2D", "screen": null, "special_features": ["Atmos"]},
+              {"time": "03:00 PM", "format": "2D", "screen": null, "special_features": ["Atmos"]},
+              {"time": "04:00 PM", "format": "2D", "screen": null, "special_features":},
+              {"time": "06:30 PM", "format": "2D", "screen": null, "special_features":},
+              {"time": "08:05 PM", "format": "2D", "screen": null, "special_features": ["Atmos"]},
+              {"time": "10:35 PM", "format": "2D", "screen": null, "special_features": ["Atmos"]},
+              {"time": "11:45 PM", "format": "2D", "screen": null, "special_features":}
+            ]
+          },
+          {
+            "title": "Shinchan: Our Dinosaur Diary",
+            "language": "Hindi",
+            "genre": null,
+            "certification": "U",
+            "duration": null,
+            "release_date": null,
+            "showtimes":},
+              {"time": "12:55 PM", "format": "2D", "screen": null, "special_features":},
+              {"time": "05:15 PM", "format": "2D", "screen": null, "special_features":},
+              {"time": "07:35 PM", "format": "2D", "screen": null, "special_features":}
+            ]
+          },
+          {
+            "title": "Tourist Family",
+            "language": "Tamil",
+            "genre": null,
+            "certification": "U",
+            "duration": null,
+            "release_date": null,
+            "showtimes":}
+            ]
+          },
+          {
+            "title": "A Minecraft Movie",
+            "language": "English",
+            "genre": null,
+            "certification": "UA 7+",
+            "duration": null,
+            "release_date": null,
+            "showtimes":}
+            ]
+          },
+          {
+            "title": "Phule",
+            "language": "Hindi",
+            "genre": null,
+            "certification": "U",
+            "duration": null,
+            "release_date": null,
+            "showtimes":}
+            ]
+          },
+          {
+            "title": "Dog Man",
+            "language": "English",
+            "genre": null,
+            "certification": "U",
+            "duration": null,
+            "release_date": null,
+            "showtimes":}
+            ]
+          },
+          {
+            "title": "Raid 2",
+            "language": "Hindi",
+            "genre": null,
+            "certification": "UA13+",
+            "duration": null,
+            "release_date": null,
+            "showtimes":},
+              {"time": "03:30 PM", "format": "2D", "screen": null, "special_features":},
+              {"time": "06:30 PM", "format": "2D", "screen": null, "special_features":},
+              {"time": "09:30 PM", "format": "2D", "screen": null, "special_features":},
+              {"time": "10:30 PM", "format": "2D", "screen": null, "special_features":}
+            ]
+          },
+          {
+            "title": "Piku",
+            "language": "Hindi",
+            "genre": null,
+            "certification": "UA",
+            "duration": null,
+            "release_date": null,
+            "showtimes":},
+              {"time": "04:50 PM", "format": "2D", "screen": null, "special_features":}
+            ]
+          },
+          {
+            "title": "Ata Thambaycha Naay",
+            "language": "Marathi",
+            "genre": null,
+            "certification": "UA 7+",
+            "duration": null,
+            "release_date": null,
+            "showtimes":}
+            ]
+          },
+          {
+            "title": "Kesari Chapter 2: The Untold Story of Jallianwala Bagh",
+            "language": "Hindi",
+            "genre": null,
+            "certification": "A",
+            "duration": null,
+            "release_date": null,
+            "showtimes":},
+              {"time": "05:00 PM", "format": "2D", "screen": null, "special_features":},
+              {"time": "10:55 PM", "format": "2D", "screen": null, "special_features":}
+            ]
+          },
+          {
+            "title": "The Bhootnii",
+            "language": "Hindi",
+            "genre": null,
+            "certification": "UA16+",
+            "duration": null,
+            "release_date": null,
+            "showtimes":}
+            ]
+          },
+          {
+            "title": "Flow",
+            "language": "English",
+            "genre": null,
+            "certification": "U",
+            "duration": null,
+            "release_date": null,
+            "showtimes":}
+            ]
+          },
+          {
+            "title": "The Eken: Benaras e Bibhishika",
+            "language": "Bengali",
+            "genre": null,
+            "certification": "UA 7+",
+            "duration": null,
+            "release_date": null,
+            "showtimes":}
+            ]
+          },
+          {
+            "title": "Jai Mata Ji - Lets Rock",
+            "language": "Gujarati",
+            "genre": null,
+            "certification": "UA 7+",
+            "duration": null,
+            "release_date": null,
+            "showtimes":}
+            ]
+          },
+          {
+            "title": "IPL T20 2025 Live Screening-(MI VS DC)",
+            "language": "English",
+            "genre": null,
+            "certification": "U",
+            "duration": null,
+            "release_date": null,
+            "showtimes":}
+            ]
+          },
+          {
+            "title": "Sinners",
+            "language": "English",
+            "genre": null,
+            "certification": "A",
+            "duration": null,
+            "release_date": null,
+            "showtimes":}
+            ]
+          },
+          {
+            "title": "Hum Tum",
+            "language": "Hindi",
+            "genre": null,
+            "certification": "UA",
+            "duration": null,
+            "release_date": null,
+            "showtimes":}
+            ]
+          },
+          {
+            "title": "Gulkand",
+            "language": "Marathi",
+            "genre": null,
+            "certification": "UA13+",
+            "duration": null,
+            "release_date": null,
+            "showtimes":}
+            ]
+          }
+        ]
+      },
+      {
+        "cinema_id": "pvr_icon_luxe_infiniti_andheri_w",
+        "name": "PVR Cinemas Icon Luxe (Infiniti Mall) Andheri West",
+        "address": "Infiniti Mall, Near Lotus Petrol Pump, Versova & Phase D, New Link Road, Andheri West-400053, Mumbai, Maharashtra 400053, India",
+        "latitude": null,
+        "longitude": null,
+        "contact_number": null,
+        "website": null,
+        "overall_rating": 4.4,
+        "rating_source": "JustDial",
+        "total_ratings": "45",
+        "operational_hours": null,
+        "key_features": ["Luxurious ambiance", "IMAX screen", "Comfortable seating", "Cutting-edge technology"],
+        "movies_showing":},
+              {"time": "04:30 PM", "format": "2D", "screen": null, "special_features":},
+              {"time": "04:55 PM", "format": "2D", "screen": null, "special_features": ["LUXE"]},
+              {"time": "07:45 PM", "format": "2D", "screen": null, "special_features":}
+            ]
+          },
+          {
+            "title": "Superman",
+            "language": "English",
+            "genre": null,
+            "certification": "UA13+",
+            "duration": null,
+            "release_date": null,
+            "showtimes":},
+              {"time": "03:55 PM", "format": "3D", "screen": null, "special_features":},
+              {"time": "11:20 PM", "format": "3D", "screen": null, "special_features": ["LUXE"]}
+            ]
+          },
+          {
+            "title": "Sitaare Zameen Par",
+            "language": "Hindi",
+            "genre": null,
+            "certification": "UA13+",
+            "duration": null,
+            "release_date": null,
+            "showtimes":},
+              {"time": "10:55 PM", "format": "2D", "screen": null, "special_features":}
+            ]
+          },
+          {
+            "title": "Metro... In Dino",
+            "language": "Hindi",
+            "genre": null,
+            "certification": "UA16+",
+            "duration": null,
+            "release_date": null,
+            "showtimes":},
+              {"time": "05:00 PM", "format": "2D", "screen": null, "special_features": ["LUXE"]},
+              {"time": "07:30 PM", "format": "2D", "screen": null, "special_features":},
+              {"time": "11:25 PM", "format": "2D", "screen": null, "special_features": ["LUXE"]}
+            ]
+          },
+          {
+            "title": "Maalik",
+            "language": "Hindi",
+            "genre": null,
+            "certification": "A",
+            "duration": null,
+            "release_date": null,
+            "showtimes":},
+              {"time": "09:40 PM", "format": "2D", "screen": null, "special_features":}
+            ]
+          },
+          {
+            "title": "Jurassic World: Rebirth",
+            "language": "English",
+            "genre": null,
+            "certification": "UA13+",
+            "duration": null,
+            "release_date": null,
+            "showtimes":},
+              {"time": "11:00 PM", "format": "3D", "screen": null, "special_features":}
+            ]
+          },
+          {
+            "title": "Aankhon Ki Gustaakhiyan",
+            "language": "Hindi",
+            "genre": null,
+            "certification": "UA16+",
+            "duration": null,
+            "release_date": null,
+            "showtimes":}
+            ]
+          }
+        ]
+      },
+      {
+        "cinema_id": "pvr_high_street_phoenix_lower_parel",
+        "name": "PVR Cinemas (High Street Phoenix) Lower Parel",
+        "address": "High Street Phoenix, Above Big Bazaar, Near Raghuvanshi Mills, Senapati Bapat Marg, Lower Parel-400013, Mumbai, Maharashtra 400013, India",
+        "latitude": null,
+        "longitude": null,
+        "contact_number": null,
+        "website": null,
+        "overall_rating": 4.1,
+        "rating_source": "JustDial",
+        "total_ratings": "27.8k",
+        "operational_hours": null,
+        "key_features": ["IMAX screen", "Comfortable seating", "Gourmet popcorn", "International standards"],
+        "movies_showing":},
+              {"time": "03:50 PM", "format": "2D", "screen": null, "special_features": ["Atmos"]},
+              {"time": "07:00 PM", "format": "2D", "screen": null, "special_features": ["Atmos"]},
+              {"time": "10:10 PM", "format": "2D", "screen": null, "special_features": ["Atmos"]}
+            ]
+          }
+        ]
+      },
+      {
+        "cinema_id": "metro_inox_marine_lines",
+        "name": "Metro INOX Cinemas: Marine Lines",
+        "address": "M.G.Road, Dhobitalao Junction, Mumbai, Maharashtra 400020, India",
+        "latitude": null,
+        "longitude": null,
+        "contact_number": null,
+        "website": null,
+        "overall_rating": 4.2,
+        "rating_source": "JustDial",
+        "total_ratings": "39.8k",
+        "operational_hours": null,
+        "key_features": ["Multiple screens", "Good ambience", "Quality sound and screening"],
+        "movies_showing":},
+              {"time": "12:20 PM", "format": "2D", "screen": null, "special_features":},
+              {"time": "07:15 PM", "format": "2D", "screen": null, "special_features":},
+              {"time": "10:25 PM", "format": "2D", "screen": null, "special_features":}
+            ]
+          }
+        ]
+      },
+      {
+        "cinema_id": "inox_nakshatra_dadar_w",
+        "name": "INOX: Nakshatra Mall, Dadar (W)",
+        "address": "2nd Floor, Nakshatra Cine Shoppe, Ranade Road, Dadar West, Near Railway Station, Mumbai, Maharashtra 400028, India",
+        "latitude": null,
+        "longitude": null,
+        "contact_number": "022-40626900",
+        "website": null,
+        "overall_rating": 3.8,
+        "rating_source": "JustDial",
+        "total_ratings": "20.6k",
+        "operational_hours": null,
+        "key_features":,
+        "movies_showing":}
+            ]
+          },
+          {
+            "title": "Son of Sardaar 2",
+            "language": "Hindi",
+            "genre": null,
+            "certification": "UA13+",
+            "duration": null,
+            "release_date": null,
+            "showtimes":}
+            ]
+          }
+        ]
+      },
+      {
+        "cinema_id": "carnival_goregaon_west",
+        "name": "Carnival Cinemas Goregaon West",
+        "address": "Plot No 1, Oyo Town House, Off S V Road, Ram Mandir Road, Goregaon West-400062, Mumbai, India",
+        "latitude": 19.155,
+        "longitude": 72.85,
+        "contact_number": null,
+        "website": null,
+        "overall_rating": 3.7,
+        "rating_source": "JustDial",
+        "total_ratings": "28.3k",
+        "operational_hours": null,
+        "key_features":,
+        "movies_showing":
+      },
+      {
+        "cinema_id": "sterling_cineplex_fort",
+        "name": "Sterling Cineplex: Fort",
+        "address": "Opposite CST Station, Near New Empire Cinema, Azad Maidan, Murzaban Road No 65, Fort-400001, Mumbai, Maharashtra 400001, India",
+        "latitude": null,
+        "longitude": null,
+        "contact_number": null,
+        "website": null,
+        "overall_rating": 4.0,
+        "rating_source": "JustDial",
+        "total_ratings": "26.6k",
+        "operational_hours": null,
+        "key_features":,
+        "movies_showing":}
+            ]
+          }
+        ]
+      },
+      {
+        "cinema_id": "moviemax_andheri_east",
+        "name": "MovieMax Cinemas Andheri East",
+        "address": "Behind Guru Nanak Petrol Pump, Andheri Kurla Road, Gundavali-Andheri East-400093, Mumbai, India",
+        "latitude": null,
+        "longitude": null,
+        "contact_number": null,
+        "website": null,
+        "overall_rating": 3.8,
+        "rating_source": "JustDial",
+        "total_ratings": "13.7k",
+        "operational_hours": null,
+        "key_features":,
+        "movies_showing":
+      },
+      {
+        "cinema_id": "inox_neelyog_ghatkopar_east",
+        "name": "INOX Cinemas (Neelyog Square Mall) Ghatkopar East",
+        "address": "2nd & 3rd Floor, Neelyog Square Mall, Near Ghatkopar East Station Parking Lot, Opposite Railway Station, Patel Chowk, RB Mehta Road, Ghatkopar East-400077, Mumbai, India",
+        "latitude": null,
+        "longitude": null,
+        "contact_number": null,
+        "website": null,
+        "overall_rating": 3.9,
+        "rating_source": "JustDial",
+        "total_ratings": "21.6k",
+        "operational_hours": null,
+        "key_features":,
+        "movies_showing":
+      }
+    ]
+  }
