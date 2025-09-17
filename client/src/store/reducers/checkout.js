@@ -24,16 +24,35 @@ const initialState = {
 };
 
 const setSelectedSeats = (state, seats) => {
+  console.log('=== REDUX SET_SELECTED_SEATS DEBUG ===');
+  console.log('Current state.selectedSeats:', state.selectedSeats);
+  console.log('New seats payload:', seats, 'type:', typeof seats, 'isArray:', Array.isArray(seats));
+  
+  // Ensure selectedSeats is always an array
+  const currentSeats = Array.isArray(state.selectedSeats) ? state.selectedSeats : [];
+  
+  // If seats is an array of numbers (ticket count), replace the entire array
+  if (Array.isArray(seats) && seats.every(seat => typeof seat === 'number')) {
+    console.log('Replacing entire array with ticket count:', seats);
+    return {
+      ...state,
+      selectedSeats: seats
+    };
+  }
+  
+  // Otherwise, handle as toggle behavior for individual seat selection
   let newSeats = [];
-  const seatExist = state.selectedSeats.find(
+  const seatExist = currentSeats.find(
     seat => JSON.stringify(seat) === JSON.stringify(seats)
   );
   !seatExist
-    ? (newSeats = [...state.selectedSeats, seats])
-    : (newSeats = state.selectedSeats.filter(
+    ? (newSeats = [...currentSeats, seats])
+    : (newSeats = currentSeats.filter(
         seat => JSON.stringify(seat) !== JSON.stringify(seats)
       ));
 
+  console.log('Final newSeats:', newSeats);
+  console.log('=====================================');
   return {
     ...state,
     selectedSeats: newSeats
@@ -41,9 +60,9 @@ const setSelectedSeats = (state, seats) => {
 };
 
 const setSuggestedSeats = (state, seats) => {
-  let newSeats = [];
-
-  newSeats = [...state.suggestedSeat, seats];
+  // Ensure suggestedSeat is always an array
+  const currentSuggestedSeat = Array.isArray(state.suggestedSeat) ? state.suggestedSeat : [];
+  const newSeats = [...currentSuggestedSeat, seats];
 
   return {
     ...state,

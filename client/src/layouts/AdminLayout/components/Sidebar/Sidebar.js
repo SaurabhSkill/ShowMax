@@ -117,14 +117,14 @@ class Sidebar extends Component {
           <ListItem
             className={classes.listItem}
             component="a"
-            href="http://georgesimos.com"
+            href="https://github.com/SaurabhSkill"
             target="_blank">
             <ListItemIcon className={classes.listItemIcon}>
               <InfoIcon />
             </ListItemIcon>
             <ListItemText
               classes={{ primary: classes.listItemText }}
-              primary="Customer support"
+              primary="GitHub (@SaurabhSkill)"
             />
           </ListItem>
         </List>

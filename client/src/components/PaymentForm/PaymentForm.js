@@ -67,7 +67,8 @@ const PaymentForm = ({
   onPaymentSuccess, 
   onPaymentError, 
   reservationData,
-  disabled = false 
+  disabled = false,
+  onRequireLogin
 }) => {
   const classes = useStyles();
   const [loading, setLoading] = useState(false);
@@ -80,27 +81,49 @@ const PaymentForm = ({
     setProcessing(true);
 
     try {
+      // Basic client-side validations to avoid 400s
+      if (!amount || Number(amount) <= 0) {
+        throw new Error('Amount must be greater than 0. Please check seat type pricing.');
+      }
+      const required = ['movieId', 'cinemaId', 'ticketsCount', 'ticketPrice', 'total', 'date', 'startAt'];
+      const missing = required.filter(k => !reservationData || reservationData[k] === undefined || reservationData[k] === null || reservationData[k] === '');
+      if (missing.length) {
+        throw new Error(`Missing booking details: ${missing.join(', ')}`);
+      }
+
+      // Ensure we have an auth token; if not, ask user to login
+      const token = localStorage.getItem('jwtToken');
+      if (!token) {
+        throw new Error('Please login to continue');
+      }
+
       // Create order
+      const safeReservation = reservationData || {};
       const orderResponse = await fetch('/create-order', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
           amount: amount,
           currency: 'INR',
           metadata: {
-            movieId: reservationData.movieId,
-            cinemaId: reservationData.cinemaId,
-            seats: JSON.stringify(reservationData.seats)
+            movieId: safeReservation.movieId,
+            cinemaId: safeReservation.cinemaId,
+            ticketsCount: safeReservation.ticketsCount,
+            seats: JSON.stringify(safeReservation.seats || [])
           }
         })
       });
 
-      const orderData = await orderResponse.json();
-      if (!orderResponse.ok) {
-        throw new Error(orderData.error || 'Failed to create order');
+      const orderText = await orderResponse.text();
+      const orderData = orderText ? JSON.parse(orderText) : {};
+      if (orderResponse.status === 401) {
+        throw new Error('Session expired. Please login again.');
+      }
+      if (!orderResponse.ok || !orderData?.orderId) {
+        throw new Error((orderData && orderData.error) || 'Failed to create order');
       }
 
       // Simulate payment processing
@@ -108,23 +131,30 @@ const PaymentForm = ({
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
           orderId: orderData.orderId,
-          reservationData
+          reservationData: safeReservation
         })
       });
 
-      const result = await paymentResponse.json();
+      const resultText = await paymentResponse.text();
+      const result = resultText ? JSON.parse(resultText) : {};
       
+      if (paymentResponse.status === 401) {
+        throw new Error('Session expired. Please login again.');
+      }
       if (paymentResponse.ok) {
         onPaymentSuccess(result);
       } else {
         throw new Error(result.error || 'Payment failed');
       }
     } catch (err) {
-      setError(err.message);
+      setError(err?.message || 'Something went wrong while processing payment');
+      if (String(err?.message || '').toLowerCase().includes('login')) {
+        if (typeof onRequireLogin === 'function') onRequireLogin();
+      }
       onPaymentError(err);
     } finally {
       setLoading(false);
@@ -144,10 +174,10 @@ const PaymentForm = ({
             Booking Summary
           </Typography>
           <Typography variant="body2" color="textSecondary">
-            Movie: {reservationData.movieTitle || 'Movie Ticket'}
+            Movie: {(reservationData && reservationData.movieTitle) || 'Movie Ticket'}
           </Typography>
           <Typography variant="body2" color="textSecondary">
-            Seats: {reservationData.seats?.length || 0} tickets
+            Seats: {(reservationData && reservationData.ticketsCount) || (reservationData && reservationData.seats && reservationData.seats.length) || 0} tickets
           </Typography>
           <Divider style={{ margin: '8px 0' }} />
           <Typography className={classes.amountDisplay}>
@@ -172,7 +202,7 @@ const PaymentForm = ({
       <Button
         variant="contained"
         color="primary"
-        disabled={loading || disabled}
+        disabled={loading}
         onClick={simulatePayment}
         className={classes.payButton}
       >

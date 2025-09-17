@@ -8,7 +8,7 @@ import theme from './theme';
 import { Alert } from './components';
 import { pageCursors } from './utils';
 import Routes from './Routes';
-import './assets/scss/index.css';
+// Removed global stylesheet for designless baseline
 import 'typeface-montserrat';
 import { CssBaseline } from '@material-ui/core';
 
@@ -34,4 +34,7 @@ class App extends Component {
     );
   }
 }
+
+// Google Client ID loaded from environment
+
 export default App;

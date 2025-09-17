@@ -6,6 +6,32 @@ const sendEmail = require('../utils/mail');
 
 const router = new express.Router();
 
+// --- ADMIN: Get all users ---
+// Used by admin panel Users section
+router.get('/users', auth.simple, async (req, res) => {
+  try {
+    // Only allow admin or superadmin roles
+    if (!req.user || (req.user.role !== 'admin' && req.user.role !== 'superadmin')) {
+      return res.status(403).send({ message: 'Forbidden' });
+    }
+    // Return a safe projection for admin list view
+    const users = await User.find({}, {
+      name: 1,
+      username: 1,
+      email: 1,
+      phone: 1,
+      role: 1,
+      imageurl: 1,
+      isVerified: 1,
+      createdAt: 1,
+      updatedAt: 1
+    }).sort({ createdAt: -1 });
+    res.send(users);
+  } catch (e) {
+    res.status(500).send({ message: 'Failed to load users' });
+  }
+});
+
 // Register with email OTP verification
 router.post('/users/register', async (req, res) => {
   try {

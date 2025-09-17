@@ -53,6 +53,32 @@ export const uploadMovieImage = (id, image) => async dispatch => {
   }
 };
 
+// Upload banner and/or poster files together
+export const uploadMovieImages = (id, bannerFile, posterFile) => async dispatch => {
+  try {
+    const token = localStorage.getItem('jwtToken');
+    const data = new FormData();
+    if (bannerFile) data.append('banner', bannerFile, bannerFile.name);
+    if (posterFile) data.append('poster', posterFile, posterFile.name);
+    const url = '/movies/photos/' + id;
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}` },
+      body: data
+    });
+    const responseData = await response.json();
+    if (response.ok) {
+      dispatch(setAlert('Images Uploaded', 'success', 5000));
+      dispatch(getMovies());
+    }
+    if (responseData?.error) {
+      dispatch(setAlert(responseData.error.message, 'error', 5000));
+    }
+  } catch (error) {
+    dispatch(setAlert(error.message, 'error', 5000));
+  }
+};
+
 export const getMovies = () => async dispatch => {
   try {
     const url = '/movies';
@@ -106,7 +132,7 @@ export const getMovieSuggestion = id => async dispatch => {
   }
 };
 
-export const addMovie = (image, newMovie) => async dispatch => {
+export const addMovie = (image, newMovie, bannerFile, posterFile) => async dispatch => {
   try {
     const token = localStorage.getItem('jwtToken');
     const url = '/movies';
@@ -122,14 +148,18 @@ export const addMovie = (image, newMovie) => async dispatch => {
     if (response.ok) {
       dispatch(setAlert('Movie have been saved!', 'success', 5000));
       if (image) dispatch(uploadMovieImage(movie._id, image));
+      if (bannerFile || posterFile) dispatch(uploadMovieImages(movie._id, bannerFile, posterFile));
       dispatch(getMovies());
+    } else {
+      const message = movie?.message || movie?.error || 'Failed to add movie';
+      dispatch(setAlert(message, 'error', 5000));
     }
   } catch (error) {
     dispatch(setAlert(error.message, 'error', 5000));
   }
 };
 
-export const updateMovie = (movieId, movie, image) => async dispatch => {
+export const updateMovie = (movieId, movie, image, bannerFile, posterFile) => async dispatch => {
   try {
     const token = localStorage.getItem('jwtToken');
     const url = '/movies/' + movieId;
@@ -141,34 +171,24 @@ export const updateMovie = (movieId, movie, image) => async dispatch => {
       },
       body: JSON.stringify(movie)
     });
+    let responseData = null;
+    try { responseData = await response.json(); } catch (_) {}
     if (response.ok) {
       dispatch(onSelectMovie(null));
       dispatch(setAlert('Movie have been saved!', 'success', 5000));
       if (image) dispatch(uploadMovieImage(movieId, image));
+      if (bannerFile || posterFile) dispatch(uploadMovieImages(movieId, bannerFile, posterFile));
       dispatch(getMovies());
+      return true;
+    } else {
+      const message = responseData?.message || responseData?.error || 'Failed to update movie';
+      dispatch(setAlert(message, 'error', 5000));
+      return false;
     }
   } catch (error) {
     dispatch(setAlert(error.message, 'error', 5000));
+    return false;
   }
 };
 
-export const removeMovie = movieId => async dispatch => {
-  try {
-    const token = localStorage.getItem('jwtToken');
-    const url = '/movies/' + movieId;
-    const response = await fetch(url, {
-      method: 'DELETE',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      }
-    });
-    if (response.ok) {
-      dispatch(getMovies());
-      dispatch(onSelectMovie(null));
-      dispatch(setAlert('Movie have been Deleted!', 'success', 5000));
-    }
-  } catch (error) {
-    dispatch(setAlert(error.message, 'error', 5000));
-  }
-};
+// delete movie action removed as per requirement

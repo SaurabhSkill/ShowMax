@@ -66,7 +66,7 @@ const MovieOverview = ({ title, description, image }) => {
             stats={[
               { label: 'Released', value: '19 September 2019' },
               { label: 'Runtime', value: '1h 20mins' },
-              { label: 'Director', value: 'George Simos' },
+              { label: 'Director', value: 'Saurabh Gupta' },
               { label: 'Genre', value: 'Action' },
               { label: 'Status', value: 'Released' },
               { label: 'Language', value: 'English' }

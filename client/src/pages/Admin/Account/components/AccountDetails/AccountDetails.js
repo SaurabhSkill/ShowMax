@@ -23,8 +23,16 @@ class Account extends Component {
   };
 
   componentDidMount() {
-    const { name, email, phone } = this.props.user;
+    const user = this.props.user || {};
+    const { name = '', email = '', phone = '' } = user;
     this.setState({ name, email, phone });
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.user !== prevProps.user && this.props.user) {
+      const { name = '', email = '', phone = '' } = this.props.user || {};
+      this.setState({ name, email, phone });
+    }
   }
 
   handleFieldChange = (field, value) => {
@@ -140,7 +148,7 @@ class Account extends Component {
 Account.propTypes = {
   className: PropTypes.string,
   classes: PropTypes.object.isRequired,
-  user: PropTypes.object.isRequired
+  user: PropTypes.object
 };
 
 export default withStyles(styles)(Account);

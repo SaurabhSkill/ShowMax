@@ -16,7 +16,11 @@ export default function BookingForm(props) {
     onChangeDate,
     times,
     selectedTime,
-    onChangeTime
+    onChangeTime,
+    ticketsCount,
+    onChangeTickets,
+    priceTier,
+    onChangePriceTier
   } = props;
 
   const showtime = showtimes.find(
@@ -91,6 +95,40 @@ export default function BookingForm(props) {
           </TextField>
         </Grid>
       )}
+      <Grid item xs>
+        <TextField
+          fullWidth
+          type="number"
+          value={ticketsCount}
+          label="Number of Tickets"
+          variant="outlined"
+          inputProps={{ min: 1, max: 10 }}
+          onChange={e => {
+            console.log('=== BOOKING FORM TICKET CHANGE ===');
+            console.log('Input value:', e.target.value);
+            console.log('Parsed value:', Number(e.target.value));
+            console.log('Current ticketsCount:', ticketsCount);
+            onChangeTickets(Number(e.target.value));
+            console.log('==================================');
+          }}
+        />
+        <div style={{ fontSize: '12px', color: '#666', marginTop: '4px' }}>
+          Debug: ticketsCount = {ticketsCount} (type: {typeof ticketsCount})
+        </div>
+      </Grid>
+      <Grid item xs>
+        <TextField
+          fullWidth
+          select
+          value={priceTier}
+          label="Seat Type"
+          variant="outlined"
+          onChange={e => onChangePriceTier(e.target.value)}>
+          {['normal', 'executive', 'premium', 'classic'].map(t => (
+            <MenuItem key={t} value={t}>{t.charAt(0).toUpperCase() + t.slice(1)}</MenuItem>
+          ))}
+        </TextField>
+      </Grid>
     </Grid>
   );
 }

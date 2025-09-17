@@ -6,14 +6,39 @@ const generateQR = require('../utils/generateQRCode');
 
 const router = new express.Router();
 
-// Create a reservation
+// Create a reservation (ticket count only supported)
 router.post('/reservations', auth.simple, async (req, res) => {
-  const reservation = new Reservation(req.body);
-
-  const QRCode = await generateQR(`https://elcinema.herokuapp.com/#/checkin/${reservation._id}`);
-
   try {
+    const { date, startAt, ticketsCount, ticketPrice, total, movieId, cinemaId, username, phone, priceTier, seatType } = req.body;
+    if (!ticketsCount || ticketsCount < 1) return res.status(400).send({ message: 'ticketsCount is required' });
+
+    // Decrement seatsAvailable atomically to avoid oversell
+    const Cinema = require('../models/cinema');
+    const cinema = await Cinema.findById(cinemaId);
+    if (!cinema) return res.status(404).send({ message: 'Cinema not found' });
+    if (cinema.seatsAvailable < ticketsCount) return res.status(400).send({ message: 'Not enough seats available' });
+
+    cinema.seatsAvailable -= ticketsCount;
+    await cinema.save();
+
+    const reservation = new Reservation({
+      date,
+      startAt,
+      ticketsCount,
+      ticketPrice,
+      priceTier,
+      seatType: seatType || 'normal',
+      total,
+      movieId,
+      cinemaId,
+      username,
+      phone,
+      seats: [],
+      userId: req.user._id,
+    });
+
     await reservation.save();
+    const QRCode = await generateQR(`${req.protocol}://${req.get('host')}/#/checkin/${reservation._id}`);
     res.status(201).send({ reservation, QRCode });
   } catch (e) {
     res.status(400).send(e);

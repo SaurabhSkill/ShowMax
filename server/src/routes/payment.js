@@ -41,22 +41,36 @@ router.post('/simulate-payment', auth.simple, async (req, res) => {
     // Simulate payment processing delay
     await simulatePaymentDelay();
     
-    // Simulate payment success (90% success rate for demo)
-    const isSuccess = Math.random() > 0.1;
-    
-    if (!isSuccess) {
-      return res.status(400).send({ 
-        error: 'Payment failed - Insufficient funds (Mock Error)',
-        paymentStatus: 'failed'
-      });
-    }
+    // Always succeed for mock payments to avoid random failures during testing
+    const isSuccess = true;
 
     // Generate mock payment ID
     const paymentId = `mock_payment_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
-    // Create reservation
+    // Coerce and validate reservation payload
+    const payload = { ...reservationData };
+    if (payload.date && typeof payload.date === 'string') {
+      payload.date = new Date(payload.date);
+    }
+    if (!payload.seats) payload.seats = [];
+    if (!payload.seatType && payload.priceTier) payload.seatType = payload.priceTier;
+    // Backfill user fields from authenticated user if missing
+    if (!payload.username && req.user?.username) payload.username = req.user.username;
+    if (!payload.phone && req.user?.phone) payload.phone = req.user.phone;
+    // Ensure numeric fields are numbers
+    if (payload.ticketsCount != null) payload.ticketsCount = Number(payload.ticketsCount);
+    if (payload.ticketPrice != null) payload.ticketPrice = Number(payload.ticketPrice);
+    if (payload.total != null) payload.total = Number(payload.total);
+    
+    // Basic required field validation
+    const required = ['date', 'startAt', 'ticketsCount', 'ticketPrice', 'total', 'movieId', 'cinemaId', 'username', 'phone'];
+    const missing = required.filter(k => payload[k] === undefined || payload[k] === null || payload[k] === '');
+    if (missing.length) {
+      return res.status(400).send({ error: `Missing fields: ${missing.join(', ')}` });
+    }
+
     const reservation = new Reservation({
-      ...reservationData,
+      ...payload,
       paymentId,
       orderId,
       paymentStatus: 'completed',
@@ -77,7 +91,10 @@ router.post('/simulate-payment', auth.simple, async (req, res) => {
     });
   } catch (error) {
     console.error('Payment simulation error:', error);
-    res.status(500).send({ error: 'Failed to process payment' });
+    // Surface validation problems for easier debugging
+    const message = error?._message || error?.message || 'Failed to process payment';
+    const status = /validation/i.test(message) ? 400 : 500;
+    res.status(status).send({ error: message, details: error?.errors });
   }
 });
 

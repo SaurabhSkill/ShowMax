@@ -6,7 +6,8 @@ const useStyles = makeStyles(theme => ({
   root: {
     backgroundColor: theme.palette.background.dark,
     color: theme.palette.common.white,
-    height: '100%'
+    minHeight: '100vh',
+    paddingTop: '70px' // Account for fixed navbar
   }
 }));
 

@@ -3,17 +3,10 @@ import { connect } from 'react-redux';
 import { getMovie } from '../../../store/actions/movies';
 import { getCinemas } from '../../../store/actions/cinemas';
 import { getShowtimesByMovie } from '../../../store/actions/showtimes';
-import {
-  Typography,
-  Paper,
-  Button,
-  Box,
-  withStyles
-} from '@material-ui/core';
+import { Typography, Button, withStyles } from '@material-ui/core';
 import { Link as RouterLink } from 'react-router-dom';
 import Loading from '../../../components/Loading';
 import styles from './styles';
-import MovieIcon from '@material-ui/icons/Movie';
 
 function SelectCinemaPage(props) {
   const {
@@ -22,7 +15,7 @@ function SelectCinemaPage(props) {
     movie,
     cinemas,
     showtimes,
-    selectedCity, // Get selectedCity from Redux
+    selectedCity,
     getMovie,
     getCinemas,
     getShowtimesByMovie
@@ -45,54 +38,62 @@ function SelectCinemaPage(props) {
 
   return (
     <div className={classes.root}>
-      <div className={classes.header}>
-        <MovieIcon className={classes.movieIcon} />
-        <Typography variant="h4" className={classes.movieTitle}>
-          {movie.title}
+      <div className={classes.container}>
+        <Typography className={classes.pageTitle}>
+          SELECT THEATER & SHOWTIME
         </Typography>
-      </div>
 
-      <div className={classes.cinemaList}>
-        {filteredCinemas.length > 0 ? (
-          filteredCinemas.map(cinema => {
-            const cinemaShowtimes = showtimes.filter(
-              showtime => showtime.cinemaId === cinema._id
-            );
+        <div>
+          {filteredCinemas.length > 0 ? (
+            filteredCinemas.map(cinema => {
+              const cinemaShowtimes = showtimes.filter(
+                showtime => showtime.cinemaId === cinema._id
+              );
 
-            if (cinemaShowtimes.length === 0) {
-              return null;
-            }
+              if (cinemaShowtimes.length === 0) {
+                return null;
+              }
 
-            return (
-              <Paper key={cinema._id} className={classes.cinemaPaper}>
-                <Box>
-                  <Typography variant="h5" className={classes.cinemaInfo}>
-                    {cinema.name}
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary">
-                    Cancellation available
-                  </Typography>
-                </Box>
-                <Box className={classes.showtimeContainer}>
-                  {cinemaShowtimes.map(showtime => (
-                    <Button
-                      key={showtime._id}
-                      component={RouterLink}
-                      to={`/movie/booking/${showtime._id}`}
-                      variant="outlined"
-                      className={classes.showtimeButton}>
-                      {showtime.startAt}
-                    </Button>
-                  ))}
-                </Box>
-              </Paper>
-            );
-          })
-        ) : (
-          <Typography variant="h6" style={{ color: 'white', textAlign: 'center' }}>
-            No cinemas available for this movie in the selected city.
-          </Typography>
-        )}
+              return (
+                <div key={cinema._id} className={classes.theaterCard}>
+                  <div className={classes.theaterHeader}>
+                    <div
+                      className={classes.moviePoster}
+                      style={{
+                        backgroundImage: `url(${movie.image})`
+                      }}
+                    />
+                    <div className={classes.theaterInfo}>
+                      <Typography className={classes.theaterName}>
+                        {cinema.name}
+                      </Typography>
+                      <Typography className={classes.theaterLocation}>
+                        {cinema.location || `${cinema.city}, ${cinema.state}`}
+                      </Typography>
+                    </div>
+                  </div>
+                  
+                  <div className={classes.showtimeGrid}>
+                    {cinemaShowtimes.map(showtime => (
+                      <Button
+                        key={showtime._id}
+                        component={RouterLink}
+                        to={`/movie/booking/${showtime._id}`}
+                        className={classes.showtimeButton}
+                      >
+                        {showtime.startAt}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+              );
+            })
+          ) : (
+            <Typography className={classes.noCinemas}>
+              No cinemas available for this movie in the selected city.
+            </Typography>
+          )}
+        </div>
       </div>
     </div>
   );

@@ -1,149 +1,156 @@
-import { GET_CINEMAS, GET_CINEMA } from '../types';
 import { setAlert } from './alert';
+import setAuthHeaders from '../../utils/setAuthHeaders';
 
-export const uploadCinemaImage = (id, image) => async dispatch => {
-  try {
-    const data = new FormData();
-    data.append('file', image);
-    const url = '/cinemas/photo/' + id;
-    const response = await fetch(url, {
-      method: 'POST',
-      body: data
-    });
-    const responseData = await response.json();
-    if (response.ok) {
-      dispatch(setAlert('Image Uploaded', 'success', 5000));
-    }
-    if (responseData.error) {
-      dispatch(setAlert(responseData.error.message, 'error', 5000));
-    }
-  } catch (error) {
-    dispatch(setAlert(error.message, 'error', 5000));
-  }
+// Action Types
+export const CINEMA_ACTIONS = {
+  GET_CINEMAS: 'GET_CINEMAS',
+  CREATE_CINEMA: 'CREATE_CINEMA',
+  UPDATE_CINEMA: 'UPDATE_CINEMA',
+  DELETE_CINEMA: 'DELETE_CINEMA',
+  SET_LOADING: 'SET_LOADING',
+  SET_ERROR: 'SET_ERROR'
 };
 
+// Action Creators
 export const getCinemas = () => async dispatch => {
   try {
-    const url = '/cinemas';
-    const response = await fetch(url, {
+    dispatch({ type: CINEMA_ACTIONS.SET_LOADING, payload: true });
+    
+    const response = await fetch('/cinemas', {
       method: 'GET',
-      headers: { 'Content-Type': 'application/json' }
+      headers: setAuthHeaders({ 'Content-Type': 'application/json' }),
+      credentials: 'include',
     });
+
     const cinemas = await response.json();
+    
     if (response.ok) {
-      dispatch({ type: GET_CINEMAS, payload: cinemas });
+      dispatch({ type: CINEMA_ACTIONS.GET_CINEMAS, payload: cinemas });
+    } else {
+      dispatch({ type: CINEMA_ACTIONS.SET_ERROR, payload: cinemas.error || 'Failed to fetch cinemas' });
     }
   } catch (error) {
-    dispatch(setAlert(error.message, 'error', 5000));
+    console.error('Error fetching cinemas:', error);
+    dispatch({ type: CINEMA_ACTIONS.SET_ERROR, payload: 'Network error while fetching cinemas' });
+  } finally {
+    dispatch({ type: CINEMA_ACTIONS.SET_LOADING, payload: false });
   }
 };
 
-export const getCinema = id => async dispatch => {
+export const createCinema = (cinemaData) => async dispatch => {
   try {
-    const url = '/cinemas/' + id;
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' }
-    });
-    const cinema = await response.json();
-    if (response.ok) {
-      dispatch({ type: GET_CINEMA, payload: cinema });
-    }
-  } catch (error) {
-    dispatch(setAlert(error.message, 'error', 5000));
-  }
-};
-
-export const createCinemas = (image, newCinema) => async dispatch => {
-  try {
-    const token = localStorage.getItem('jwtToken');
-    const url = '/cinemas';
-    const response = await fetch(url, {
+    dispatch({ type: CINEMA_ACTIONS.SET_LOADING, payload: true });
+    
+    const response = await fetch('/cinemas', {
       method: 'POST',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(newCinema)
+      headers: setAuthHeaders({ 'Content-Type': 'application/json' }),
+      credentials: 'include',
+      body: JSON.stringify(cinemaData),
     });
-    const cinema = await response.json();
+
+    if (response.status === 401) {
+      dispatch({ type: CINEMA_ACTIONS.SET_ERROR, payload: 'Unauthorized. Please log in again.' });
+      dispatch(setAlert('Unauthorized. Please log in again.', 'error', 5000));
+      return { status: 'error', error: 'Unauthorized' };
+    }
+
+    const result = await response.json();
+    
     if (response.ok) {
-      dispatch(setAlert('Cinema Created', 'success', 5000));
-      if (image) dispatch(uploadCinemaImage(cinema._id, image));
-      dispatch(getCinemas());
-      return { status: 'success', message: 'Cinema Created' };
+      dispatch({ type: CINEMA_ACTIONS.CREATE_CINEMA, payload: result });
+      dispatch(setAlert('Cinema created successfully!', 'success', 5000));
+      return { status: 'success', data: result };
+    } else {
+      dispatch({ type: CINEMA_ACTIONS.SET_ERROR, payload: result.error || 'Failed to create cinema' });
+      dispatch(setAlert(result.error || 'Failed to create cinema', 'error', 5000));
+      return { status: 'error', error: result.error };
     }
   } catch (error) {
-    dispatch(setAlert(error.message, 'error', 5000));
-    return {
-      status: 'error',
-      message: ' Cinema have not been saved, try again.'
-    };
+    console.error('Error creating cinema:', error);
+    const errorMessage = 'Network error while creating cinema';
+    dispatch({ type: CINEMA_ACTIONS.SET_ERROR, payload: errorMessage });
+    dispatch(setAlert(errorMessage, 'error', 5000));
+    return { status: 'error', error: errorMessage };
+  } finally {
+    dispatch({ type: CINEMA_ACTIONS.SET_LOADING, payload: false });
   }
 };
 
-export const updateCinemas = (image, cinema, id) => async dispatch => {
+export const updateCinema = (cinemaId, cinemaData) => async dispatch => {
   try {
-    const token = localStorage.getItem('jwtToken');
-    const url = '/cinemas/' + id;
-    const response = await fetch(url, {
+    dispatch({ type: CINEMA_ACTIONS.SET_LOADING, payload: true });
+    
+    const response = await fetch(`/cinemas/${cinemaId}`, {
       method: 'PATCH',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(cinema)
+      headers: setAuthHeaders({ 'Content-Type': 'application/json' }),
+      credentials: 'include',
+      body: JSON.stringify(cinemaData),
     });
+
+    if (response.status === 401) {
+      dispatch({ type: CINEMA_ACTIONS.SET_ERROR, payload: 'Unauthorized. Please log in again.' });
+      dispatch(setAlert('Unauthorized. Please log in again.', 'error', 5000));
+      return { status: 'error', error: 'Unauthorized' };
+    }
+
+    const result = await response.json();
+    
     if (response.ok) {
-      dispatch(setAlert('Cinema Updated', 'success', 5000));
-      if (image) dispatch(uploadCinemaImage(id, image));
-      return { status: 'success', message: 'Cinema Updated' };
+      dispatch({ type: CINEMA_ACTIONS.UPDATE_CINEMA, payload: result });
+      dispatch(setAlert('Cinema updated successfully!', 'success', 5000));
+      // Refresh the cinemas list
+      dispatch(getCinemas());
+      return { status: 'success', data: result };
+    } else {
+      dispatch({ type: CINEMA_ACTIONS.SET_ERROR, payload: result.error || 'Failed to update cinema' });
+      dispatch(setAlert(result.error || 'Failed to update cinema', 'error', 5000));
+      return { status: 'error', error: result.error };
     }
   } catch (error) {
-    dispatch(setAlert(error.message, 'error', 5000));
-    return {
-      status: 'error',
-      message: ' Cinema have not been updated, try again.'
-    };
+    console.error('Error updating cinema:', error);
+    const errorMessage = 'Network error while updating cinema';
+    dispatch({ type: CINEMA_ACTIONS.SET_ERROR, payload: errorMessage });
+    dispatch(setAlert(errorMessage, 'error', 5000));
+    return { status: 'error', error: errorMessage };
+  } finally {
+    dispatch({ type: CINEMA_ACTIONS.SET_LOADING, payload: false });
   }
 };
 
-export const removeCinemas = id => async dispatch => {
+export const deleteCinema = (cinemaId) => async dispatch => {
   try {
-    const token = localStorage.getItem('jwtToken');
-    const url = '/cinemas/' + id;
-    const response = await fetch(url, {
+    dispatch({ type: CINEMA_ACTIONS.SET_LOADING, payload: true });
+    
+    const response = await fetch(`/cinemas/${cinemaId}`, {
       method: 'DELETE',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      }
+      headers: setAuthHeaders({ 'Content-Type': 'application/json' }),
+      credentials: 'include',
     });
-    if (response.ok) {
-      dispatch(setAlert('Cinema Deleted', 'success', 5000));
-      return { status: 'success', message: 'Cinema Removed' };
-    }
-  } catch (error) {
-    dispatch(setAlert(error.message, 'error', 5000));
-    return {
-      status: 'error',
-      message: ' Cinema have not been deleted, try again.'
-    };
-  }
-};
 
-export const getCinemasUserModeling = username => async dispatch => {
-  try {
-    const url = '/cinemas/usermodeling/' + username;
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' }
-    });
-    const cinemas = await response.json();
+    if (response.status === 401) {
+      dispatch({ type: CINEMA_ACTIONS.SET_ERROR, payload: 'Unauthorized. Please log in again.' });
+      dispatch(setAlert('Unauthorized. Please log in again.', 'error', 5000));
+      return { status: 'error', error: 'Unauthorized' };
+    }
+
+    const result = await response.json();
+    
     if (response.ok) {
-      dispatch({ type: GET_CINEMAS, payload: cinemas });
+      dispatch({ type: CINEMA_ACTIONS.DELETE_CINEMA, payload: cinemaId });
+      dispatch(setAlert('Cinema deleted successfully!', 'success', 5000));
+      return { status: 'success' };
+    } else {
+      dispatch({ type: CINEMA_ACTIONS.SET_ERROR, payload: result.error || 'Failed to delete cinema' });
+      dispatch(setAlert(result.error || 'Failed to delete cinema', 'error', 5000));
+      return { status: 'error', error: result.error };
     }
   } catch (error) {
-    dispatch(setAlert(error.message, 'error', 5000));
+    console.error('Error deleting cinema:', error);
+    const errorMessage = 'Network error while deleting cinema';
+    dispatch({ type: CINEMA_ACTIONS.SET_ERROR, payload: errorMessage });
+    dispatch(setAlert(errorMessage, 'error', 5000));
+    return { status: 'error', error: errorMessage };
+  } finally {
+    dispatch({ type: CINEMA_ACTIONS.SET_LOADING, payload: false });
   }
 };

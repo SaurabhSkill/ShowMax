@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { makeStyles } from '@material-ui/core';
-import { Typography } from '@material-ui/core';
+import { Typography, Button } from '@material-ui/core';
+import { useHistory } from 'react-router-dom';
 import { AccessTime as AccessTimeIcon } from '@material-ui/icons';
 import { Paper } from '../../../../../components';
 
@@ -59,6 +60,7 @@ const useStyles = makeStyles(theme => ({
 function MovieCard(props) {
   const classes = useStyles(props);
   const { className, movie } = props;
+  const history = useHistory();
 
   const rootClassName = classNames(classes.root, className);
   return (
@@ -79,6 +81,11 @@ function MovieCard(props) {
         <Typography className={classes.updateText} variant="body2">
           {movie.duration} minutes
         </Typography>
+      </div>
+      <div style={{ paddingLeft: 24, paddingRight: 24, paddingTop: 8 }}>
+        <Button size="small" color="primary" onClick={() => history.push(`/admin/movies/${movie._id}/edit`)}>
+          Edit
+        </Button>
       </div>
     </Paper>
   );

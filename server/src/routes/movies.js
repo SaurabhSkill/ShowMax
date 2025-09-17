@@ -17,6 +17,7 @@ router.post('/movies', auth.enhance, async (req, res) => {
   }
 });
 
+// Upload single legacy image (kept for backward compatibility)
 router.post(
   '/movies/photo/:id',
   auth.enhance,
@@ -35,9 +36,40 @@ router.post(
       if (!movie) return res.sendStatus(404);
 
       movie.image = `${url}/uploads/movies/${file.filename}`;
-      
       await movie.save();
       res.send({ movie, file });
+    } catch (e) {
+      console.log(e);
+      res.sendStatus(400).send(e);
+    }
+  }
+);
+
+// Upload banner and poster images in one call
+router.post(
+  '/movies/photos/:id',
+  auth.enhance,
+  upload('movies').fields([
+    { name: 'banner', maxCount: 1 },
+    { name: 'poster', maxCount: 1 }
+  ]),
+  async (req, res, next) => {
+    const url = `${req.protocol}://${req.get('host')}`;
+    const movieId = req.params.id;
+    try {
+      const movie = await Movie.findById(movieId);
+      if (!movie) return res.sendStatus(404);
+      const bannerFile = req.files?.banner?.[0];
+      const posterFile = req.files?.poster?.[0];
+      if (!bannerFile && !posterFile) {
+        const error = new Error('Please upload at least one file');
+        error.httpStatusCode = 400;
+        return next(error);
+      }
+      if (bannerFile) movie.bannerImage = `${url}/uploads/movies/banners/${bannerFile.filename}`;
+      if (posterFile) movie.posterImage = `${url}/uploads/movies/posters/${posterFile.filename}`;
+      await movie.save();
+      res.send({ movie, files: req.files });
     } catch (e) {
       console.log(e);
       res.sendStatus(400).send(e);
@@ -136,16 +168,7 @@ router.put('/movies/:id', auth.enhance, async (req, res) => {
   }
 });
 
-// Delete movie by id
-router.delete('/movies/:id', auth.enhance, async (req, res) => {
-  const _id = req.params.id;
-  try {
-    const movie = await Movie.findByIdAndDelete(_id);
-    return !movie ? res.sendStatus(404) : res.send(movie);
-  } catch (e) {
-    return res.sendStatus(400);
-  }
-});
+// Delete movie route removed as per requirement
 
 // Movies user modeling (suggested movies)
 router.get('/movies/usermodeling/:username', async (req, res) => {

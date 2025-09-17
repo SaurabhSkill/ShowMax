@@ -1,29 +1,35 @@
-import { red, blue, lightBlue, yellow, green } from '@material-ui/core/colors';
-const white = '#FFF';
-const black = '#000';
+import { red, lightBlue, yellow, green } from '@material-ui/core/colors';
+const white = '#FFFFFF';
+const black = '#000000';
 
 export default {
   type: 'dark',
   common: {
     black,
     white,
-    commonBackground: 'rgb(45, 45, 45)',
+    commonBackground: '#0A0A0A',
     contrastText: white,
     neutral: '#E4E7EB',
     muted: '#9EA0A4'
   },
   default: {
-    light: 'rgba(41, 150, 243, .1)',
-    main: 'rgba(0, 40, 73, .9)',
-    dark: 'rgb(0, 40, 73)',
-    logoBg: 'rgb(51, 51, 51)',
-    border: 'rgba(0, 40, 73, .1)',
+    light: 'rgba(0, 123, 255, 0.1)',
+    main: 'rgba(0, 123, 255, 0.9)',
+    dark: '#001122',
+    logoBg: '#1A1A1A',
+    border: 'rgba(255, 255, 255, 0.1)',
     contrastText: white
   },
   primary: {
-    light: lightBlue[300],
-    main: lightBlue[500],
-    dark: lightBlue[700],
+    light: '#4FC3F7',
+    main: '#007BFF',
+    dark: '#0056B3',
+    contrastText: white
+  },
+  secondary: {
+    light: '#FF6B9D',
+    main: '#E91E63',
+    dark: '#AD1457',
     contrastText: white
   },
   success: {
@@ -33,9 +39,9 @@ export default {
     contrastText: white
   },
   info: {
-    light: blue[300],
-    main: blue[500],
-    dark: blue[700],
+    light: lightBlue[300],
+    main: lightBlue[500],
+    dark: lightBlue[700],
     contrastText: white
   },
   warning: {
@@ -51,15 +57,25 @@ export default {
     contrastText: white
   },
   background: {
-    paper: 'rgb(45, 45, 45)',
-    default: 'rgb(26, 26, 26)',
-    dark: 'rgb(26, 26, 26)'
+    paper: '#1A1A1A',
+    default: '#0A0A0A',
+    dark: '#0A0A0A'
   },
-  border: '#DFE3E8',
-  divider: '#DFE3E8',
-  oxfordBlue: 'rgba(5, 41, 73, 1)',
-  prussianBlue: 'rgba(19, 49, 92, 1)',
-  darkCerulean: 'rgba(19, 64, 116, 1)',
-  pewterBlue: 'rgba(141, 169, 196, 1)',
-  isabelline: 'rgba(238, 244, 237, 1)'
+  text: {
+    primary: '#FFFFFF',
+    secondary: '#B0B0B0',
+    disabled: '#666666'
+  },
+  border: 'rgba(255, 255, 255, 0.1)',
+  divider: 'rgba(255, 255, 255, 0.1)',
+  // ShowMax specific colors
+  showmax: {
+    primary: '#007BFF',
+    secondary: '#6C757D',
+    accent: '#28A745',
+    warning: '#FFC107',
+    danger: '#DC3545',
+    dark: '#0A0A0A',
+    light: '#F8F9FA'
+  }
 };

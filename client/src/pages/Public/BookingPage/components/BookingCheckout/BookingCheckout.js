@@ -28,10 +28,13 @@ export default function BookingCheckout(props) {
     user,
     ticketPrice,
     selectedSeats,
-    seatsAvailable,
     onBookSeats,
-    reservationData
+    reservationData,
+    onRequireLogin
   } = props;
+  
+  // Ensure selectedSeats is always a valid number
+  const safeSelectedSeats = Math.max(0, Number(selectedSeats) || 0);
   
   const [showPayment, setShowPayment] = useState(false);
   const [paymentLoading, setPaymentLoading] = useState(false);
@@ -48,6 +51,11 @@ export default function BookingCheckout(props) {
   };
 
   const handleCheckout = () => {
+    // If user is not logged in, trigger login flow
+    if (!user) {
+      if (typeof onRequireLogin === 'function') onRequireLogin();
+      return;
+    }
     setShowPayment(true);
   };
 
@@ -66,18 +74,14 @@ export default function BookingCheckout(props) {
             )}
             <Grid item>
               <Typography className={classes.bannerTitle}>Tickets</Typography>
-              {selectedSeats > 0 ? (
-                <Typography className={classes.bannerContent}>
-                  {selectedSeats} tickets
-                </Typography>
-              ) : (
-                <Typography className={classes.bannerContent}>0</Typography>
-              )}
+              <Typography className={classes.bannerContent}>
+                {safeSelectedSeats} tickets
+              </Typography>
             </Grid>
             <Grid item>
               <Typography className={classes.bannerTitle}>Price</Typography>
               <Typography className={classes.bannerContent}>
-                ₹{(ticketPrice * selectedSeats).toFixed(2)}
+                ₹{((ticketPrice || 0) * safeSelectedSeats).toFixed(2)}
               </Typography>
             </Grid>
           </Grid>
@@ -94,7 +98,7 @@ export default function BookingCheckout(props) {
           <Button
             color="inherit"
             fullWidth
-            disabled={seatsAvailable <= 0 || paymentLoading}
+            disabled={safeSelectedSeats <= 0}
             onClick={handleCheckout}>
             {paymentLoading ? 'Processing...' : 'Pay Now'}
           </Button>
@@ -111,11 +115,11 @@ export default function BookingCheckout(props) {
         <DialogTitle>Complete Payment</DialogTitle>
         <DialogContent>
           <PaymentForm
-            amount={ticketPrice * selectedSeats}
+            amount={(ticketPrice || 0) * safeSelectedSeats}
             onPaymentSuccess={handlePaymentSuccess}
             onPaymentError={handlePaymentError}
             reservationData={reservationData}
-            disabled={paymentLoading}
+            onRequireLogin={onRequireLogin}
           />
         </DialogContent>
       </Dialog>

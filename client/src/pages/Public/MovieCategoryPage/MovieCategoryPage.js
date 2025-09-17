@@ -1,65 +1,112 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { makeStyles, Grid, Typography } from '@material-ui/core';
-import ResponsiveMovieCard from '../components/ResponsiveMovieCard/ResponsiveMovieCard';
+import { makeStyles, Container, Typography, Box } from '@material-ui/core';
+import MovieCard from '../components/MovieCard/MovieCard';
 import { getMovies } from '../../../store/actions';
 
 const useStyles = makeStyles(theme => ({
+  root: {
+    backgroundColor: theme.palette.background.dark,
+    minHeight: '100vh',
+    paddingTop: '2rem'
+  },
   title: {
     fontSize: '3rem',
-    lineHeight: '3rem',
+    fontWeight: 700,
     textAlign: 'center',
-    textTransform: 'capitalize',
-    marginTop: theme.spacing(15),
-    marginBottom: theme.spacing(3)
+    textTransform: 'uppercase',
+    marginBottom: '3rem',
+    color: '#FFFFFF',
+    background: 'linear-gradient(45deg, #007BFF, #4FC3F7)',
+    WebkitBackgroundClip: 'text',
+    WebkitTextFillColor: 'transparent',
+    backgroundClip: 'text'
   },
-  [theme.breakpoints.down('sm')]: {
-    fullWidth: { width: '100%' }
+  movieGrid: {
+    display: 'flex',
+    gap: '1.5rem',
+    overflowX: 'auto',
+    paddingBottom: '1rem',
+    '&::-webkit-scrollbar': {
+      height: '6px'
+    },
+    '&::-webkit-scrollbar-track': {
+      backgroundColor: 'rgba(255, 255, 255, 0.1)',
+      borderRadius: '3px'
+    },
+    '&::-webkit-scrollbar-thumb': {
+      backgroundColor: '#007BFF',
+      borderRadius: '3px'
+    }
+  },
+  movieCard: {
+    minWidth: '200px',
+    flexShrink: 0
+  },
+  noMovies: {
+    textAlign: 'center',
+    color: '#B0B0B0',
+    fontSize: '1.2rem',
+    marginTop: '3rem'
   }
 }));
 
 function MovieCategoryPage(props) {
-  const { movies, getMovies } = props;
+  const { movies, getMovies, location } = props;
   const category = props.match.params.category;
+  const classes = useStyles(props);
+
   useEffect(() => {
     if (!movies.length) {
       getMovies();
     }
   }, [movies, getMovies]);
 
-  const classes = useStyles(props);
+  const getCategoryTitle = (cat) => {
+    switch (cat) {
+      case 'nowShowing':
+        return 'EXPLORE ALL MOVIES';
+      case 'comingSoon':
+        return 'COMING SOON';
+      default:
+        return cat.toUpperCase();
+    }
+  };
+
+  const params = new URLSearchParams(location.search);
+  const q = (params.get('q') || '').toLowerCase();
+  const filtered = q ? movies.filter(m => (m.title || '').toLowerCase().includes(q)) : movies;
+
   return (
-    <Grid container spacing={2}>
-      {!['nowShowing', 'comingSoon'].includes(category) ? (
-        <Grid item xs={12}>
-          <Typography className={classes.title} variant="h2" color="inherit">
-            Category Does not exist.
+    <Box className={classes.root}>
+      <Container maxWidth="xl">
+        {!['nowShowing', 'comingSoon'].includes(category) ? (
+          <Typography className={classes.title}>
+            Category Does Not Exist
           </Typography>
-        </Grid>
-      ) : (
-        <>
-          <Grid item xs={12}>
-            <Typography className={classes.title} variant="h2" color="inherit">
-              {category}
+        ) : (
+          <>
+            <Typography className={classes.title}>
+              {getCategoryTitle(category)}
             </Typography>
-          </Grid>
-          <Grid
-            container
-            item
-            xs={12}
-            direction="column"
-            alignItems="center"
-            justify="center"
-            spacing={2}>
-            {movies.map(movie => (
-              <Grid key={movie._id} item className={classes.fullWidth}>
-                <ResponsiveMovieCard movie={movie} />
-              </Grid>
-            ))}
-          </Grid>
-        </>
-      )}
-    </Grid>
+            
+            {filtered.length > 0 ? (
+              <Box className={classes.movieGrid}>
+                {filtered.map(movie => (
+                  <Box key={movie._id} className={classes.movieCard}>
+                    <MovieCard movie={movie} />
+                  </Box>
+                ))}
+              </Box>
+            ) : (
+              <Typography className={classes.noMovies}>
+                No movies available in this category
+              </Typography>
+            )}
+          </>
+        )}
+      </Container>
+    </Box>
   );
 }
 

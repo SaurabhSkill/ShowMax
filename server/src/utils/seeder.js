@@ -74,25 +74,56 @@ const movies = [
     }
 ];
 
-const generateSeats = () => {
-    const seats = [];
-    const rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
-    rows.forEach(row => {
-        for (let i = 1; i <= 12; i++) {
-            seats.push({ seat: `${row}${i}`, isAvailable: true });
-        }
-    });
-    return seats;
-};
-
 const cinemas = [
-  { name: 'PVR Icon, Oberoi Mall', ticketPrice: 350, city: 'mumbai', seats: generateSeats(), seatsAvailable: 96, image: 'https://placehold.co/600x400/1a1a1a/ffffff?text=PVR+Icon' },
-  { name: 'INOX, Inorbit Mall', ticketPrice: 320, city: 'mumbai', seats: generateSeats(), seatsAvailable: 96, image: 'https://placehold.co/600x400/1a1a1a/ffffff?text=INOX' },
-  { name: 'G7 Multiplex, Bandra', ticketPrice: 250, city: 'mumbai', seats: generateSeats(), seatsAvailable: 96, image: 'https://placehold.co/600x400/1a1a1a/ffffff?text=G7+Multiplex' },
-  { name: 'PVR Logix, City Center', ticketPrice: 400, city: 'delhi', seats: generateSeats(), seatsAvailable: 96, image: 'https://placehold.co/600x400/1a1a1a/ffffff?text=PVR+Logix' },
-  { name: 'DT Star Cinemas, Saket', ticketPrice: 380, city: 'delhi', seats: generateSeats(), seatsAvailable: 96, image: 'https://placehold.co/600x400/1a1a1a/ffffff?text=DT+Star' },
-  { name: 'Cinepolis, Forum Shantiniketan', ticketPrice: 280, city: 'bangalore', seats: generateSeats(), seatsAvailable: 96, image: 'https://placehold.co/600x400/1a1a1a/ffffff?text=Cinepolis' },
-  { name: 'Urvashi Cinema, Lal Bagh', ticketPrice: 220, city: 'bangalore', seats: generateSeats(), seatsAvailable: 96, image: 'https://placehold.co/600x400/1a1a1a/ffffff?text=Urvashi' },
+  { 
+    name: 'PVR Icon, Oberoi Mall', 
+    city: 'mumbai', 
+    seatsAvailable: 96, 
+    image: 'https://placehold.co/600x400/1a1a1a/ffffff?text=PVR+Icon',
+    priceTiers: { normal: 200, executive: 300, premium: 400, classic: 500 }
+  },
+  { 
+    name: 'INOX, Inorbit Mall', 
+    city: 'mumbai', 
+    seatsAvailable: 96, 
+    image: 'https://placehold.co/600x400/1a1a1a/ffffff?text=INOX',
+    priceTiers: { normal: 180, executive: 280, premium: 380, classic: 480 }
+  },
+  { 
+    name: 'G7 Multiplex, Bandra', 
+    city: 'mumbai', 
+    seatsAvailable: 96, 
+    image: 'https://placehold.co/600x400/1a1a1a/ffffff?text=G7+Multiplex',
+    priceTiers: { normal: 150, executive: 200, premium: 250, classic: 300 }
+  },
+  { 
+    name: 'PVR Logix, City Center', 
+    city: 'delhi', 
+    seatsAvailable: 96, 
+    image: 'https://placehold.co/600x400/1a1a1a/ffffff?text=PVR+Logix',
+    priceTiers: { normal: 250, executive: 350, premium: 450, classic: 550 }
+  },
+  { 
+    name: 'DT Star Cinemas, Saket', 
+    city: 'delhi', 
+    seatsAvailable: 96, 
+    image: 'https://placehold.co/600x400/1a1a1a/ffffff?text=DT+Star',
+    priceTiers: { normal: 220, executive: 320, premium: 420, classic: 520 }
+  },
+  { 
+    name: 'Cinepolis, Forum Shantiniketan', 
+    city: 'bangalore', 
+    seatsAvailable: 96, 
+    image: 'https://placehold.co/600x400/1a1a1a/ffffff?text=Cinepolis',
+    priceTiers: { normal: 160, executive: 240, premium: 320, classic: 400 }
+  },
+  { 
+    name: 'Urvashi Cinema, Lal Bagh', 
+    city: 'bangalore', 
+    seatsAvailable: 96, 
+    image: 'https://placehold.co/600x400/1a1a1a/ffffff?text=Urvashi',
+    priceTiers: { normal: 120, executive: 180, premium: 240, classic: 300 }
+  },
 ];
 
 const importData = async () => {
@@ -109,32 +140,27 @@ const importData = async () => {
     const createdCinemas = await Cinema.insertMany(cinemas);
     console.log('Movies and Cinemas imported...');
 
-    // --- NEW REALISTIC SHOWTIME LOGIC ---
+    // --- SIMPLIFIED SHOWTIME LOGIC (without cinemas) ---
     const showtimes = [];
     const possibleTimes = ['10:00 AM', '11:30 AM', '01:15 PM', '02:45 PM', '04:30 PM', '06:00 PM', '07:45 PM', '09:15 PM', '11:00 PM'];
     
-    createdCinemas.forEach(cinema => {
-        // Assign 2 to 4 random movies to each cinema
-        const moviesToShow = [...createdMovies].sort(() => 0.5 - Math.random()).slice(0, Math.floor(Math.random() * 3) + 2);
-
-        moviesToShow.forEach(movie => {
-            // Assign 3 to 5 random showtimes for each movie at this cinema
-            const timesForThisMovie = [...possibleTimes].sort(() => 0.5 - Math.random()).slice(0, Math.floor(Math.random() * 3) + 3);
-            
-            timesForThisMovie.forEach(time => {
-                showtimes.push({
-                    startAt: time,
-                    startDate: new Date(),
-                    endDate: movie.endDate,
-                    movieId: movie._id,
-                    cinemaId: cinema._id,
-                });
+    // Create showtimes for each movie without cinema association
+    createdMovies.forEach(movie => {
+        // Assign 3 to 5 random showtimes for each movie
+        const timesForThisMovie = [...possibleTimes].sort(() => 0.5 - Math.random()).slice(0, Math.floor(Math.random() * 3) + 3);
+        
+        timesForThisMovie.forEach(time => {
+            showtimes.push({
+                startAt: time,
+                startDate: new Date(),
+                endDate: movie.endDate,
+                movieId: movie._id,
             });
         });
     });
 
     await Showtime.insertMany(showtimes);
-    console.log('Realistic showtimes created and imported...');
+    console.log('Showtimes created and imported...');
     
     console.log('Data Imported Successfully!');
     process.exit();

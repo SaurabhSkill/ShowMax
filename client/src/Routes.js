@@ -8,6 +8,7 @@ import { AdminLayout, PublicLayout } from './layouts';
 // Admin
 const DashboardPage = lazy(() => import('./pages/Admin/Dashboard'));
 const MovieList = lazy(() => import('./pages/Admin/MovieList'));
+const EditMoviePage = lazy(() => import('./pages/Admin/EditMoviePage'));
 const CinemaList = lazy(() => import('./pages/Admin/CinemaList'));
 const ReservationList = lazy(() => import('./pages/Admin/ReservationList'));
 const User = lazy(() => import('./pages/Admin/User'));
@@ -33,6 +34,7 @@ const SelectCinemaPage = lazy(() =>
   import('./pages/Public/SelectCinemaPage/SelectCinemaPage')
 );
 const Checkin = lazy(() => import('./pages/Public/Checkin'));
+const BookingSuccessPage = lazy(() => import('./pages/Public/BookingSuccess'));
 
 const Routes = () => {
   return (
@@ -97,6 +99,13 @@ const Routes = () => {
             layoutProps={{ withFooter: false }}
             component={BookingPage}
           />
+          <WithLayoutRoute
+            exact
+            path="/booking/success/:id"
+            layout={PublicLayout}
+            layoutProps={{ withFooter: false }}
+            component={BookingSuccessPage}
+          />
           <ProtectedRoute
             exact
             path="/admin/dashboard"
@@ -126,6 +135,12 @@ const Routes = () => {
             path="/admin/movies"
             layout={AdminLayout}
             component={MovieList}
+          />
+          <ProtectedRoute
+            exact
+            path="/admin/movies/:id/edit"
+            layout={AdminLayout}
+            component={EditMoviePage}
           />
           <ProtectedRoute
             exact

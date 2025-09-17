@@ -1,20 +1,39 @@
 import React, { Component } from 'react';
-import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { withStyles, Typography, Select, InputLabel, FormControl } from '@material-ui/core';
-import { Button, TextField, MenuItem, Grid } from '@material-ui/core';
-import {
-  MuiPickersUtilsProvider,
-  KeyboardDatePicker
-} from '@material-ui/pickers';
+import { withStyles, Typography } from '@material-ui/core';
+import { Button, TextField, MenuItem, Grid, Select, InputLabel, FormControl, Box } from '@material-ui/core';
+import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
 import MomentUtils from '@date-io/moment';
-import styles from './styles';
-import { genreData, languageData } from '../../../../../data/MovieDataService';
-import { addMovie } from '../../../../../store/actions';
-import FileUpload from '../../../../../components/FileUpload/FileUpload';
+import { genreData, languageData } from '../../../data/MovieDataService';
+import { getMovie, updateMovie } from '../../../store/actions';
+import FileUpload from '../../../components/FileUpload/FileUpload';
 
-class AddMovie extends Component {
+const styles = theme => ({
+  root: {
+    padding: theme.spacing(3)
+  },
+  field: {
+    display: 'flex',
+    alignItems: 'center'
+  },
+  textField: {
+    marginRight: theme.spacing(2),
+    width: 230
+  },
+  title: {
+    marginBottom: theme.spacing(2)
+  },
+  upload: {
+    marginTop: theme.spacing(1)
+  },
+  buttonFooter: {
+    marginTop: theme.spacing(2),
+    marginRight: theme.spacing(2)
+  }
+});
+
+class EditMoviePage extends Component {
   state = {
     title: '',
     bannerImage: null,
@@ -28,32 +47,81 @@ class AddMovie extends Component {
     releaseDate: new Date(),
     endDate: new Date(),
     additionalInfo: '',
+    existingBannerUrl: '',
+    existingPosterUrl: '',
     loading: false
   };
 
-  componentDidMount() {}
+  componentDidMount() {
+    const id = this.props.match.params.id;
+    this.props.getMovie(id).then(() => {
+      const m = this.props.selectedMovie || {};
+      this.setState({
+        title: m.title || '',
+        language: Array.isArray(m.language) ? m.language : (m.language ? [m.language] : []),
+        genre: typeof m.genre === 'string' ? m.genre.split(',') : (m.genre || []),
+        director: m.director || '',
+        cast: m.cast || '',
+        description: m.description || '',
+        duration: m.duration || '',
+        releaseDate: m.releaseDate ? new Date(m.releaseDate) : new Date(),
+        endDate: m.endDate ? new Date(m.endDate) : new Date(),
+        additionalInfo: m.additionalInfo || '',
+        existingBannerUrl: m.bannerImage || '',
+        existingPosterUrl: m.posterImage || ''
+      });
+    });
+  }
 
   handleFieldChange = (field, value) => {
     this.setState({ [field]: value });
   };
 
-  onAddMovie = async () => {
+  onUpdateMovie = async () => {
     this.setState({ loading: true });
-    const { bannerImage, posterImage, genre, ...rest } = this.state;
-    const movie = { ...rest, genre: genre.join(',') };
+    const {
+      title,
+      language,
+      genre,
+      duration,
+      description,
+      director,
+      cast,
+      releaseDate,
+      endDate,
+      additionalInfo,
+      bannerImage,
+      posterImage
+    } = this.state;
+
+    // Only send fields allowed by the server update route
+    const movie = {
+      title,
+      language,
+      genre: genre.join(','),
+      duration: Number(duration),
+      description,
+      director,
+      cast,
+      releaseDate,
+      endDate,
+      additionalInfo
+    };
+
     try {
-      await this.props.addMovie(null, movie, bannerImage, posterImage);
+      const ok = await this.props.updateMovie(this.props.match.params.id, movie, null, bannerImage, posterImage);
+      if (ok) {
+        this.props.history.push('/admin/movies');
+      }
     } finally {
       this.setState({ loading: false });
     }
   };
 
-  onUpdateMovie = undefined;
-
   onRemoveMovie = undefined;
 
   render() {
-    const { classes, className } = this.props;
+    const { classes } = this.props;
     const {
       title,
       bannerImage,
@@ -66,19 +134,16 @@ class AddMovie extends Component {
       cast,
       releaseDate,
       endDate,
-      additionalInfo, // Get new state
-      loading
+      additionalInfo,
+      loading,
+      existingBannerUrl,
+      existingPosterUrl
     } = this.state;
 
-    const rootClassName = classNames(classes.root, className);
-    const subtitle = 'Add Movie';
-    const submitButton = 'Save Details';
-    const submitAction = () => this.onAddMovie();
-
     return (
-      <div className={rootClassName}>
+      <div className={classes.root}>
         <Typography variant="h4" className={classes.title}>
-          {subtitle}
+          Edit Movie
         </Typography>
         <form autoComplete="off" noValidate>
           <div className={classes.field}>
@@ -90,9 +155,7 @@ class AddMovie extends Component {
               required
               value={title}
               variant="outlined"
-              onChange={event =>
-                this.handleFieldChange('title', event.target.value)
-              }
+              onChange={event => this.handleFieldChange('title', event.target.value)}
             />
           </div>
           <div className={classes.field}>
@@ -101,9 +164,7 @@ class AddMovie extends Component {
               <Select
                 multiple
                 value={genre}
-                onChange={event =>
-                  this.handleFieldChange('genre', event.target.value)
-                }
+                onChange={event => this.handleFieldChange('genre', event.target.value)}
                 label="Genre">
                 {genreData.map((genreItem, index) => (
                   <MenuItem key={genreItem + '-' + index} value={genreItem}>
@@ -124,9 +185,7 @@ class AddMovie extends Component {
               required
               variant="outlined"
               value={description}
-              onChange={event =>
-                this.handleFieldChange('description', event.target.value)
-              }
+              onChange={event => this.handleFieldChange('description', event.target.value)}
             />
           </div>
           <div className={classes.field}>
@@ -135,9 +194,7 @@ class AddMovie extends Component {
               <Select
                 multiple
                 value={language}
-                onChange={event =>
-                  this.handleFieldChange('language', event.target.value)
-                }
+                onChange={event => this.handleFieldChange('language', event.target.value)}
                 label="Language">
                 {languageData.map((langItem, index) => (
                   <MenuItem key={langItem + '-' + index} value={langItem}>
@@ -146,18 +203,15 @@ class AddMovie extends Component {
                 ))}
               </Select>
             </FormControl>
-
             <TextField
               className={classes.textField}
               label="Duration"
-              helperText="(in minutes)" // Updated label
+              helperText="(in minutes)"
               margin="dense"
               type="number"
               value={duration}
               variant="outlined"
-              onChange={event =>
-                this.handleFieldChange('duration', event.target.value)
-              }
+              onChange={event => this.handleFieldChange('duration', event.target.value)}
             />
           </div>
           <div className={classes.field}>
@@ -168,9 +222,7 @@ class AddMovie extends Component {
               required
               value={director}
               variant="outlined"
-              onChange={event =>
-                this.handleFieldChange('director', event.target.value)
-              }
+              onChange={event => this.handleFieldChange('director', event.target.value)}
             />
             <TextField
               className={classes.textField}
@@ -179,12 +231,9 @@ class AddMovie extends Component {
               required
               value={cast}
               variant="outlined"
-              onChange={event =>
-                this.handleFieldChange('cast', event.target.value)
-              }
+              onChange={event => this.handleFieldChange('cast', event.target.value)}
             />
           </div>
-          {/* --- NEW FIELD FOR ADDITIONAL INFO --- */}
           <div className={classes.field}>
             <TextField
               fullWidth
@@ -195,9 +244,7 @@ class AddMovie extends Component {
               margin="dense"
               variant="outlined"
               value={additionalInfo}
-              onChange={event =>
-                this.handleFieldChange('additionalInfo', event.target.value)
-              }
+              onChange={event => this.handleFieldChange('additionalInfo', event.target.value)}
             />
           </div>
           <div className={classes.field}>
@@ -209,14 +256,9 @@ class AddMovie extends Component {
                 id="release-date"
                 label="Release Date"
                 value={releaseDate}
-                onChange={date =>
-                  this.handleFieldChange('releaseDate', date._d)
-                }
-                KeyboardButtonProps={{
-                  'aria-label': 'change date'
-                }}
+                onChange={date => this.handleFieldChange('releaseDate', date._d)}
+                KeyboardButtonProps={{ 'aria-label': 'change date' }}
               />
-
               <KeyboardDatePicker
                 className={classes.textField}
                 inputVariant="outlined"
@@ -225,13 +267,10 @@ class AddMovie extends Component {
                 label="End Date"
                 value={endDate}
                 onChange={date => this.handleFieldChange('endDate', date._d)}
-                KeyboardButtonProps={{
-                  'aria-label': 'change date'
-                }}
+                KeyboardButtonProps={{ 'aria-label': 'change date' }}
               />
             </MuiPickersUtilsProvider>
           </div>
-          {/* Primary Image (legacy) removed */}
           <Grid container spacing={2}>
             <Grid item xs={12} md={6}>
               <div className={classes.field}>
@@ -239,12 +278,21 @@ class AddMovie extends Component {
                 <FileUpload
                   className={classes.upload}
                   file={bannerImage}
+                  inputId={`banner-file-${this.props.match.params.id}`}
                   onUpload={event => {
                     const file = event.target.files[0];
                     this.handleFieldChange('bannerImage', file);
                   }}
                 />
-                {/* No preview for Add mode since no existing image */}
+                {(existingBannerUrl || bannerImage) && (
+                  <Box mt={1}>
+                    <img
+                      alt="banner preview"
+                      src={bannerImage ? URL.createObjectURL(bannerImage) : existingBannerUrl}
+                      style={{ width: '100%', maxHeight: 140, objectFit: 'cover', borderRadius: 8 }}
+                    />
+                  </Box>
+                )}
               </div>
             </Grid>
             <Grid item xs={12} md={6}>
@@ -253,44 +301,48 @@ class AddMovie extends Component {
                 <FileUpload
                   className={classes.upload}
                   file={posterImage}
+                  inputId={`poster-file-${this.props.match.params.id}`}
                   onUpload={event => {
                     const file = event.target.files[0];
                     this.handleFieldChange('posterImage', file);
                   }}
                 />
-                {/* No preview for Add mode since no existing image */}
+                {(existingPosterUrl || posterImage) && (
+                  <Box mt={1}>
+                    <img
+                      alt="poster preview"
+                      src={posterImage ? URL.createObjectURL(posterImage) : existingPosterUrl}
+                      style={{ width: '100%', maxHeight: 140, objectFit: 'cover', borderRadius: 8 }}
+                    />
+                  </Box>
+                )}
               </div>
             </Grid>
           </Grid>
         </form>
-
         <Button
           className={classes.buttonFooter}
           color="primary"
           variant="contained"
           disabled={loading}
-          onClick={submitAction}>
-          {submitButton}
+          onClick={this.onUpdateMovie}
+        >
+          Update Movie
         </Button>
-        {/* Delete action removed from Add form */}
+        {/* Delete removed */}
       </div>
     );
   }
 }
 
-AddMovie.propTypes = {
-  className: PropTypes.string,
-  classes: PropTypes.object,
-  movie: PropTypes.object
+EditMoviePage.propTypes = {
+  match: PropTypes.object,
+  selectedMovie: PropTypes.object
 };
 
-const mapStateToProps = ({ movieState }) => ({
-  movies: movieState.movies
-});
+const mapStateToProps = ({ movieState }) => ({ selectedMovie: movieState.selectedMovie });
+const mapDispatchToProps = { getMovie, updateMovie };
 
-const mapDispatchToProps = { addMovie };
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(EditMoviePage));
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(withStyles(styles)(AddMovie));
+

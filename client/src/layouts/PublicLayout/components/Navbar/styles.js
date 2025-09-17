@@ -1,243 +1,188 @@
-export default theme => ({
+export default (theme) => ({
   navbar: {
     position: 'fixed',
     top: 0,
     left: 0,
-    width: '100%',
-    padding: '1.25rem 20px',
+    right: 0,
+    zIndex: 1000,
+    backgroundColor: 'rgba(10, 10, 10, 0.95)',
+    backdropFilter: 'blur(10px)',
+    borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+    padding: '0 2rem',
+    height: '70px',
     display: 'flex',
-    flexWrap: 'wrap',
     alignItems: 'center',
     justifyContent: 'space-between',
-    transform: 'translate3d(0,0,0)',
-    backfaceVisibility: 'hidden',
-    zIndex: 999,
-    transition: 'all 300ms ease-in'
+    transition: 'all 0.3s ease'
   },
   navbarColor: {
-    background: theme.palette.background.dark,
-    transition: 'all 200ms ease-out'
+    backgroundColor: 'rgba(10, 10, 10, 0.98)',
+    boxShadow: '0 2px 20px rgba(0, 0, 0, 0.3)'
   },
   logoLink: {
-    display: 'inline-block',
-    paddingTop: '.15rem',
-    paddingBottom: '.15rem',
-    marginRight: '20px',
-    fontSize: '1.5rem',
-    lineHeight: 'inherit',
-    whiteSpace: 'nowrap',
-    textDecoration: 'none'
+    textDecoration: 'none',
+    display: 'flex',
+    alignItems: 'center'
   },
   logo: {
-    maxHeight: '2.4rem',
-    width: 'auto',
-    fontSize: '2rem',
-    letterSpacing: '1px',
-    color: theme.palette.common.white
+    color: '#FFFFFF',
+    fontWeight: 700,
+    fontSize: '1.8rem',
+    letterSpacing: '0.5px',
+    margin: 0,
+    background: 'linear-gradient(45deg, #007BFF, #4FC3F7)',
+    WebkitBackgroundClip: 'text',
+    WebkitTextFillColor: 'transparent',
+    backgroundClip: 'text'
   },
   navLinks: {
-    marginLeft: 'auto',
-    display: 'flex'
+    display: 'flex',
+    alignItems: 'center',
+    gap: '2rem',
+    listStyle: 'none',
+    margin: 0,
+    padding: 0
   },
   navLink: {
-    position: 'relative',
-    color: theme.palette.common.white,
-    padding: '0 .5rem',
-    margin: '0 1rem',
-    fontSize: '1.1rem',
-    fontWeight: '600',
-    cursor: 'pointer',
+    color: '#B0B0B0',
     textDecoration: 'none',
-    zIndex: 2,
-    '&:after': {
-      content: '""',
-      position: 'absolute',
-      bottom: 0,
-      left: 0,
-      width: '100%',
-      opacity: 0,
-      height: 0,
-      backgroundColor: 'rgba(255,255,255,0.5)',
-      transition: 'all 200ms linear',
-      zIndex: 1
+    fontSize: '1rem',
+    fontWeight: 500,
+    padding: '0.5rem 0',
+    position: 'relative',
+    transition: 'color 0.3s ease',
+    '&:hover': {
+      color: '#FFFFFF'
     },
-    '&:hover:after': {
-      opacity: 1,
-      height: '9px'
+    '&.active': {
+      color: '#007BFF',
+      '&::after': {
+        content: '""',
+        position: 'absolute',
+        bottom: '-2px',
+        left: 0,
+        right: 0,
+        height: '2px',
+        backgroundColor: '#007BFF'
+      }
     }
   },
   navAccount: {
-    marginLeft: 'auto',
-    marginRight: theme.spacing(3),
-    display: 'flex', // Make this a flex container
-    alignItems: 'center' // Align items vertically
+    display: 'flex',
+    alignItems: 'center',
+    gap: '1rem'
   },
-  // --- NEW STYLES FOR CITY DROPDOWN ---
   citySelect: {
-    color: theme.palette.common.white,
-    marginRight: theme.spacing(2),
-    fontWeight: 600,
-    '&:before': {
-      borderColor: theme.palette.common.white,
+    color: '#FFFFFF',
+    minWidth: '120px',
+    '& .MuiSelect-select': {
+      color: '#FFFFFF',
+      padding: '0.5rem 1rem',
+      border: '1px solid rgba(255, 255, 255, 0.2)',
+      borderRadius: '6px',
+      backgroundColor: 'rgba(255, 255, 255, 0.05)'
     },
-    '&:after': {
-      borderColor: theme.palette.common.white,
+    '& .MuiOutlinedInput-notchedOutline': {
+      borderColor: 'rgba(255, 255, 255, 0.2)'
     },
+    '&:hover .MuiOutlinedInput-notchedOutline': {
+      borderColor: 'rgba(255, 255, 255, 0.4)'
+    },
+    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+      borderColor: '#007BFF'
+    }
   },
   citySelectIcon: {
-    fill: theme.palette.common.white,
+    color: '#FFFFFF'
   },
-  // --- END NEW STYLES ---
-  navMobile: { marginRight: theme.spacing(1) },
+  navMobile: {
+    display: 'none',
+    '@media (max-width: 768px)': {
+      display: 'block'
+    }
+  },
   navIcon: {
     display: 'none',
-    height: '30px',
-    width: '30px',
-    position: 'relative',
-    zIndex: 2,
-    cursor: 'pointer',
-    '&:hover $navIconLine__left, &:hover $navIconLine__right': {
-      width: '30px'
+    '@media (max-width: 768px)': {
+      display: 'flex',
+      flexDirection: 'column',
+      cursor: 'pointer',
+      padding: '0.5rem'
     }
   },
   navIconLine: {
-    height: '2px',
-    width: '30px',
-    display: 'block',
-    backgroundColor: theme.palette.common.white,
-    marginBottom: '7px',
-    transition: ' transform .2s ease, background-color .5s ease'
+    width: '25px',
+    height: '3px',
+    backgroundColor: '#FFFFFF',
+    margin: '3px 0',
+    transition: '0.3s',
+    borderRadius: '2px'
   },
   navIconLine__left: {
-    width: '20px',
-    transition: 'all 200ms linear'
+    transform: 'rotate(-45deg) translate(-5px, 6px)'
   },
   navIconLine__right: {
-    width: '20px',
-    transition: 'all 200ms linear'
+    transform: 'rotate(45deg) translate(-5px, -6px)'
   },
-
   nav: {
-    display: 'flex',
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    zIndex: -1,
-    paddingLeft: 0,
-    marginBottom: 0,
-    '&:before, &:after': {
-      content: '""',
+    display: 'none',
+    '@media (max-width: 768px)': {
+      display: 'block',
       position: 'fixed',
-      width: '100vw',
-      height: '100vh',
-      background: 'rgba(255, 255, 255, 0.1)',
-      zIndex: '-1',
-      transition: 'transform cubic-bezier(0.77, 0, 0.175, 1) 0.8s',
-      transform: 'translateX(0%) translateY(-100%)'
-    },
-    '&:before': {
-      background: theme.palette.common.black,
-      transitionDelay: '0s'
-    },
-    '&:after': {
-      transitionDelay: '.1s'
+      top: '70px',
+      left: 0,
+      right: 0,
+      backgroundColor: 'rgba(10, 10, 10, 0.98)',
+      backdropFilter: 'blur(10px)',
+      borderTop: '1px solid rgba(255, 255, 255, 0.1)',
+      transform: 'translateY(-100%)',
+      transition: 'transform 0.3s ease',
+      zIndex: 999
     }
   },
   navActive: {
-    visibility: 'visible',
-    zIndex: 9,
-    '&:before': {
-      transitionDelay: '0s',
-      transform: 'translateX(0%) translateY(0%)'
-    },
-    '&:after': {
-      transitionDelay: '.1s',
-      transform: 'translateX(0%) translateY(0%)'
-    },
-    '& $navContent': {
-      visibility: 'visible'
-    },
-    '& $navContent $currentPageShadow': {
-      transitionDelay: '.5s',
-      opacity: 0.03,
-      marginTop: '0'
-    },
-    '& $navContent $innerNavListItem': {
-      transitionDelay: '.5s',
-      opacity: 1,
-      transform: 'translateX(0%)',
-      transition: 'opacity .3s ease, transform .3s ease, color .3s ease'
+    '@media (max-width: 768px)': {
+      transform: 'translateY(0)'
     }
   },
   navContent: {
-    position: 'fixed',
-    visibility: 'hidden',
-    top: '50%',
-    transform: 'translate(0%, -50%)',
-    width: '100%'
+    padding: '1rem 2rem'
   },
   currentPageShadow: {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    fontFamily: 'sans-serif',
-    fontSize: '10rem',
-    fontWeight: 800,
-    marginTop: '25px',
-    color: '#fff',
-    opacity: 0,
-    transition: 'all 300ms linear'
+    boxShadow: '0 2px 20px rgba(0, 123, 255, 0.3)'
   },
   innerNav: {
-    position: 'relative',
-    padding: 0,
+    listStyle: 'none',
     margin: 0,
-    zIndex: 2
+    padding: 0
   },
   innerNavListItem: {
-    opacity: 0,
-    position: 'relative',
-    display: 'block',
-    textAlign: 'center',
-    fontSize: '4rem',
-    lineHeight: '1.05',
-    letterSpacing: '3px',
-    transform: 'translate(0%, 100%)',
-    transition: 'opacity .2s ease, transform .3s ease'
+    margin: '0.5rem 0'
   },
   innerNavLink: {
-    position: 'relative',
-    color: theme.palette.common.white,
-    padding: '0 .5rem',
-    margin: '0 1rem',
-    fontSize: '2rem',
-    fontWeight: 600,
-    cursor: 'pointer',
+    color: '#B0B0B0',
     textDecoration: 'none',
-    zIndex: 2,
-    '&:after': {
-      content: '""',
-      position: 'absolute',
-      bottom: 0,
-      left: 0,
-      width: '100%',
-      opacity: 0,
-      height: 0,
-      marginTop: '3px',
-      backgroundColor: 'rgba(255,255,255,0.5)',
-      transition: 'all 200ms linear',
-      zIndex: 1
-    },
-    '&:hover:after': {
-      opacity: 1,
-      height: 15
+    fontSize: '1rem',
+    fontWeight: 500,
+    padding: '0.5rem 0',
+    display: 'block',
+    transition: 'color 0.3s ease',
+    '&:hover': {
+      color: '#FFFFFF'
     }
   },
-  [theme.breakpoints.down('sm')]: {
-    navIcon: { display: 'block' },
-    navLinks: { display: 'none' }
+  '@media (max-width: 768px)': {
+    navbar: {
+      padding: '0 1rem'
+    },
+    navLinks: {
+      display: 'none'
+    },
+    navAccount: {
+      gap: '0.5rem'
+    },
+    citySelect: {
+      minWidth: '100px'
+    }
   }
 });

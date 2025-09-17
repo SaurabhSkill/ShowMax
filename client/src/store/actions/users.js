@@ -56,10 +56,18 @@ export const getUsers = () => async dispatch => {
         Authorization: `Bearer ${token}`
       }
     });
-    const users = await response.json();
-    if (response.ok) {
-      dispatch({ type: GET_USERS, payload: users });
+    const text = await response.text();
+    let users = [];
+    try {
+      users = text ? JSON.parse(text) : [];
+    } catch (e) {
+      throw new Error('Failed to parse server response for users');
     }
+    if (!response.ok) {
+      const message = (users && users.message) || 'Failed to load users';
+      throw new Error(message);
+    }
+    dispatch({ type: GET_USERS, payload: users });
   } catch (error) {
     dispatch(setAlert(error.message, 'error', 5000));
   }

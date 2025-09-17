@@ -22,9 +22,9 @@ export default {
   },
   primary: {
     contrastText: white,
-    main: '#0767DB',
-    light: '#F6F9FD',
-    dark: '#0B48A0'
+    main: '#1976d2',
+    light: '#63a4ff',
+    dark: '#004ba0'
   },
   secondary: {
     contrastText: white,
@@ -62,8 +62,8 @@ export default {
     link: blue[600]
   },
   background: {
-    default: '#f8fafc',
-    dark: 'rgb(26, 26, 26)',
+    default: '#fafafa',
+    dark: '#f0f0f0',
     paper: white
   },
   border: '#DFE3E8',

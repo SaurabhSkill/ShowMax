@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-
 const { Schema } = mongoose;
 
 const cinemaSchema = new Schema({
@@ -8,28 +7,50 @@ const cinemaSchema = new Schema({
     required: true,
     trim: true,
   },
-  ticketPrice: {
-    type: Number,
-    required: true,
-  },
   city: {
     type: String,
     required: true,
     trim: true,
     lowercase: true,
   },
-  seats: {
-    type: [Schema.Types.Mixed],
-    required: true,
-  },
   seatsAvailable: {
     type: Number,
     required: true,
+    min: 0,
+  },
+  priceTiers: {
+    normal: { 
+      type: Number, 
+      default: 0,
+      min: 0 
+    },
+    executive: { 
+      type: Number, 
+      default: 0,
+      min: 0 
+    },
+    premium: { 
+      type: Number, 
+      default: 0,
+      min: 0 
+    },
+    classic: { 
+      type: Number, 
+      default: 0,
+      min: 0 
+    },
   },
   image: {
     type: String,
+    default: 'https://source.unsplash.com/featured/?cinema'
   },
+}, {
+  timestamps: true
 });
+
+// Add indexes for better performance
+cinemaSchema.index({ city: 1 });
+cinemaSchema.index({ name: 1 });
 
 const Cinema = mongoose.model('Cinema', cinemaSchema);
 

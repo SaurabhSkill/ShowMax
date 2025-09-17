@@ -32,11 +32,26 @@ app.use(cors({
   exposedHeaders: ['Authorization']
 }));
 
+// Relax COOP to allow communication with popups (e.g., window.postMessage)
+app.use((req, res, next) => {
+  // Use 'same-origin-allow-popups' so popups opened from this page can still communicate
+  res.setHeader('Cross-Origin-Opener-Policy', 'same-origin-allow-popups');
+  // Ensure we don't isolate browsing context group via COEP; allow embedding
+  res.setHeader('Cross-Origin-Embedder-Policy', 'unsafe-none');
+  // Allow cross-origin resources if needed (images/fonts)
+  res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+  // Disable Origin-Agent-Cluster which can interfere with COOP isolation
+  res.setHeader('Origin-Agent-Cluster', '?0');
+  next();
+});
+
 // Body parser
 app.use(express.json());
 
 // Static assets
 app.use(express.static(path.join(__dirname, '../../client/build')));
+// Serve hashed static assets without SPA fallback interfering
+app.use('/static', express.static(path.join(__dirname, '../../client/build/static')));
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 // API routes

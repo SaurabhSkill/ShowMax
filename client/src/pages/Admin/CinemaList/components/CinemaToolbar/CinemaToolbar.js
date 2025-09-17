@@ -1,64 +1,74 @@
-import React, { Component, Fragment } from 'react';
-import PropTypes from 'prop-types';
-import classNames from 'classnames';
-import { withStyles } from '@material-ui/core';
-import { Button } from '@material-ui/core';
-import { SearchInput, ResponsiveDialog } from '../../../../../components';
-import styles from './styles';
-import AddCinema from '../AddCinema/AddCinema';
+import React from 'react';
+import { makeStyles } from '@material-ui/core';
+import { Box, Button, TextField } from '@material-ui/core';
+import { Add as AddIcon, Refresh as RefreshIcon } from '@material-ui/icons';
 
-class CinemaToolbar extends Component {
-  state = {
-    openAddDialog: false
-  };
+const useStyles = makeStyles(theme => ({
+  root: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: theme.spacing(2),
+    backgroundColor: theme.palette.background.paper,
+    borderBottom: `1px solid ${theme.palette.divider}`,
+    flexWrap: 'wrap',
+    gap: theme.spacing(2),
+  },
+  searchBox: {
+    minWidth: 300,
+    [theme.breakpoints.down('sm')]: {
+      minWidth: 200,
+    },
+  },
+  buttonGroup: {
+    display: 'flex',
+    gap: theme.spacing(1),
+  },
+}));
 
-  OpenAddDialog() {
-    this.setState({ openAddDialog: true });
-  }
+function CinemaToolbar(props) {
+  const classes = useStyles();
+  const { 
+    searchTerm, 
+    onSearchChange, 
+    onAddClick, 
+    onRefresh,
+    loading = false 
+  } = props;
 
-  CloseAddDialog() {
-    this.setState({ openAddDialog: false });
-  }
-
-  render() {
-    const { openAddDialog } = this.state;
-    const { classes, className, search, onChangeSearch } = this.props;
-
-    const rootClassName = classNames(classes.root, className);
-
-    return (
-      <Fragment>
-        <div className={rootClassName}>
-          <div className={classes.row}>
-            <SearchInput
-              className={classes.searchInput}
-              placeholder="Search cinema"
-              value={search}
-              onChange={onChangeSearch}
-            />
-            <Button
-              onClick={() => this.OpenAddDialog()}
-              color="primary"
-              size="small"
-              variant="outlined">
-              Add
-            </Button>
-          </div>
-        </div>
-        <ResponsiveDialog
-          id="Add-cinema"
-          open={openAddDialog}
-          handleClose={() => this.CloseAddDialog()}>
-          <AddCinema />
-        </ResponsiveDialog>
-      </Fragment>
-    );
-  }
+  return (
+    <Box className={classes.root}>
+      <TextField
+        className={classes.searchBox}
+        placeholder="Search cinemas..."
+        value={searchTerm}
+        onChange={onSearchChange}
+        variant="outlined"
+        size="small"
+        disabled={loading}
+      />
+      <Box className={classes.buttonGroup}>
+        <Button
+          onClick={onRefresh}
+          color="secondary"
+          size="small"
+          variant="outlined"
+          startIcon={<RefreshIcon />}
+          disabled={loading}>
+          Refresh
+        </Button>
+        <Button
+          onClick={onAddClick}
+          color="primary"
+          size="small"
+          variant="contained"
+          startIcon={<AddIcon />}
+          disabled={loading}>
+          Add Cinema
+        </Button>
+      </Box>
+    </Box>
+  );
 }
 
-CinemaToolbar.propTypes = {
-  className: PropTypes.string,
-  classes: PropTypes.object.isRequired
-};
-
-export default withStyles(styles)(CinemaToolbar);
+export default CinemaToolbar;

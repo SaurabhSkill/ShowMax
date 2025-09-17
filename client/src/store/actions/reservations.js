@@ -54,13 +54,21 @@ export const addReservation = reservation => async dispatch => {
       },
       body: JSON.stringify(reservation)
     });
+    const body = await response.json().catch(() => ({}));
     if (response.ok) {
-      const { reservation, QRCode } = await response.json();
+      const { reservation, QRCode } = body;
       dispatch(setAlert('Reservation Created', 'success', 5000));
       return {
         status: 'success',
         message: 'Reservation Created',
         data: { reservation, QRCode }
+      };
+    } else {
+      const message = body?.message || body?._message || 'Failed to create reservation';
+      dispatch(setAlert(message, 'error', 5000));
+      return {
+        status: 'error',
+        message
       };
     }
   } catch (error) {

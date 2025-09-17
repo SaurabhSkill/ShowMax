@@ -16,6 +16,7 @@ import styles from './styles';
 class AccountProfile extends Component {
   render() {
     const { user, classes, className, file, onUpload } = this.props;
+    const safeUser = user || {};
     const rootClassName = classNames(classes.root, className);
 
     return (
@@ -23,17 +24,17 @@ class AccountProfile extends Component {
         <PortletContent>
           <div className={classes.details}>
             <div className={classes.info}>
-              <Typography variant="h2">{user.name}</Typography>
+              <Typography variant="h2">{safeUser.name || 'User'}</Typography>
               <Typography className={classes.emailText} variant="body1">
-                {user.email}
+                {safeUser.email || ''}
               </Typography>
               <Typography className={classes.dateText} variant="body1">
-                Join at: {moment(user.createdAt).format('DD/MM/YYYY')}
+                Join at: {safeUser.createdAt ? moment(safeUser.createdAt).format('DD/MM/YYYY') : ''}
               </Typography>
             </div>
             <Avatar
               className={classes.avatar}
-              src={user.imageurl ? user.imageurl : '/images/avatars/avatar.png'}
+              src={safeUser.imageurl ? safeUser.imageurl : '/images/avatars/avatar.png'}
             />
           </div>
         </PortletContent>

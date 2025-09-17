@@ -38,8 +38,8 @@ function MyDashboard(props) {
 
   const classes = useStyles(props);
 
-  const myReservations = reservations.filter(
-    reservation => reservation.username === user.username
+  const myReservations = (reservations || []).filter(
+    reservation => user && reservation && reservation.username === user.username
   );
 
   console.log(myReservations);

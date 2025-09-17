@@ -1,349 +1,462 @@
-import React, { Component } from 'react'; // Fragment removed
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import classNames from 'classnames';
-import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core';
 import {
-  withStyles,
+  Box, 
+  TextField, 
   Button,
-  TextField,
   Typography,
-  Divider,
-  List,
-  ListItem,
-  ListItemText,
-  IconButton,
-  MenuItem
+  Grid,
+  Paper
 } from '@material-ui/core';
-import { Add, Delete } from '@material-ui/icons';
-import styles from './styles';
-import {
-  getCinemas,
-  createCinemas,
-  updateCinemas,
-  removeCinemas
-} from '../../../../../store/actions/cinemas';
-import {
-  getShowtimesByCinema,
-  addShowtime,
-  deleteShowtime
-} from '../../../../../store/actions/showtimes';
-import { FileUpload } from '../../../../../components';
+import { createCinema, updateCinema } from '../../../../../store/actions/cinemas';
+import { getMovies } from '../../../../../store/actions/movies';
+import { getShowtimesByCinema, addShowtime } from '../../../../../store/actions/showtimes';
+
+const styles = theme => ({
+  root: {
+    padding: theme.spacing(3),
+  },
+  form: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: theme.spacing(3),
+  },
+  section: {
+    padding: theme.spacing(2),
+    marginBottom: theme.spacing(2),
+  },
+  sectionTitle: {
+    marginBottom: theme.spacing(2),
+    color: theme.palette.primary.main,
+    fontWeight: 'bold',
+  },
+  priceTiersGrid: {
+    marginTop: theme.spacing(2),
+  },
+  buttonGroup: {
+    display: 'flex',
+    gap: theme.spacing(2),
+    justifyContent: 'flex-end',
+    marginTop: theme.spacing(3),
+  },
+});
 
 class AddCinema extends Component {
-  state = {
+  constructor(props) {
+    super(props);
+    
+    this.state = {
     _id: '',
     name: '',
-    image: null,
-    ticketPrice: '',
     city: '',
     seatsAvailable: '',
-    seats: [],
-    notification: {},
-    // New state for the showtime form
-    newShowtimeMovieId: '',
-    newShowtimeStartAt: ''
-  };
+      priceTiers: {
+        normal: 0,
+        executive: 0,
+        premium: 0,
+        classic: 0,
+      },
+      loading: false,
+      assignMovieId: '',
+      assignStartAt: '',
+      assignStartDate: '',
+      assignEndDate: ''
+    };
+  }
 
   componentDidMount() {
     if (this.props.editCinema) {
-      const { image, ...rest } = this.props.editCinema;
-      this.setState({ ...rest });
-      // Fetch showtimes for this cinema when the component mounts
+      this.loadCinemaData();
+    }
+    this.props.getMovies();
+    if (this.props.editCinema?._id) {
       this.props.getShowtimesByCinema(this.props.editCinema._id);
     }
   }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.editCinema !== this.props.editCinema) {
+      if (this.props.editCinema) {
+        this.loadCinemaData();
+        if (this.props.editCinema?._id) {
+          this.props.getShowtimesByCinema(this.props.editCinema._id);
+        }
+      } else {
+        this.resetForm();
+      }
+    }
+  }
+
+  loadCinemaData = () => {
+    const { editCinema } = this.props;
+    if (editCinema) {
+      this.setState({
+        _id: editCinema._id || '',
+        name: editCinema.name || '',
+        city: editCinema.city || '',
+        seatsAvailable: editCinema.seatsAvailable || '',
+        priceTiers: {
+          normal: editCinema.priceTiers?.normal || 0,
+          executive: editCinema.priceTiers?.executive || 0,
+          premium: editCinema.priceTiers?.premium || 0,
+          classic: editCinema.priceTiers?.classic || 0,
+        },
+      });
+    }
+  };
+
+  handleAssignFieldChange = (field, value) => {
+    this.setState({ [field]: value });
+  };
+
+  handleAddShowtime = async () => {
+    const { _id, assignMovieId, assignStartAt, assignStartDate, assignEndDate } = this.state;
+    if (!_id) return;
+
+    if (!assignMovieId || !assignStartAt || !assignStartDate || !assignEndDate) {
+      alert('Please fill movie, start time, start date and end date');
+      return;
+    }
+
+    const payload = {
+      cinemaId: _id,
+      movieId: assignMovieId,
+      startAt: assignStartAt,
+      startDate: new Date(assignStartDate),
+      endDate: new Date(assignEndDate)
+    };
+
+    this.setState({ loading: true });
+    try {
+      const res = await this.props.addShowtime(payload);
+      if (res?.status === 'success') {
+        await this.props.getShowtimesByCinema(_id);
+        this.setState({ assignMovieId: '', assignStartAt: '', assignStartDate: '', assignEndDate: '' });
+      }
+    } finally {
+      this.setState({ loading: false });
+    }
+  };
+
+  resetForm = () => {
+    this.setState({ 
+      _id: '',
+      name: '',
+      city: '',
+      seatsAvailable: '',
+      priceTiers: {
+        normal: 0,
+        executive: 0,
+        premium: 0,
+        classic: 0,
+      },
+    });
+  };
 
   handleFieldChange = (field, value) => {
     this.setState({ [field]: value });
   };
 
-  onSubmitAction = async type => {
-    const {
-      getCinemas,
-      createCinemas,
-      updateCinemas,
-      removeCinemas,
-      handleClose
-    } = this.props;
-    const {
-      _id,
-      name,
-      image,
-      ticketPrice,
-      city,
-      seatsAvailable,
-      seats
-    } = this.state;
-    const cinema = { name, ticketPrice, city, seatsAvailable, seats };
-    let notification = {};
-    if (type === 'create') {
-      notification = await createCinemas(image, cinema);
-    } else if (type === 'update') {
-      notification = await updateCinemas(image, cinema, _id);
-    } else {
-      notification = await removeCinemas(_id);
-    }
-    this.setState({ notification });
-    if (notification && notification.status === 'success') {
-      getCinemas();
-      handleClose();
-    }
+  handlePriceTierChange = (tier, value) => {
+    this.setState(prevState => ({
+      priceTiers: {
+        ...prevState.priceTiers,
+        [tier]: Number(value) || 0,
+      },
+    }));
   };
 
-  // --- NEW SHOWTIME HANDLERS ---
-  handleShowtimeAdd = async () => {
-    const { addShowtime, getShowtimesByCinema, editCinema } = this.props;
-    const { newShowtimeMovieId, newShowtimeStartAt } = this.state;
+  handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    const { _id, name, city, seatsAvailable, priceTiers } = this.state;
+    const { handleClose } = this.props;
 
-    if (!newShowtimeMovieId || !newShowtimeStartAt) {
-      return this.setState({
-        notification: {
-          status: 'error',
-          message: 'Please select a movie and a time.'
-        }
-      });
+    // Validation
+    if (!name.trim() || !city.trim() || !seatsAvailable) {
+      alert('Please fill in all required fields');
+      return;
     }
 
-    const newShowtime = {
-      movieId: newShowtimeMovieId,
-      cinemaId: editCinema._id,
-      startAt: newShowtimeStartAt,
-      startDate: new Date(), // Default to today
-      endDate: new Date('2025-12-31') // Default end date
+    if (Number(seatsAvailable) < 0) {
+      alert('Seats available must be a positive number');
+      return;
+    }
+
+    this.setState({ loading: true });
+
+    const cinemaData = {
+      name: name.trim(),
+      city: city.trim().toLowerCase(),
+      seatsAvailable: Number(seatsAvailable),
+      priceTiers,
     };
 
-    const notification = await addShowtime(newShowtime);
-    this.setState({
-      notification,
-      newShowtimeMovieId: '',
-      newShowtimeStartAt: ''
-    });
+    try {
+      let result;
+      if (_id) {
+        // Update existing cinema
+        result = await this.props.updateCinema(_id, cinemaData);
+      } else {
+        // Create new cinema
+        result = await this.props.createCinema(cinemaData);
+      }
 
-    if (notification && notification.status === 'success') {
-      getShowtimesByCinema(editCinema._id);
+      if (result.status === 'success') {
+        handleClose();
+      }
+    } catch (error) {
+      console.error('Error saving cinema:', error);
+    } finally {
+      this.setState({ loading: false });
     }
-  };
-
-  handleShowtimeDelete = async showtimeId => {
-    const { deleteShowtime, getShowtimesByCinema, editCinema } = this.props;
-    const notification = await deleteShowtime(showtimeId);
-    this.setState({ notification });
-    if (notification && notification.status === 'success') {
-      getShowtimesByCinema(editCinema._id);
-    }
-  };
-
-  // --- RENDER METHOD FOR THE SHOWTIME MANAGER ---
-  renderShowtimeManager = () => {
-    const { classes, movies, showtimes } = this.props;
-    const { newShowtimeMovieId, newShowtimeStartAt } = this.state;
-    
-    return (
-      <div className={classes.showtimeManager}>
-        <Divider style={{ margin: '20px 0' }} />
-        <Typography variant="h5" className={classes.title}>
-          Manage Showtimes
-        </Typography>
-
-        {/* List of existing showtimes */}
-        <List>
-          {showtimes &&
-            showtimes.map(showtime => (
-              <ListItem key={showtime._id} dense>
-                <ListItemText
-                  primary={showtime.movieId ? showtime.movieId.title : 'Loading...'}
-                  secondary={showtime.startAt}
-                />
-                <IconButton
-                  edge="end"
-                  aria-label="delete"
-                  onClick={() => this.handleShowtimeDelete(showtime._id)}>
-                  <Delete />
-                </IconButton>
-              </ListItem>
-            ))}
-        </List>
-
-        {/* Form to add a new showtime */}
-        <div className={classes.field}>
-          <TextField
-            fullWidth
-            select
-            label="Select Movie"
-            value={newShowtimeMovieId}
-            onChange={event => this.handleFieldChange('newShowtimeMovieId', event.target.value)}
-            variant="outlined"
-            margin="dense">
-            {movies.map(movie => (
-              <MenuItem key={movie._id} value={movie._id}>
-                {movie.title}
-              </MenuItem>
-            ))}
-          </TextField>
-          <TextField
-            fullWidth
-            label="Enter Time (e.g., 10:30 AM)"
-            value={newShowtimeStartAt}
-            onChange={event => this.handleFieldChange('newShowtimeStartAt', event.target.value)}
-            variant="outlined"
-            margin="dense"
-          />
-        </div>
-        <Button
-          color="primary"
-          variant="outlined"
-          onClick={this.handleShowtimeAdd}>
-          <Add /> Add Showtime
-        </Button>
-      </div>
-    );
   };
 
   render() {
-    const { classes, className, editCinema } = this.props;
+    const { classes } = this.props;
+    const { editCinema, handleClose, movies, cinemaShowtimes } = this.props;
     const {
       name,
-      image,
-      ticketPrice,
       city,
       seatsAvailable,
-      notification
+      priceTiers, 
+      loading,
+      assignMovieId,
+      assignStartAt,
+      assignStartDate,
+      assignEndDate 
     } = this.state;
 
-    const rootClassName = classNames(classes.root, className);
-    const mainTitle = editCinema ? 'Edit Cinema' : 'Add Cinema';
-    const submitButton = editCinema ? 'Update Cinema' : 'Save Details';
-    const submitAction = editCinema
-      ? () => this.onSubmitAction('update')
-      : () => this.onSubmitAction('create');
-
     return (
-      <div className={rootClassName}>
-        <Typography variant="h4" className={classes.title}>
-          {mainTitle}
+      <Box className={classes.root}>
+        <Typography variant="h5" gutterBottom>
+          {editCinema ? 'Edit Cinema' : 'Add New Cinema'}
         </Typography>
-        <form autoComplete="off" noValidate>
-          {/* Cinema Details Form */}
-          <div className={classes.field}>
+        
+        <form onSubmit={this.handleSubmit} className={classes.form}>
+          {/* Basic Information */}
+          <Paper className={classes.section}>
+            <Typography variant="h6" className={classes.sectionTitle}>
+              Basic Information
+            </Typography>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
             <TextField
-              className={classes.textField}
-              helperText="Please specify the cinema name"
-              label="Name"
-              margin="dense"
+                  fullWidth
+                  label="Cinema Name"
+                  value={name}
+                  onChange={(e) => this.handleFieldChange('name', e.target.value)}
               required
-              value={name}
-              variant="outlined"
-              onChange={event =>
-                this.handleFieldChange('name', event.target.value)
-              }
-            />
+                  disabled={loading}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
             <TextField
               fullWidth
-              className={classes.textField}
               label="City"
-              margin="dense"
+                  value={city}
+                  onChange={(e) => this.handleFieldChange('city', e.target.value)}
               required
-              variant="outlined"
-              value={city}
-              onChange={event =>
-                this.handleFieldChange('city', event.target.value)
-              }
-            />
-          </div>
-          <div className={classes.field}>
-            <FileUpload
-              className={classes.textField}
-              file={image}
-              onUpload={event => {
-                const file = event.target.files[0];
-                this.handleFieldChange('image', file);
-              }}
-            />
-          </div>
-          <div className={classes.field}>
+                  disabled={loading}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
             <TextField
-              className={classes.textField}
-              label="Ticket Price"
-              margin="dense"
+                  fullWidth
+                  label="Seats Available"
               type="number"
-              value={ticketPrice}
-              variant="outlined"
-              onChange={event =>
-                this.handleFieldChange('ticketPrice', event.target.value)
-              }
-            />
+                  value={seatsAvailable}
+                  onChange={(e) => this.handleFieldChange('seatsAvailable', e.target.value)}
+                  required
+                  disabled={loading}
+                  inputProps={{ min: 0 }}
+                />
+              </Grid>
+            </Grid>
+          </Paper>
+
+          {/* Price Tiers */}
+          <Paper className={classes.section}>
+            <Typography variant="h6" className={classes.sectionTitle}>
+              Price Tiers (₹)
+            </Typography>
+            <Grid container spacing={2} className={classes.priceTiersGrid}>
+              <Grid item xs={12} sm={6} md={3}>
             <TextField
-              className={classes.textField}
-              label="Seats Available"
-              margin="dense"
-              required
-              value={seatsAvailable}
-              variant="outlined"
-              onChange={event =>
-                this.handleFieldChange('seatsAvailable', event.target.value)
-              }
-            />
-          </div>
-        </form>
+                  fullWidth
+                  label="Normal"
+              type="number"
+                  value={priceTiers.normal}
+                  onChange={(e) => this.handlePriceTierChange('normal', e.target.value)}
+                  disabled={loading}
+                  inputProps={{ min: 0 }}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} md={3}>
+            <TextField
+                  fullWidth
+                  label="Executive"
+              type="number"
+                  value={priceTiers.executive}
+                  onChange={(e) => this.handlePriceTierChange('executive', e.target.value)}
+                  disabled={loading}
+                  inputProps={{ min: 0 }}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} md={3}>
+            <TextField
+                  fullWidth
+                  label="Premium"
+              type="number"
+                  value={priceTiers.premium}
+                  onChange={(e) => this.handlePriceTierChange('premium', e.target.value)}
+                  disabled={loading}
+                  inputProps={{ min: 0 }}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} md={3}>
+            <TextField
+                  fullWidth
+                  label="Classic"
+                  type="number"
+                  value={priceTiers.classic}
+                  onChange={(e) => this.handlePriceTierChange('classic', e.target.value)}
+                  disabled={loading}
+                  inputProps={{ min: 0 }}
+                />
+              </Grid>
+            </Grid>
+            </Paper>
 
-        {/* Render Showtime Manager only when editing a cinema */}
-        {editCinema && this.renderShowtimeManager()}
+          {/* Assign Movies and Showtimes */}
+          <Paper className={classes.section}>
+            <Typography variant="h6" className={classes.sectionTitle}>
+              Assign Movies and Showtimes
+            </Typography>
+            {!editCinema ? (
+              <Typography variant="body2" color="textSecondary">
+                Save the cinema first to assign showtimes.
+              </Typography>
+            ) : (
+              <>
+                <Grid container spacing={2}>
+                  <Grid item xs={12} md={4}>
+                    <TextField
+                      select
+                      fullWidth
+                      SelectProps={{ native: true }}
+                      label="Movie"
+                      value={assignMovieId}
+                      onChange={(e) => this.handleAssignFieldChange('assignMovieId', e.target.value)}
+                      disabled={loading}
+                    >
+                      <option value="" disabled>Select a movie</option>
+                      {movies && movies.map(m => (
+                        <option key={m._id} value={m._id}>{m.title}</option>
+                      ))}
+                    </TextField>
+                  </Grid>
+                  <Grid item xs={12} md={2}>
+                    <TextField
+                      fullWidth
+                      label="Start Time"
+                      placeholder="e.g. 10:00 AM"
+                      value={assignStartAt}
+                      onChange={(e) => this.handleAssignFieldChange('assignStartAt', e.target.value)}
+                      disabled={loading}
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={3}>
+                    <TextField
+                      fullWidth
+                      type="date"
+                      label="Start Date"
+                      InputLabelProps={{ shrink: true }}
+                      value={assignStartDate}
+                      onChange={(e) => this.handleAssignFieldChange('assignStartDate', e.target.value)}
+                      disabled={loading}
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={3}>
+                    <TextField
+                      fullWidth
+                      type="date"
+                      label="End Date"
+                      InputLabelProps={{ shrink: true }}
+                      value={assignEndDate}
+                      onChange={(e) => this.handleAssignFieldChange('assignEndDate', e.target.value)}
+                      disabled={loading}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={this.handleAddShowtime}
+                      disabled={loading || !assignMovieId || !assignStartAt || !assignStartDate || !assignEndDate}
+                    >
+                      Add Showtime
+                    </Button>
+                  </Grid>
+                </Grid>
 
-        <div className={classes.buttonContainer}>
+                <Box mt={3}>
+                  <Typography variant="subtitle1">Existing Showtimes</Typography>
+                  {(!cinemaShowtimes || cinemaShowtimes.length === 0) ? (
+                    <Typography variant="body2" color="textSecondary">No showtimes yet.</Typography>
+                  ) : (
+                    <Grid container spacing={1}>
+                      {cinemaShowtimes.map(st => (
+                        <Grid item xs={12} md={6} key={st._id}>
+                          <Paper className={classes.section}>
+                            <Typography variant="body1">{st?.movieId?.title || ''} — {st.startAt}</Typography>
+                            <Typography variant="caption" color="textSecondary">
+                              {new Date(st.startDate).toLocaleDateString()} - {new Date(st.endDate).toLocaleDateString()}
+                            </Typography>
+                          </Paper>
+                        </Grid>
+                      ))}
+                    </Grid>
+                  )}
+                </Box>
+              </>
+            )}
+          </Paper>
+
+          {/* Action Buttons */}
+          <Box className={classes.buttonGroup}>
           <Button
-            className={classes.buttonFooter}
-            color="primary"
-            variant="contained"
-            onClick={submitAction}>
-            {submitButton}
+              onClick={handleClose}
+              disabled={loading}
+              variant="outlined">
+              Cancel
           </Button>
-          {editCinema && (
-            <Button
-              color="secondary"
-              className={classes.buttonFooter}
+          <Button
+              type="submit"
               variant="contained"
-              onClick={() => this.onSubmitAction('remove')}>
-              Delete Cinema
-            </Button>
-          )}
-        </div>
-
-        {notification && notification.status && (
-          <Typography
-            className={classes.infoMessage}
-            color={notification.status === 'success' ? 'primary' : 'error'}
-            variant="caption">
-            {notification.message}
-          </Typography>
-        )}
-      </div>
+              color="primary"
+              disabled={loading}>
+              {loading ? 'Saving...' : (editCinema ? 'Update Cinema' : 'Create Cinema')}
+          </Button>
+              </Box>
+        </form>
+                </Box>
     );
   }
 }
 
-AddCinema.propTypes = {
-  className: PropTypes.string,
-  classes: PropTypes.object.isRequired,
-  editCinema: PropTypes.object,
-  handleClose: PropTypes.func.isRequired
-};
-
 const mapStateToProps = state => ({
   movies: state.movieState.movies,
-  showtimes: state.showtimeState.showtimes
+  cinemaShowtimes: state.showtimeState.showtimes
 });
 
 const mapDispatchToProps = {
-  getCinemas,
-  createCinemas,
-  updateCinemas,
-  removeCinemas,
+  createCinema,
+  updateCinema,
+  getMovies,
   getShowtimesByCinema,
   addShowtime,
-  deleteShowtime
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(withStyles(styles)(AddCinema));
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(AddCinema));

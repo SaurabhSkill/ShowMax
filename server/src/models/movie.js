@@ -36,6 +36,12 @@ const movieSchema = new Schema({
   image: {
     type: String,
   },
+  bannerImage: {
+    type: String,
+  },
+  posterImage: {
+    type: String,
+  },
   language: {
     type: [String],
     required: true,

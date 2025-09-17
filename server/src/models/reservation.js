@@ -11,13 +11,32 @@ const reservationSchema = new Schema({
     required: true,
     trim: true,
   },
+  // Optional when using ticket-count-only flow
   seats: {
     type: [Schema.Types.Mixed],
+    required: false,
+    default: [],
+  },
+  ticketsCount: {
+    type: Number,
     required: true,
+    min: 1,
   },
   ticketPrice: {
     type: Number,
     required: true,
+  },
+  // Which tier selected for pricing
+  priceTier: {
+    type: String,
+    enum: ['normal', 'executive', 'premium', 'classic'],
+    default: 'normal',
+  },
+  // Seat type selected by user
+  seatType: {
+    type: String,
+    enum: ['normal', 'executive', 'premium', 'classic'],
+    default: 'normal',
   },
   total: {
     type: Number,

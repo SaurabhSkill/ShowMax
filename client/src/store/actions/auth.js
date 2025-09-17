@@ -9,7 +9,7 @@ import {
 } from '../types';
 import { setAlert } from './alert';
 // History will be passed via props in components 
-import { setAuthHeaders, setUser, removeUser, isLoggedIn } from '../../utils';
+import { setAuthHeaders, setUser, removeUser } from '../../utils';
 
 
 export const register = (userData, history) => async dispatch => {
@@ -167,8 +167,9 @@ export const login = (username, password, history) => async dispatch => {
 };
 
 export const loadUser = () => async dispatch => {
-  if (!isLoggedIn()) return;
   try {
+    const token = localStorage.getItem('jwtToken');
+    if (!token) return;
     const url = '/users/me';
     const response = await fetch(url, {
       method: 'GET',
@@ -176,9 +177,10 @@ export const loadUser = () => async dispatch => {
     });
     const responseData = await response.json();
     if (response.ok) {
-      const { user } = responseData;
-      user && setUser(user);
-      dispatch({ type: USER_LOADED, payload: responseData });
+      // API returns raw user object for /users/me
+      const user = responseData && responseData._id ? responseData : responseData.user;
+      if (user) setUser(user);
+      dispatch({ type: USER_LOADED, payload: { user } });
     } else {
       dispatch({ type: AUTH_ERROR });
     }
@@ -191,6 +193,19 @@ export const logout = (history) => async dispatch => {
   removeUser();
   dispatch({ type: LOGOUT });
   dispatch(setAlert('You have been logged out.', 'success', 5000));
-  history.push('/login');
+  try {
+    if (history && typeof history.push === 'function') {
+      history.push('/login');
+    } else if (typeof window !== 'undefined') {
+      // Fallback navigation when history is not available
+      if (window.location && typeof window.location.replace === 'function') {
+        window.location.replace('#/login');
+      } else {
+        window.location.hash = '#/login';
+      }
+    }
+  } catch (_) {
+    // Ignore navigation errors
+  }
 };
 

@@ -15,7 +15,8 @@ const ResponsiveDialog = ({
   children,
   open,
   handleClose,
-  maxWidth = 'lg'
+  maxWidth = 'lg',
+  buttonText = 'Done'
 }) => {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
@@ -35,7 +36,7 @@ const ResponsiveDialog = ({
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose} color="primary" autoFocus>
-          Done
+          {buttonText}
         </Button>
       </DialogActions>
     </Dialog>

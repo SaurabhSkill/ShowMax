@@ -4,10 +4,8 @@ import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core';
 import { CircularProgress, Grid } from '@material-ui/core';
 import { MovieToolbar, MovieCard } from './components';
-import { ResponsiveDialog } from '../../../components';
 import styles from './styles';
-import AddMovie from './components/AddMovie/AddMovie';
-import { getMovies, onSelectMovie } from '../../../store/actions';
+import { getMovies } from '../../../store/actions';
 import { match } from '../../../utils';
 
 class MovieList extends Component {
@@ -36,8 +34,7 @@ class MovieList extends Component {
             key={movie._id}
             lg={4}
             md={6}
-            xs={12}
-            onClick={() => this.props.onSelectMovie(movie)}>
+            xs={12}>
             <MovieCard movie={movie} />
           </Grid>
         ))}
@@ -46,7 +43,7 @@ class MovieList extends Component {
   }
 
   render() {
-    const { classes, selectedMovie } = this.props;
+    const { classes } = this.props;
     return (
       <div className={classes.root}>
         <MovieToolbar
@@ -54,12 +51,6 @@ class MovieList extends Component {
           onChangeSearch={e => this.setState({ search: e.target.value })}
         />
         <div className={classes.content}>{this.renderMovies()}</div>
-        <ResponsiveDialog
-          id="Edit-movie"
-          open={Boolean(selectedMovie)}
-          handleClose={() => this.props.onSelectMovie(null)}>
-          <AddMovie edit={selectedMovie} />
-        </ResponsiveDialog>
       </div>
     );
   }
@@ -73,11 +64,10 @@ const mapStateToProps = ({ movieState }) => ({
   movies: movieState.movies,
   latestMovies: movieState.latestMovies,
   comingSoon: movieState.comingSoon,
-  nowShowing: movieState.nowShowing,
-  selectedMovie: movieState.selectedMovie
+  nowShowing: movieState.nowShowing
 });
 
-const mapDispatchToProps = { getMovies, onSelectMovie };
+const mapDispatchToProps = { getMovies };
 
 export default connect(
   mapStateToProps,

@@ -1,127 +1,174 @@
 export default theme => ({
   movieHero: {
     position: 'relative',
-    height: props => (props.height ? props.height : '100%'),
+    minHeight: '100vh',
     width: '100%',
     color: theme.palette.common.white,
-    backgroundColor: theme.palette.background.dark
+    backgroundColor: theme.palette.background.dark,
+    display: 'flex',
+    alignItems: 'center',
+    padding: '2rem 0'
   },
   blurBackground: {
     position: 'absolute',
     top: 0,
-    zIndex: 1,
-    height: '100%',
+    left: 0,
     right: 0,
+    bottom: 0,
+    zIndex: 1,
     backgroundSize: 'cover',
+    backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
-    width: '100%'
+    '&::after': {
+      content: '""',
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      background: 'linear-gradient(135deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 100%)'
+    }
   },
   infoSection: {
     position: 'relative',
-    padding: theme.spacing(3),
+    zIndex: 2,
     display: 'flex',
     alignItems: 'center',
     width: '100%',
-    height: '100%',
-    backgroundBlendMode: 'multiply',
-    background:
-      'linear-gradient(to right, rgba(0,0,0,.9) 25%, transparent 100%)',
-    zIndex: 2
+    maxWidth: '1200px',
+    margin: '0 auto',
+    padding: '0 2rem'
+  },
+  moviePoster: {
+    width: '300px',
+    height: '450px',
+    borderRadius: '12px',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    marginRight: '3rem',
+    boxShadow: '0 20px 40px rgba(0, 0, 0, 0.5)',
+    flexShrink: 0
   },
   movieHeader: {
-    position: 'relative',
-    padding: theme.spacing(3),
-    maxWidth: '60%'
+    flex: 1,
+    maxWidth: '600px'
   },
   tag: {
-    padding: theme.spacing(0.3, 3),
-    marginRight: theme.spacing(1),
-    border: '1px solid rgba(255,255,255,0.9)',
-    borderRadius: 25
+    padding: '0.5rem 1rem',
+    marginRight: '0.5rem',
+    marginBottom: '1rem',
+    border: '1px solid rgba(255,255,255,0.3)',
+    borderRadius: '20px',
+    fontSize: '0.9rem',
+    display: 'inline-block',
+    backgroundColor: 'rgba(255,255,255,0.1)'
   },
   movieTitle: {
-    maxWidth: '60%',
-    fontSize: '32px',
-    lineHeight: 1.2,
-    fontWeight: 400,
-    textTransform: 'capitalize'
+    fontSize: '3rem',
+    lineHeight: 1.1,
+    fontWeight: 700,
+    marginBottom: '1rem',
+    color: '#FFFFFF'
   },
-  director: {
-    color: '#9ac7fa',
-    fontWeight: '500',
-    fontSize: '16px',
-    marginTop: theme.spacing(1)
-  },
-
-  duration: {
-    display: 'inline-block',
-    marginTop: theme.spacing(2),
-    padding: theme.spacing(1),
-    border: '1px solid rgba(255,255,255,0.13)'
-  },
-  genre: {
-    display: 'inline-block',
-    color: '#cee4fd',
-    marginLeft: theme.spacing(2)
+  movieMeta: {
+    fontSize: '1.1rem',
+    color: '#B0B0B0',
+    marginBottom: '1.5rem',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '1rem'
   },
   descriptionText: {
-    color: '#cfd6e1',
-    padding: theme.spacing(2, 0),
-    maxWidth: '60%'
+    color: '#E0E0E0',
+    fontSize: '1.1rem',
+    lineHeight: 1.6,
+    marginBottom: '2rem',
+    maxWidth: '500px'
   },
-  footer: {
-    position: 'absolute',
-    left: theme.spacing(4),
-    bottom: theme.spacing(2),
-    zIndex: 2
+  director: {
+    color: '#B0B0B0',
+    fontSize: '1rem',
+    marginBottom: '1.5rem'
   },
-  icons: {
-    display: 'inline-block',
-    cursor: 'pointer',
-    color: 'rgba(255, 255, 255, 0.4)',
-    margin: theme.spacing(0, 1),
-    transition: 'all 0.3s',
+  rating: {
+    display: 'flex',
+    alignItems: 'center',
+    marginBottom: '2rem',
+    gap: '0.5rem'
+  },
+  ratingText: {
+    color: '#FFFFFF',
+    fontSize: '1.1rem',
+    fontWeight: 600
+  },
+  movieActions: {
+    display: 'flex',
+    gap: '1rem',
+    alignItems: 'center'
+  },
+  button: {
+    backgroundColor: '#007BFF',
+    color: '#FFFFFF',
+    padding: '1rem 2rem',
+    fontSize: '1.1rem',
+    fontWeight: 600,
+    borderRadius: '8px',
+    textTransform: 'none',
+    minWidth: '180px',
     '&:hover': {
-      color: 'rgba(255, 255, 255, 0.8)',
-      transform: 'scale(1.25)',
-      transition: 'all 0.3s',
-      transitionDelay: '0.15s'
+      backgroundColor: '#0056B3',
+      transform: 'translateY(-2px)',
+      boxShadow: '0 8px 25px rgba(0, 123, 255, 0.3)'
+    },
+    transition: 'all 0.3s ease'
+  },
+  learnMore: {
+    backgroundColor: 'transparent',
+    color: '#FFFFFF',
+    border: '2px solid #FFFFFF',
+    '&:hover': {
+      backgroundColor: '#FFFFFF',
+      color: '#000000'
     }
   },
-  movieActions: { position: 'absolute', bottom: 0, right: 0 },
-  button: {
-    width: 200,
-    height: 70,
-    borderRadius: 0,
-    zIndex: 2
+  buttonIcon: {
+    marginLeft: '0.5rem'
   },
-  learnMore: { color: theme.palette.common.white },
-  buttonIcon: { marginLeft: theme.spacing(2) },
-  [theme.breakpoints.down('sm')]: {
-    infoSection: {
-      background:
-        'linear-gradient(to right, rgba(0,0,0,.9) 70%, transparent 100%)'
+  [theme.breakpoints.down('md')]: {
+    movieHero: {
+      minHeight: 'auto',
+      padding: '4rem 0'
     },
-    movieHeader: { maxWidth: '90%' },
+    infoSection: {
+      flexDirection: 'column',
+      textAlign: 'center',
+      padding: '0 1rem'
+    },
+    moviePoster: {
+      width: '250px',
+      height: '375px',
+      marginRight: 0,
+      marginBottom: '2rem'
+    },
     movieTitle: {
-      maxWidth: '100%',
-      fontSize: '16px'
+      fontSize: '2.5rem'
+    }
+  },
+  [theme.breakpoints.down('sm')]: {
+    moviePoster: {
+      width: '200px',
+      height: '300px'
+    },
+    movieTitle: {
+      fontSize: '2rem'
     },
     descriptionText: {
-      maxWidth: '100%',
-      fontSize: '12px'
+      fontSize: '1rem'
     },
-    tag: { padding: theme.spacing(0.3, 1), margin: theme.spacing(1, 1, 1, 0) },
-    movieActions: { display: 'flex', width: '100%' },
     button: {
-      flex: 1,
-      fontSize: 13,
-      height: 'auto',
-      padding: theme.spacing(2)
-    },
-    footer: {
-      left: theme.spacing(1),
-      bottom: theme.spacing(12)
+      padding: '0.8rem 1.5rem',
+      fontSize: '1rem',
+      minWidth: '150px'
     }
   }
 });
