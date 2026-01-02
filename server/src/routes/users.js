@@ -1,5 +1,4 @@
 const express = require('express');
-const crypto = require('crypto');
 const User = require('../models/user');
 const auth = require('../middlewares/auth');
 const sendEmail = require('../utils/mail');
@@ -158,7 +157,9 @@ router.post('/users/reset-password', async (req, res) => {
         user.otpExpires = undefined;
         await user.save();
 
-        res.send({ message: 'Password has been reset successfully.' });
+        // Generate token for auto-login after password reset
+        const token = await user.generateAuthToken();
+        res.send({ user, token, message: 'Password has been reset successfully.' });
 
     } catch (e) {
         res.status(400).send(e);
@@ -166,78 +167,16 @@ router.post('/users/reset-password', async (req, res) => {
 });
 
 
-// Google login with token verification
-router.post('/users/google-login', async (req, res) => {
-  try {
-    const { tokenId } = req.body;
-    if (!tokenId) {
-      return res.status(400).send({ message: 'Google token is required' });
-    }
-
-    const { OAuth2Client } = require('google-auth-library');
-    const clientId = process.env.GOOGLE_CLIENT_ID || process.env.REACT_APP_GOOGLE_CLIENT_ID;
-    if (!clientId) {
-      return res.status(500).send({ message: 'Server Google Client ID not configured' });
-    }
-
-    const oauthClient = new OAuth2Client(clientId);
-    const ticket = await oauthClient.verifyIdToken({ idToken: tokenId, audience: clientId });
-    const payload = ticket.getPayload();
-    const { email, name, sub: googleId, picture } = payload || {};
-
-    if (!email) {
-      return res.status(400).send({ message: 'Google token is invalid (no email in payload)' });
-    }
-
-    // Find or create user
-    let user = await User.findOne({ email });
-    if (!user) {
-      // Ensure a unique username based on email local-part
-      const baseUsername = String(email.split('@')[0] || 'googleuser').toLowerCase();
-      let usernameCandidate = baseUsername;
-      let suffix = 1;
-      // Loop until unique
-      while (await User.findOne({ username: usernameCandidate })) {
-        suffix += 1;
-        usernameCandidate = `${baseUsername}${suffix}`;
-      }
-
-      user = new User({
-        name: name || 'Google User',
-        email,
-        username: usernameCandidate,
-        google: googleId,
-        imageurl: picture,
-        isVerified: true,
-      });
-      await user.save();
-    } else {
-      // Update Google-specific fields if changed
-      user.google = user.google || googleId;
-      user.imageurl = user.imageurl || picture;
-      if (!user.isVerified) user.isVerified = true;
-      await user.save();
-    }
-
-    const token = await user.generateAuthToken();
-    res.send({ user, token });
-  } catch (e) {
-    console.error('Google login error:', e);
-    res.status(400).send({
-      error: { message: 'Google login failed' },
-    });
-  }
-});
-
-// Username/password login
+// Username/email and password login
 router.post('/users/login', async (req, res) => {
   try {
-    const user = await User.findByCredentials(req.body.username, req.body.password);
+    const { username, password } = req.body;
+    const user = await User.findByCredentials(username, password);
     const token = await user.generateAuthToken();
     res.send({ user, token });
   } catch (e) {
     res.status(400).send({
-      error: { message: e.message || 'You have entered an invalid username or password' },
+      error: { message: e.message || 'You have entered an invalid username/email or password' },
     });
   }
 });

@@ -68,7 +68,7 @@ export const verifyOtp = ({ email, otp }, history) => async dispatch => {
   }
 };
 
-export const forgotPassword = ({ email }) => async dispatch => {
+export const forgotPassword = ({ email }, history) => async dispatch => {
   try {
     const url = '/users/forgot-password';
     const response = await fetch(url, {
@@ -80,6 +80,10 @@ export const forgotPassword = ({ email }) => async dispatch => {
 
     if (response.ok) {
       dispatch(setAlert('Password reset OTP sent! Please check your email.', 'success', 5000));
+      // Redirect to reset password page with email parameter
+      if (history && typeof history.push === 'function') {
+        history.push(`/reset-password?email=${encodeURIComponent(email)}`);
+      }
     } else {
       dispatch(setAlert(responseData.message || 'An error occurred.', 'error', 5000));
     }
@@ -114,40 +118,13 @@ export const resetPassword = ({ email, otp, password }, history) => async dispat
   }
 };
 
-export const googleLogin = ({ tokenId }, history) => async dispatch => {
-  try {
-    const url = '/users/google-login';
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ tokenId })
-    });
-    const responseData = await response.json();
-
-    if (response.ok) {
-      const { user } = responseData;
-      user && setUser(user);
-      dispatch({ type: LOGIN_SUCCESS, payload: responseData });
-      dispatch(setAlert(`Welcome ${user.name}`, 'success', 5000));
-      history.push('/');
-    } else {
-      dispatch({ type: LOGIN_FAIL });
-      dispatch(setAlert(responseData.message || 'Google login failed.', 'error', 5000));
-    }
-  } catch (error) {
-    dispatch({ type: LOGIN_FAIL });
-    dispatch(setAlert(error.message, 'error', 5000));
-  }
-};
-
-
-export const login = (username, password, history) => async dispatch => {
+export const login = (usernameOrEmail, password, history) => async dispatch => {
   try {
     const url = '/users/login';
     const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password })
+      body: JSON.stringify({ username: usernameOrEmail, password })
     });
     const responseData = await response.json();
     if (response.ok) {

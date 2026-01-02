@@ -15,11 +15,11 @@ export default theme => ({
     height: '80%',
     padding: '5px 10px',
     width: '100%',
-    color: theme.palette.common.white
+    color: theme.palette.text.primary
   },
   body: {
     height: '20%',
-    color: theme.palette.common.white,
+    color: theme.palette.text.primary,
     padding: '15px',
     whiteSpace: 'normal'
   }

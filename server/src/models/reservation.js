@@ -91,6 +91,8 @@ const reservationSchema = new Schema({
     ref: 'User',
     required: true,
   },
+}, {
+  timestamps: true // This adds createdAt and updatedAt fields automatically
 });
 
 const Reservation = mongoose.model('Reservation', reservationSchema);

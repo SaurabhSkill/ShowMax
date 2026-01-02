@@ -45,8 +45,6 @@ const userSchema = Schema(
       default: 'guest',
       enum: ['guest', 'admin', 'superadmin'],
     },
-    facebook: String,
-    google: String,
     phone: {
       type: String,
       unique: true,
@@ -106,8 +104,15 @@ userSchema.methods.generateAuthToken = async function() {
   return token;
 };
 
-userSchema.statics.findByCredentials = async (username, password) => {
-  const user = await User.findOne({ username });
+userSchema.statics.findByCredentials = async (usernameOrEmail, password) => {
+  // Try to find user by username first, then by email
+  let user = await User.findOne({ username: usernameOrEmail.toLowerCase() });
+  
+  // If not found by username, try by email
+  if (!user) {
+    user = await User.findOne({ email: usernameOrEmail.toLowerCase() });
+  }
+  
   if (!user) throw new Error('Unable to login');
 
   if (!user.isVerified) throw new Error('Please verify your email before logging in.');

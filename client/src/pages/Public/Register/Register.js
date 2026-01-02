@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { register as registerAction } from '../../../store/actions/auth';
 import { Link, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core';
+import { withStyles, Box } from '@material-ui/core';
 import {
   Button,
   Checkbox,
@@ -29,7 +29,6 @@ class Register extends React.Component {
     },
     errors: {}
   };
-
 
   handleBack = () => {
     this.props.history.goBack();
@@ -73,56 +72,87 @@ class Register extends React.Component {
 
     return (
       <div className={classes.root}>
+        <div className={classes.backgroundEffect} />
+        
         <Grid className={classes.grid} container>
+          {/* Left side - Cinematic background */}
           <Grid className={classes.bgWrapper} item lg={5}>
             <div className={classes.bg} />
           </Grid>
+          
+          {/* Right side - Register form */}
           <Grid className={classes.content} item lg={7} xs={12}>
-            <div className={classes.content}>
-              <div className={classes.contentHeader}>
-                <IconButton className={classes.backButton} onClick={this.handleBack}>
-                  <ArrowBackIcon />
-                </IconButton>
-              </div>
-              <div className={classes.contentBody}>
+            <div className={classes.contentHeader}>
+              <IconButton 
+                className={classes.backButton} 
+                onClick={this.handleBack}
+                aria-label="Go back"
+              >
+                <ArrowBackIcon />
+              </IconButton>
+            </div>
+            
+            <div className={classes.contentBody}>
+              <Box width="100%">
+                {/* Mobile welcome section */}
+                <div className={classes.mobileWelcome}>
+                  <Typography className={classes.mobileTitle}>
+                    Join the Experience
+                  </Typography>
+                  <Typography className={classes.mobileSubtitle}>
+                    Create your account and start your cinematic journey
+                  </Typography>
+                </div>
+                
                 {/* Use onSubmit for the form to ensure preventDefault works */}
                 <form className={classes.form} onSubmit={this.handleRegister}>
                   <Typography className={classes.title} variant="h2">
-                    Create new account
+                    Create Account
                   </Typography>
                   <Typography className={classes.subtitle} variant="body1">
-                    Use your email to create new account... it's free.
+                    Join thousands of movie lovers and get started today
                   </Typography>
+                  
                   <div className={classes.fields}>
                     <TextField
                       className={classes.textField}
-                      label="Full name"
+                      label="Full Name"
                       name="name"
                       value={values.name}
                       onChange={event => this.handleFieldChange('name', event.target.value)}
                       variant="outlined"
                       error={!!errors.name}
                       helperText={errors.name}
+                      placeholder="Enter your full name"
+                      required
+                      fullWidth
                     />
                     <TextField
                       className={classes.textField}
-                      label="User name"
+                      label="Username"
                       name="username"
                       value={values.username}
                       onChange={event => this.handleFieldChange('username', event.target.value)}
                       variant="outlined"
                       error={!!errors.username}
                       helperText={errors.username}
+                      placeholder="Choose a unique username"
+                      required
+                      fullWidth
                     />
                     <TextField
                       className={classes.textField}
-                      label="Email address"
+                      label="Email Address"
                       name="email"
+                      type="email"
                       value={values.email}
                       onChange={event => this.handleFieldChange('email', event.target.value)}
                       variant="outlined"
                       error={!!errors.email}
                       helperText={errors.email}
+                      placeholder="Enter your email address"
+                      required
+                      fullWidth
                     />
                     <TextField
                       className={classes.textField}
@@ -133,6 +163,9 @@ class Register extends React.Component {
                       onChange={event => this.handleFieldChange('phone', event.target.value)}
                       error={!!errors.phone}
                       helperText={errors.phone}
+                      placeholder="Enter your phone number"
+                      required
+                      fullWidth
                     />
                     <TextField
                       className={classes.textField}
@@ -143,7 +176,11 @@ class Register extends React.Component {
                       onChange={event => this.handleFieldChange('password', event.target.value)}
                       error={!!errors.password}
                       helperText={errors.password}
+                      placeholder="Create a strong password"
+                      required
+                      fullWidth
                     />
+                    
                     <FileUpload
                       className={classes.upload}
                       file={values.image}
@@ -152,6 +189,7 @@ class Register extends React.Component {
                         this.handleFieldChange('image', file);
                       }}
                     />
+                    
                     <div className={classes.policy}>
                       <Checkbox
                         checked={values.policy}
@@ -160,32 +198,38 @@ class Register extends React.Component {
                         name="policy"
                         onChange={() => this.handleFieldChange('policy', !values.policy)}
                       />
-                      <Typography className={classes.policyText} variant="body1">
-                        I have read the &nbsp;
-                        <Link className={classes.policyUrl} to="#">
+                      <Typography className={classes.policyText} variant="body2">
+                        I agree to the{' '}
+                        <Link className={classes.policyUrl} to="/terms">
                           Terms and Conditions
+                        </Link>{' '}
+                        and{' '}
+                        <Link className={classes.policyUrl} to="/privacy">
+                          Privacy Policy
                         </Link>
-                        .
                       </Typography>
                     </div>
                   </div>
+                  
                   <Button
                     className={classes.registerButton}
                     color="primary"
                     disabled={!isValid}
                     type="submit"
                     size="large"
-                    variant="contained">
-                    Register now
+                    variant="contained"
+                  >
+                    Create Account
                   </Button>
+                  
                   <Typography className={classes.login} variant="body1">
-                    Have an account?{' '}
+                    Already have an account?{' '}
                     <Link className={classes.loginUrl} to="/login">
-                      Login
+                      Sign In
                     </Link>
                   </Typography>
                 </form>
-              </div>
+              </Box>
             </div>
           </Grid>
         </Grid>

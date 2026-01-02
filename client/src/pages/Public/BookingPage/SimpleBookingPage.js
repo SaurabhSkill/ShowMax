@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withStyles, Grid, Container, TextField, Typography, Box, FormControl, Select, MenuItem, Chip } from '@material-ui/core';
+import theme from '../../../theme';
 import BookingCheckout from './components/BookingCheckout/BookingCheckout';
 import {
   addReservation,
@@ -10,6 +11,41 @@ import {
   getReservations
 } from '../../../store/actions';
 
+// Reusable styled box component
+const StyledBox = ({ children, ...props }) => (
+  <Box 
+    p={3} 
+    bgcolor={theme.palette.background.paper} 
+    borderRadius={2}
+    style={{ backdropFilter: 'blur(10px)', border: `1px solid ${theme.palette.divider}` }}
+    {...props}
+  >
+    {children}
+  </Box>
+);
+
+// Summary item component
+const SummaryItem = ({ label, value, highlight = false }) => (
+  <Box 
+    mb={2} 
+    p={2} 
+    bgcolor={highlight ? "rgba(218, 165, 32, 0.1)" : theme.palette.background.default} 
+    borderRadius={1}
+    border={highlight ? `1px solid ${theme.palette.primary.main}` : 'none'}
+  >
+    <Typography 
+      variant={highlight ? "h6" : "body1"} 
+      style={{ 
+        color: highlight ? theme.palette.primary.main : theme.palette.text.primary, 
+        fontSize: highlight ? '18px' : '16px',
+        fontWeight: highlight ? 'bold' : 'normal'
+      }}
+    >
+      <strong>{label}:</strong> {value}
+    </Typography>
+  </Box>
+);
+
 class SimpleBookingPage extends Component {
   state = {
     localTicketCount: 1,
@@ -18,11 +54,7 @@ class SimpleBookingPage extends Component {
 
   handleTicketCountChange = (count) => {
     const safe = Math.max(1, Math.min(10, Number(count) || 1));
-    // console.log('SimpleBookingPage: Setting ticket count to', safe);
     this.setState({ localTicketCount: safe });
-    
-    // Don't update Redux selectedSeats - keep it for actual seat selection
-    // The ticket count will be used directly in the checkout process
   };
 
   handleSeatTypeChange = (seatType) => {
@@ -32,12 +64,7 @@ class SimpleBookingPage extends Component {
   getSeatPrice = () => {
     const { cinema } = this.props;
     const { selectedSeatType } = this.state;
-    
-    if (!cinema || !cinema.priceTiers) {
-      return 0;
-    }
-    
-    return cinema.priceTiers[selectedSeatType] || 0;
+    return cinema?.priceTiers?.[selectedSeatType] || 0;
   };
 
   getTotalPrice = () => {
@@ -46,33 +73,106 @@ class SimpleBookingPage extends Component {
   };
 
   async checkout(paymentResult = null) {
-    const {
-      getReservations,
-      isAuth,
-      toggleLoginPopup,
-      showInvitationForm,
-      setQRCode
-    } = this.props;
+    const { getReservations, isAuth, toggleLoginPopup, showInvitationForm, setQRCode, history } = this.props;
 
     if (this.state.localTicketCount <= 0) return;
     if (!isAuth) return toggleLoginPopup();
 
-    // If payment was successful, use the payment result
     if (paymentResult) {
       setQRCode(paymentResult.QRCode);
       getReservations();
       showInvitationForm();
-      // Navigate to success page if reservation id is available
-      try {
-        const reservationId = paymentResult?.reservation?._id || paymentResult?.reservation?.id;
-        if (reservationId && this.props.history && typeof this.props.history.push === 'function') {
-          this.props.history.push(`/booking/success/${reservationId}`);
-        }
-      } catch (_) {}
-      return;
+      
+      const reservationId = paymentResult?.reservation?._id || paymentResult?.reservation?.id;
+      if (reservationId && history?.push) {
+        history.push(`/booking/success/${reservationId}`);
+      }
     }
-    // If payment did not succeed (or user cancelled), do not attempt to create reservation here
-    return;
+  }
+
+  renderTicketSelection() {
+    const { cinema } = this.props;
+    const { localTicketCount, selectedSeatType } = this.state;
+
+    return (
+      <StyledBox>
+        <Typography variant="h6" gutterBottom style={{ color: theme.palette.text.primary, marginBottom: '20px' }}>
+          Select Tickets
+        </Typography>
+        
+        <TextField
+          fullWidth
+          type="number"
+          label="Number of Tickets"
+          value={localTicketCount}
+          onChange={(e) => this.handleTicketCountChange(e.target.value)}
+          inputProps={{ min: 1, max: 10 }}
+          variant="outlined"
+          style={{ 
+            backgroundColor: theme.palette.background.paper,
+            borderRadius: '8px',
+            marginBottom: '20px'
+          }}
+        />
+
+        <FormControl 
+          fullWidth 
+          variant="outlined"
+          style={{ 
+            backgroundColor: theme.palette.background.paper,
+            borderRadius: '8px',
+            marginBottom: '20px'
+          }}
+        >
+          <Select
+            value={selectedSeatType}
+            onChange={(e) => this.handleSeatTypeChange(e.target.value)}
+            label="Seat Type"
+            style={{ color: theme.palette.text.primary }}
+          >
+            {cinema?.priceTiers && Object.keys(cinema.priceTiers).map(seatType => (
+              <MenuItem key={seatType} value={seatType}>
+                <Box display="flex" justifyContent="space-between" width="100%">
+                  <span style={{ textTransform: 'capitalize' }}>{seatType}</span>
+                  <Chip 
+                    label={`₹${cinema.priceTiers[seatType] || 0}`} 
+                    size="small" 
+                    color="primary"
+                    style={{ marginLeft: '10px' }}
+                  />
+                </Box>
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        
+        <Box mt={2}>
+          <Typography variant="body2" style={{ color: theme.palette.text.secondary }}>
+            {localTicketCount} ticket(s) × {selectedSeatType} seat
+          </Typography>
+        </Box>
+      </StyledBox>
+    );
+  }
+
+  renderBookingSummary() {
+    const { cinema, selectedTime } = this.props;
+    const { localTicketCount, selectedSeatType } = this.state;
+
+    return (
+      <StyledBox>
+        <Typography variant="h6" gutterBottom style={{ color: theme.palette.text.primary, marginBottom: '20px' }}>
+          Booking Summary
+        </Typography>
+        
+        <SummaryItem label="Tickets" value={localTicketCount} />
+        <SummaryItem label="Seat Type" value={selectedSeatType.charAt(0).toUpperCase() + selectedSeatType.slice(1)} />
+        <SummaryItem label="Price per ticket" value={`₹${this.getSeatPrice()}`} />
+        <SummaryItem label="Total Price" value={`₹${this.getTotalPrice()}`} highlight />
+        <SummaryItem label="Cinema" value={cinema?.name || 'Loading...'} />
+        <SummaryItem label="Time" value={selectedTime} />
+      </StyledBox>
+    );
   }
 
   render() {
@@ -80,140 +180,28 @@ class SimpleBookingPage extends Component {
     const { localTicketCount, selectedSeatType } = this.state;
 
     return (
-      <Container maxWidth="lg" style={{ padding: '20px', minHeight: '100vh', backgroundColor: '#121214' }}>
+      <Container maxWidth="lg" style={{ padding: '20px', minHeight: '100vh', backgroundColor: theme.palette.background.default }}>
         <Grid container spacing={4}>
-          {/* Header Section */}
           <Grid item xs={12}>
-            <Typography variant="h4" gutterBottom style={{ color: 'white', textAlign: 'center', marginBottom: '30px' }}>
+            <Typography variant="h4" gutterBottom style={{ color: theme.palette.text.primary, textAlign: 'center', marginBottom: '30px' }}>
               Movie Booking
             </Typography>
           </Grid>
           
-          {/* Main Content Row */}
           <Grid item xs={12}>
             <Grid container spacing={3}>
-              {/* Left Column - Ticket Selection */}
               <Grid item xs={12} md={6}>
-                <Box 
-                  p={3} 
-                  bgcolor="rgba(255, 255, 255, 0.1)" 
-                  borderRadius={2}
-                  style={{ backdropFilter: 'blur(10px)' }}
-                >
-                  <Typography variant="h6" gutterBottom style={{ color: 'white', marginBottom: '20px' }}>
-                    Select Tickets
-                  </Typography>
-                  
-                  <TextField
-                    fullWidth
-                    type="number"
-                    label="Number of Tickets"
-                    value={localTicketCount}
-                    onChange={(e) => this.handleTicketCountChange(e.target.value)}
-                    inputProps={{ min: 1, max: 10 }}
-                    variant="outlined"
-                    style={{ 
-                      backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                      borderRadius: '8px',
-                      marginBottom: '20px'
-                    }}
-                  />
-
-                  {/* Seat Type Selection */}
-                  <FormControl 
-                    fullWidth 
-                    variant="outlined"
-                    style={{ 
-                      backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                      borderRadius: '8px',
-                      marginBottom: '20px'
-                    }}
-                  >
-                    <Select
-                      value={selectedSeatType}
-                      onChange={(e) => this.handleSeatTypeChange(e.target.value)}
-                      label="Seat Type"
-                      style={{ color: '#333' }}
-                    >
-                      {cinema?.priceTiers && Object.keys(cinema.priceTiers).map(seatType => (
-                        <MenuItem key={seatType} value={seatType}>
-                          <Box display="flex" justifyContent="space-between" width="100%">
-                            <span style={{ textTransform: 'capitalize' }}>{seatType}</span>
-                            <Chip 
-                              label={`₹${cinema.priceTiers[seatType] || 0}`} 
-                              size="small" 
-                              color="primary"
-                              style={{ marginLeft: '10px' }}
-                            />
-                          </Box>
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                  
-                  <Box mt={2}>
-                    <Typography variant="body2" style={{ color: 'rgba(255, 255, 255, 0.8)' }}>
-                      {localTicketCount} ticket(s) × {selectedSeatType} seat
-                    </Typography>
-                  </Box>
-                </Box>
+                {this.renderTicketSelection()}
               </Grid>
 
-              {/* Right Column - Booking Summary */}
               {selectedCinema && selectedTime && (
                 <Grid item xs={12} md={6}>
-                  <Box 
-                    p={3} 
-                    bgcolor="rgba(255, 255, 255, 0.1)" 
-                    borderRadius={2}
-                    style={{ backdropFilter: 'blur(10px)' }}
-                  >
-                    <Typography variant="h6" gutterBottom style={{ color: 'white', marginBottom: '20px' }}>
-                      Booking Summary
-                    </Typography>
-                    
-                    <Box mb={2} p={2} bgcolor="rgba(255, 255, 255, 0.05)" borderRadius={1}>
-                      <Typography variant="body1" style={{ color: 'white', fontSize: '16px' }}>
-                        <strong>Tickets:</strong> {localTicketCount}
-                      </Typography>
-                    </Box>
-                    
-                    <Box mb={2} p={2} bgcolor="rgba(255, 255, 255, 0.05)" borderRadius={1}>
-                      <Typography variant="body1" style={{ color: 'white', fontSize: '16px' }}>
-                        <strong>Seat Type:</strong> {selectedSeatType.charAt(0).toUpperCase() + selectedSeatType.slice(1)}
-                      </Typography>
-                    </Box>
-                    
-                    <Box mb={2} p={2} bgcolor="rgba(255, 255, 255, 0.05)" borderRadius={1}>
-                      <Typography variant="body1" style={{ color: 'white', fontSize: '16px' }}>
-                        <strong>Price per ticket:</strong> ₹{this.getSeatPrice()}
-                      </Typography>
-                    </Box>
-                    
-                    <Box mb={2} p={2} bgcolor="rgba(120, 205, 4, 0.2)" borderRadius={1} border="1px solid rgba(120, 205, 4, 0.3)">
-                      <Typography variant="h6" style={{ color: '#78cd04', fontSize: '18px', fontWeight: 'bold' }}>
-                        <strong>Total Price:</strong> ₹{this.getTotalPrice()}
-                      </Typography>
-                    </Box>
-                    
-                    <Box mb={2} p={2} bgcolor="rgba(255, 255, 255, 0.05)" borderRadius={1}>
-                      <Typography variant="body1" style={{ color: 'white', fontSize: '16px' }}>
-                        <strong>Cinema:</strong> {cinema?.name || 'Loading...'}
-                      </Typography>
-                    </Box>
-                    
-                    <Box mb={2} p={2} bgcolor="rgba(255, 255, 255, 0.05)" borderRadius={1}>
-                      <Typography variant="body1" style={{ color: 'white', fontSize: '16px' }}>
-                        <strong>Time:</strong> {selectedTime}
-                      </Typography>
-                    </Box>
-                  </Box>
+                  {this.renderBookingSummary()}
                 </Grid>
               )}
             </Grid>
           </Grid>
 
-          {/* Checkout Section - Full Width */}
           {selectedCinema && selectedTime && !showInvitation && (
             <Grid item xs={12}>
               <Box mt={3}>
@@ -244,27 +232,20 @@ class SimpleBookingPage extends Component {
             </Grid>
           )}
 
-          {/* Invitation/Success Section */}
           {showInvitation && (
             <Grid item xs={12}>
               <Box mt={3}>
-                <Typography variant="h6" style={{ color: 'white', textAlign: 'center' }}>
+                <Typography variant="h6" style={{ color: theme.palette.text.primary, textAlign: 'center' }}>
                   Booking confirmed! Check your email for details.
                 </Typography>
               </Box>
             </Grid>
           )}
 
-          {/* Loading State */}
           {(!selectedCinema || !selectedTime) && (
             <Grid item xs={12}>
-              <Box 
-                display="flex" 
-                justifyContent="center" 
-                alignItems="center" 
-                minHeight="200px"
-              >
-                <Typography variant="h6" style={{ color: 'white' }}>
+              <Box display="flex" justifyContent="center" alignItems="center" minHeight="200px">
+                <Typography variant="h6" style={{ color: theme.palette.text.primary }}>
                   Loading booking information...
                 </Typography>
               </Box>

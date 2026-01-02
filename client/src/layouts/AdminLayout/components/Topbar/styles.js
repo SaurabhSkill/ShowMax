@@ -1,7 +1,7 @@
 export default theme => ({
   root: {
-    borderBottom: `1px solid ${theme.palette.borderShadow}`,
-    boxShadow: `0 0 35px 0  ${theme.palette.borderShadow}`,
+    borderBottom: `1px solid ${theme.palette.border}`,
+    boxShadow: theme.shadows[10],
     backgroundColor: theme.palette.background.paper,
     display: 'flex',
     alignItems: 'center',
@@ -14,7 +14,7 @@ export default theme => ({
     paddingLeft: 0
   },
   brandWrapper: {
-    background: theme.palette.default.dark,
+    background: theme.palette.primary.main,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
@@ -30,23 +30,21 @@ export default theme => ({
     fontSize: '22px',
     fontWeight: 700,
     letterSpacing: 3,
-    color: theme.palette.common.white
+    color: theme.palette.primary.contrastText
   },
   title: {
     marginLeft: theme.spacing(3),
     textTransform: 'uppercase',
     textDecoration: 'none',
     fontSize: '14px',
-    color: theme.palette.common.white
+    color: theme.palette.text.primary
   },
   menuButton: {
-    color: theme.palette.common.white,
+    color: theme.palette.primary.contrastText,
     marginLeft: '-4px'
   },
-  notificationsButton: {
-    marginLeft: 'auto'
-  },
   signOutButton: {
-    marginLeft: theme.spacing(1)
+    marginLeft: 'auto',
+    color: theme.palette.text.primary
   }
 });

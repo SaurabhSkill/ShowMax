@@ -33,7 +33,7 @@ export default theme => ({
     paddingRight: theme.spacing(2)
   },
   backButton: {
-    color: theme.palette.common.white
+    color: theme.palette.text.primary
   },
   contentBody: {
     flexGrow: 1,

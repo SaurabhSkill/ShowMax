@@ -25,7 +25,7 @@ const useStyles = makeStyles(theme => ({
     right: 0,
     width: '100%',
     textAlign: 'center',
-    color: theme.palette.common.white,
+    color: theme.palette.text.primary,
     fontSize: '24px',
     textTransform: 'capitalize',
     zIndex: 2
@@ -38,7 +38,7 @@ const useStyles = makeStyles(theme => ({
     width: '100%'
   },
   infoBox: {
-    color: theme.palette.common.white,
+    color: theme.palette.text.primary,
     marginBottom: theme.spacing(2)
   },
   [theme.breakpoints.down('md')]: {

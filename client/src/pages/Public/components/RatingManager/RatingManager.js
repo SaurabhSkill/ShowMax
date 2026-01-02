@@ -13,6 +13,7 @@ import {
 } from '@material-ui/core';
 import { Rating } from '@material-ui/lab';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
+import theme from '../../../../theme';
 import { addMovieReview } from '../../../../store/actions/movies';
 
 const useStyles = makeStyles(theme => ({
@@ -26,12 +27,12 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(2)
   },
   ratingText: {
-    color: theme.palette.common.white,
+    color: theme.palette.text.primary,
     fontWeight: 'bold'
   },
   rateButton: {
-    color: theme.palette.common.black,
-    backgroundColor: theme.palette.common.white,
+    color: theme.palette.text.primary,
+    backgroundColor: theme.palette.background.paper,
     '&:hover': {
       backgroundColor: '#e0e0e0'
     }
@@ -82,7 +83,7 @@ function RatingManager(props) {
           value={parseFloat(averageRating) / 2} // Convert 10-scale to 5-scale for display
           precision={0.1}
           readOnly
-          emptyIcon={<StarBorderIcon style={{ color: 'white' }} />}
+          emptyIcon={<StarBorderIcon style={{ color: theme.palette.text.secondary }} />}
         />
         <Typography className={classes.ratingText}>
           {averageRating}/10 ({movie.ratings.length} Votes)

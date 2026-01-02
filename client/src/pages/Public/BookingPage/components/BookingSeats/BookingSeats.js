@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { Box } from '@material-ui/core';
+import theme from '../../../../../theme';
 const useStyles = makeStyles(theme => ({
   row: {
     display: 'flex',
@@ -9,13 +10,15 @@ const useStyles = makeStyles(theme => ({
   },
   seat: {
     cursor: 'pointer',
-    color: 'rgba(255,255,255,0.7)',
+    color: theme.palette.text.primary,
     borderRadius: 2,
     padding: theme.spacing(2),
     margin: theme.spacing(0.5),
     fontWeight: 600,
+    border: `1px solid ${theme.palette.divider}`,
     '&:hover': {
-      background: 'rgb(120, 205, 4)'
+      background: theme.palette.success.main,
+      color: theme.palette.success.contrastText
     }
   },
   seatInfoContainer: {
@@ -24,16 +27,23 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     alignItems: 'center',
     textAlign: 'center',
-    color: '#eee'
+    color: theme.palette.text.primary
   },
 
-  seatInfo: { marginRight: theme.spacing(2) },
+  seatInfo: { 
+    marginRight: theme.spacing(2),
+    display: 'flex',
+    alignItems: 'center',
+    gap: theme.spacing(1)
+  },
 
   seatInfoLabel: {
     marginRight: theme.spacing(1),
     display: 'inline-block',
-    width: 10,
-    height: 10
+    width: 16,
+    height: 16,
+    borderRadius: 2,
+    border: `1px solid ${theme.palette.divider}`
   },
 
   [theme.breakpoints.down('sm')]: {
@@ -60,13 +70,16 @@ export default function BookingSeats(props) {
                   className={classes.seat}
                   bgcolor={
                     seat === 1
-                      ? 'rgb(65, 66, 70)'
+                      ? theme.palette.cinema.space[400] // Available seat - medium grey
                       : seat === 2
-                      ? 'rgb(120, 205, 4)'
+                      ? theme.palette.success.main // Selected seat - green
                       : seat === 3
-                      ? 'rgb(14, 151, 218)'
-                      : 'rgb(96, 93, 169)'
-                  }>
+                      ? theme.palette.info.main // Recommended seat - blue
+                      : theme.palette.cinema.space[600] // Reserved seat - dark grey
+                  }
+                  style={{
+                    color: seat === 1 ? theme.palette.text.primary : theme.palette.common.white
+                  }}>
                   {index + 1}
                 </Box>
               ))}
@@ -78,26 +91,26 @@ export default function BookingSeats(props) {
           <div className={classes.seatInfo}>
             <div
               className={classes.seatInfoLabel}
-              style={{ background: 'rgb(96, 93, 169)' }}></div>
-            Seat Available
+              style={{ background: theme.palette.cinema.space[600] }}></div>
+            <span>Available Seat</span>
           </div>
           <div className={classes.seatInfo}>
             <div
               className={classes.seatInfoLabel}
-              style={{ background: 'rgb(65, 66, 70)' }}></div>
-            Reserved Seat
+              style={{ background: theme.palette.cinema.space[400] }}></div>
+            <span>Reserved Seat</span>
           </div>
           <div className={classes.seatInfo}>
             <div
               className={classes.seatInfoLabel}
-              style={{ background: 'rgb(120, 205, 4)' }}></div>
-            Selected Seat
+              style={{ background: theme.palette.success.main }}></div>
+            <span>Selected Seat</span>
           </div>
           <div className={classes.seatInfo}>
             <div
               className={classes.seatInfoLabel}
-              style={{ background: 'rgb(14, 151, 218)' }}></div>
-            Recommended Seat
+              style={{ background: theme.palette.info.main }}></div>
+            <span>Recommended Seat</span>
           </div>
         </div>
       </Box>

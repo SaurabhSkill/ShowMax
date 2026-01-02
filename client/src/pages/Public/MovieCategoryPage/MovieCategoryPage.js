@@ -6,7 +6,7 @@ import { getMovies } from '../../../store/actions';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    backgroundColor: theme.palette.background.dark,
+    backgroundColor: theme.palette.background.default,
     minHeight: '100vh',
     paddingTop: '2rem'
   },
@@ -16,8 +16,8 @@ const useStyles = makeStyles(theme => ({
     textAlign: 'center',
     textTransform: 'uppercase',
     marginBottom: '3rem',
-    color: '#FFFFFF',
-    background: 'linear-gradient(45deg, #007BFF, #4FC3F7)',
+    color: theme.palette.text.primary,
+    background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.info.main})`,
     WebkitBackgroundClip: 'text',
     WebkitTextFillColor: 'transparent',
     backgroundClip: 'text'
@@ -31,11 +31,11 @@ const useStyles = makeStyles(theme => ({
       height: '6px'
     },
     '&::-webkit-scrollbar-track': {
-      backgroundColor: 'rgba(255, 255, 255, 0.1)',
+      backgroundColor: theme.palette.divider,
       borderRadius: '3px'
     },
     '&::-webkit-scrollbar-thumb': {
-      backgroundColor: '#007BFF',
+      backgroundColor: theme.palette.primary.main,
       borderRadius: '3px'
     }
   },
@@ -45,14 +45,14 @@ const useStyles = makeStyles(theme => ({
   },
   noMovies: {
     textAlign: 'center',
-    color: '#B0B0B0',
+    color: theme.palette.text.secondary,
     fontSize: '1.2rem',
     marginTop: '3rem'
   }
 }));
 
 function MovieCategoryPage(props) {
-  const { movies, getMovies, location } = props;
+  const { movies, getMovies } = props;
   const category = props.match.params.category;
   const classes = useStyles(props);
 
@@ -73,10 +73,6 @@ function MovieCategoryPage(props) {
     }
   };
 
-  const params = new URLSearchParams(location.search);
-  const q = (params.get('q') || '').toLowerCase();
-  const filtered = q ? movies.filter(m => (m.title || '').toLowerCase().includes(q)) : movies;
-
   return (
     <Box className={classes.root}>
       <Container maxWidth="xl">
@@ -90,9 +86,9 @@ function MovieCategoryPage(props) {
               {getCategoryTitle(category)}
             </Typography>
             
-            {filtered.length > 0 ? (
+            {movies.length > 0 ? (
               <Box className={classes.movieGrid}>
-                {filtered.map(movie => (
+                {movies.map(movie => (
                   <Box key={movie._id} className={classes.movieCard}>
                     <MovieCard movie={movie} />
                   </Box>

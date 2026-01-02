@@ -47,7 +47,7 @@ ShowMax requires Node.js to run.
 Set environment variables 
 
 ```sh
-$ Create a .env file in your server and client folder
+$ Create a .env file in your server folder
 $ See the .env sample
 create a mongodb database and add your connection string into .env file
 ```
@@ -87,7 +87,6 @@ Server libraries:
 - concurrently
 - bcryptjs
 - express
-- googleapis
 - jsonwebtoken
 - mongoose
 - multer
@@ -99,10 +98,7 @@ Client libraries:
 - fullcalendar
 - material-ui
 - moment
-- jspdf
 - react
-- react-facebook-login
-- react-google-login
 - react-redux
 - react-router-dom
 - react-slick

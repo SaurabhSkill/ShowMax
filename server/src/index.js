@@ -19,6 +19,9 @@ const reservationRouter = require('./routes/reservation');
 const invitationsRouter = require('./routes/invitations');
 const paymentRouter = require('./routes/payment');
 
+// Import reservation cleanup utility
+const { scheduleReservationCleanup } = require('./utils/reservationCleanup');
+
 const app = express();
 app.disable('x-powered-by');
 const port = process.env.PORT || 8080;
@@ -69,4 +72,9 @@ app.get('/*', (req, res) => {
 });
 
 // Start the server
-app.listen(port, () => console.log(`app is running in PORT: ${port}`));
+app.listen(port, () => {
+  console.log(`app is running in PORT: ${port}`);
+  
+  // Start the reservation cleanup scheduler
+  scheduleReservationCleanup();
+});

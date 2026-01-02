@@ -5,7 +5,7 @@ export default theme => ({
   },
   h2: {
     fontSize: '2rem',
-    color: theme.palette.common.white,
+    color: theme.palette.text.primary,
     margin: theme.spacing(3),
     textTransform: 'capitalize'
   },
@@ -23,21 +23,21 @@ export default theme => ({
     width: '20%',
     display: 'flex',
     alignItems: 'center',
-    background: 'rgba(0,0,0,.5)',
-    color: theme.palette.common.white,
+    background: 'rgba(255, 255, 255, 0.9)',
+    color: theme.palette.text.primary,
     zIndex: 1,
     '&.prevArrow': {
       left: 0,
       justifyContent: 'flex-start',
       background:
-        ' linear-gradient(90deg, rgba(0,0,0,1) 0%, rgba(0,0,37,0) 100%)',
+        'linear-gradient(90deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0) 100%)',
       opacity: ({ currentSlide }) => (currentSlide ? 1 : 0)
     },
     '&.nextArrow': {
       right: 0,
       justifyContent: 'flex-end',
       background:
-        ' linear-gradient(90deg, rgba(0,0,37,0) 0%, rgba(0,0,0,1) 100%)',
+        'linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%)',
       opacity: ({ currentSlide, slideCount }) =>
         currentSlide === slideCount ? 0 : 1
     }

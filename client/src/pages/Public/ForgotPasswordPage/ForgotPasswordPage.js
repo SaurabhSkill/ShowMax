@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import { forgotPassword } from '../../../store/actions/auth';
 import { setAlert } from '../../../store/actions/alert';
 import {
@@ -77,6 +78,8 @@ function ForgotPasswordPage(props) {
   );
 }
 
-export default withStyles(styles)(
-  connect(null, { forgotPassword, setAlert })(ForgotPasswordPage)
+export default withRouter(
+  withStyles(styles)(
+    connect(null, { forgotPassword, setAlert })(ForgotPasswordPage)
+  )
 );

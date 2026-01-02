@@ -25,18 +25,18 @@ const useStyles = makeStyles(theme => ({
   error: {
     marginTop: theme.spacing(1),
     padding: theme.spacing(1),
-    backgroundColor: '#ffebee',
-    color: '#c62828',
+    backgroundColor: theme.palette.danger?.light || '#ffebee',
+    color: theme.palette.danger?.main || '#c62828',
     borderRadius: theme.shape.borderRadius,
-    border: '1px solid #ffcdd2',
+    border: `1px solid ${theme.palette.danger?.light || '#ffcdd2'}`,
   },
   success: {
     marginTop: theme.spacing(1),
     padding: theme.spacing(1),
-    backgroundColor: '#e8f5e8',
-    color: '#2e7d32',
+    backgroundColor: theme.palette.success?.light || '#e8f5e8',
+    color: theme.palette.success?.main || '#2e7d32',
     borderRadius: theme.shape.borderRadius,
-    border: '1px solid #c8e6c9',
+    border: `1px solid ${theme.palette.success?.light || '#c8e6c9'}`,
   },
   amountDisplay: {
     fontSize: '2rem',
@@ -47,10 +47,10 @@ const useStyles = makeStyles(theme => ({
   },
   summaryCard: {
     marginBottom: theme.spacing(2),
-    backgroundColor: '#f5f5f5'
+    backgroundColor: theme.palette.background.paper
   },
   mockInfo: {
-    backgroundColor: '#e3f2fd',
+    backgroundColor: theme.palette.info?.light || '#e3f2fd',
     padding: theme.spacing(2),
     borderRadius: theme.shape.borderRadius,
     marginTop: theme.spacing(2),

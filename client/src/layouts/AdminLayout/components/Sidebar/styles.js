@@ -61,6 +61,10 @@ export default theme => ({
     fontWeight: 500,
     color: theme.palette.common.contrastText
   },
+  reservationsText: {
+    fontWeight: 500,
+    color: '#000000 !important'
+  },
   listDivider: {
     marginBottom: theme.spacing(2),
     marginTop: theme.spacing(2)

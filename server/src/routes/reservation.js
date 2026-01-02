@@ -3,6 +3,7 @@ const auth = require('../middlewares/auth');
 const Reservation = require('../models/reservation');
 const userModeling = require('../utils/userModeling');
 const generateQR = require('../utils/generateQRCode');
+const { manualCleanup } = require('../utils/reservationCleanup');
 
 const router = new express.Router();
 
@@ -126,6 +127,24 @@ router.get('/reservations/usermodeling/:username', async (req, res) => {
     res.send(suggestedSeats);
   } catch (e) {
     res.status(400).send(e);
+  }
+});
+
+// Manual cleanup endpoint (admin only)
+router.post('/reservations/cleanup', auth.enhance, async (req, res) => {
+  try {
+    const result = await manualCleanup();
+    res.status(200).send({
+      success: true,
+      ...result
+    });
+  } catch (error) {
+    console.error('Manual cleanup failed:', error);
+    res.status(500).send({
+      success: false,
+      message: 'Cleanup failed',
+      error: error.message
+    });
   }
 });
 

@@ -1,6 +1,6 @@
 export default theme => ({
   root: {
-    backgroundColor: theme.palette.background.dark,
+    backgroundColor: theme.palette.background.default,
     minHeight: '100vh',
     padding: '2rem 0'
   },
@@ -12,7 +12,7 @@ export default theme => ({
   pageTitle: {
     fontSize: '2.5rem',
     fontWeight: 700,
-    color: '#FFFFFF',
+    color: theme.palette.text.primary,
     marginBottom: '2rem',
     textAlign: 'center'
   },
@@ -26,33 +26,34 @@ export default theme => ({
   dateButton: {
     padding: '0.8rem 1.5rem',
     borderRadius: '8px',
-    border: '1px solid rgba(255, 255, 255, 0.2)',
+    border: `1px solid ${theme.palette.divider}`,
     backgroundColor: 'transparent',
-    color: '#B0B0B0',
+    color: theme.palette.text.secondary,
     fontSize: '1rem',
     fontWeight: 500,
     textTransform: 'none',
     minWidth: '120px',
     '&:hover': {
-      backgroundColor: 'rgba(255, 255, 255, 0.1)',
-      borderColor: 'rgba(255, 255, 255, 0.4)'
+      backgroundColor: theme.palette.background.paper,
+      borderColor: theme.palette.primary.light
     },
     '&.selected': {
-      backgroundColor: '#007BFF',
-      borderColor: '#007BFF',
-      color: '#FFFFFF'
+      backgroundColor: theme.palette.primary.main,
+      borderColor: theme.palette.primary.main,
+      color: theme.palette.primary.contrastText
     }
   },
   theaterCard: {
-    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+    backgroundColor: theme.palette.background.paper,
     borderRadius: '12px',
     padding: '1.5rem',
     marginBottom: '1.5rem',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
+    border: `1px solid ${theme.palette.divider}`,
     transition: 'all 0.3s ease',
     '&:hover': {
-      backgroundColor: 'rgba(255, 255, 255, 0.08)',
-      borderColor: 'rgba(255, 255, 255, 0.2)'
+      backgroundColor: theme.palette.background.default,
+      borderColor: theme.palette.primary.light,
+      boxShadow: theme.palette.shadows.card
     }
   },
   theaterHeader: {
@@ -75,12 +76,12 @@ export default theme => ({
   theaterName: {
     fontSize: '1.3rem',
     fontWeight: 600,
-    color: '#FFFFFF',
+    color: theme.palette.text.primary,
     marginBottom: '0.25rem'
   },
   theaterLocation: {
     fontSize: '1rem',
-    color: '#B0B0B0'
+    color: theme.palette.text.secondary
   },
   showtimeGrid: {
     display: 'grid',
@@ -91,40 +92,40 @@ export default theme => ({
   showtimeButton: {
     padding: '0.75rem 1rem',
     borderRadius: '8px',
-    border: '1px solid rgba(255, 255, 255, 0.2)',
+    border: `1px solid ${theme.palette.divider}`,
     backgroundColor: 'transparent',
-    color: '#B0B0B0',
+    color: theme.palette.text.secondary,
     fontSize: '0.9rem',
     fontWeight: 500,
     textTransform: 'none',
     transition: 'all 0.3s ease',
     '&:hover': {
-      backgroundColor: '#007BFF',
-      borderColor: '#007BFF',
-      color: '#FFFFFF',
+      backgroundColor: theme.palette.primary.main,
+      borderColor: theme.palette.primary.main,
+      color: theme.palette.primary.contrastText,
       transform: 'translateY(-2px)'
     },
     '&.selected': {
-      backgroundColor: '#007BFF',
-      borderColor: '#007BFF',
-      color: '#FFFFFF'
+      backgroundColor: theme.palette.primary.main,
+      borderColor: theme.palette.primary.main,
+      color: theme.palette.primary.contrastText
     },
     '&.unavailable': {
-      backgroundColor: 'rgba(255, 255, 255, 0.05)',
-      borderColor: 'rgba(255, 255, 255, 0.1)',
-      color: '#666666',
+      backgroundColor: theme.palette.background.default,
+      borderColor: theme.palette.divider,
+      color: theme.palette.text.disabled,
       cursor: 'not-allowed',
       '&:hover': {
-        backgroundColor: 'rgba(255, 255, 255, 0.05)',
-        borderColor: 'rgba(255, 255, 255, 0.1)',
-        color: '#666666',
+        backgroundColor: theme.palette.background.default,
+        borderColor: theme.palette.divider,
+        color: theme.palette.text.disabled,
         transform: 'none'
       }
     }
   },
   noCinemas: {
     textAlign: 'center',
-    color: '#B0B0B0',
+    color: theme.palette.text.secondary,
     fontSize: '1.2rem',
     marginTop: '3rem'
   },

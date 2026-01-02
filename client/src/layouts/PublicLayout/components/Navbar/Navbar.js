@@ -13,8 +13,6 @@ import {
   Select,
   MenuItem
 } from '@material-ui/core';
-import { Search } from '@material-ui/icons';
-import { TextField, InputAdornment } from '@material-ui/core';
 
 // Component styles
 import styles from './styles';
@@ -48,7 +46,7 @@ class Navbar extends Component {
 
   render() {
     const { showMenu, scrollPos } = this.state;
-    const { classes, isAuth, user, logout, location, selectedCity, history } = this.props;
+    const { classes, isAuth, user, logout, location, selectedCity } = this.props;
     const cities = ['mumbai', 'delhi', 'bangalore'];
 
     return (
@@ -96,27 +94,6 @@ class Navbar extends Component {
           </div>
 
           <div className={classes.navAccount}>
-            <TextField
-              placeholder="Search movies..."
-              variant="outlined"
-              size="small"
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  const q = e.target.value.trim();
-                  history.push(q ? `/movie/category/nowShowing?q=${encodeURIComponent(q)}` : '/movie/category/nowShowing');
-                }
-              }}
-              InputProps={{
-                style: { color: '#fff' },
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Search style={{ color: '#FFFFFF' }} />
-                  </InputAdornment>
-                )
-              }}
-              style={{ marginRight: 16, minWidth: 220 }}
-            />
-
             <FormControl>
               <Select
                 value={selectedCity}
@@ -178,37 +155,67 @@ class Navbar extends Component {
         </nav>
         
         <div
-          className={classnames({
-            [classes.navActive]: showMenu,
-            [classes.nav]: true
+          className={classnames(classes.mobileMenu, {
+            open: showMenu
           })}>
-          <div className={classes.navContent}>
-            <ul className={classes.innerNav}>
-              <li className={classes.innerNavListItem}>
-                <Link className={classes.innerNavLink} to="/">Home</Link>
+          <div className={classes.mobileMenuContent}>
+            <ul className={classes.mobileNavLinks}>
+              <li>
+                <Link 
+                  className={classes.mobileNavLink} 
+                  to="/"
+                  onClick={() => this.setState({ showMenu: false })}
+                >
+                  Home
+                </Link>
               </li>
-              <li className={classes.innerNavListItem}>
-                <Link className={classes.innerNavLink} to="/movie/category/nowShowing">Movies</Link>
+              <li>
+                <Link 
+                  className={classes.mobileNavLink} 
+                  to="/movie/category/nowShowing"
+                  onClick={() => this.setState({ showMenu: false })}
+                >
+                  Movies
+                </Link>
               </li>
-              <li className={classes.innerNavListItem}>
-                <Link className={classes.innerNavLink} to="/cinemas">Theaters</Link>
+              <li>
+                <Link 
+                  className={classes.mobileNavLink} 
+                  to="/cinemas"
+                  onClick={() => this.setState({ showMenu: false })}
+                >
+                  Theaters
+                </Link>
               </li>
               {isAuth && (
-                <li className={classes.innerNavListItem}>
+                <li>
                   <Link 
-                    className={classes.innerNavLink}
-                    to={(user && user.role !== 'guest') ? '/admin/dashboard' : '/mydashboard'}>
+                    className={classes.mobileNavLink}
+                    to={(user && user.role !== 'guest') ? '/admin/dashboard' : '/mydashboard'}
+                    onClick={() => this.setState({ showMenu: false })}
+                  >
                     Dashboard
                   </Link>
                 </li>
               )}
-              <li className={classes.innerNavListItem}>
+              <li>
                 {isAuth ? (
-                  <Link className={classes.innerNavLink} onClick={logout} to="/">
+                  <Link 
+                    className={classes.mobileNavLink} 
+                    onClick={() => {
+                      logout();
+                      this.setState({ showMenu: false });
+                    }} 
+                    to="/"
+                  >
                     Logout
                   </Link>
                 ) : (
-                  <Link className={classes.innerNavLink} to="/login">
+                  <Link 
+                    className={classes.mobileNavLink} 
+                    to="/login"
+                    onClick={() => this.setState({ showMenu: false })}
+                  >
                     Login
                   </Link>
                 )}

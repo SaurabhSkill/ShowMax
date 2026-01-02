@@ -13,7 +13,7 @@ const useStyles = makeStyles(theme => ({
   bannerContent: {
     fontSize: theme.spacing(2),
     textTransform: 'capitalize',
-    color: theme.palette.common.white
+    color: theme.palette.text.primary
   },
   [theme.breakpoints.down('sm')]: {
     hideOnSmall: {

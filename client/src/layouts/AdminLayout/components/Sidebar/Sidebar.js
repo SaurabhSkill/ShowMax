@@ -72,7 +72,7 @@ class Sidebar extends Component {
               <PeopleIcon />
             </ListItemIcon>
             <ListItemText
-              classes={{ primary: classes.listItemText }}
+              classes={{ primary: classes.reservationsText }}
               primary="Reservations"
             />
           </ListItem>

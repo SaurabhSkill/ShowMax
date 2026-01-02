@@ -14,4 +14,3 @@ export { default as PortletToolbar } from './PortletToolbar';
 export { default as ResponsiveDialog } from './ResponsiveDialog';
 export { default as SearchInput } from './SearchInput';
 export { default as SnackbarContentWrapper } from './SnackbarContentWrapper';
-export { default as Status } from './Status';

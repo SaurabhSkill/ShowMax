@@ -13,7 +13,7 @@ const useStyles = makeStyles(theme => ({
     maxWidth: 400,
     backgroundColor: 'transparent',
     borderRadius: 0,
-    color: theme.palette.common.white,
+    color: theme.palette.text.primary,
     boxShadow: 'unset'
   },
   media: {

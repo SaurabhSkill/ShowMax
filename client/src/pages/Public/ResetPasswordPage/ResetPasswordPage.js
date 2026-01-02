@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import { resetPassword } from '../../../store/actions/auth';
 import { setAlert } from '../../../store/actions/alert';
 import {
@@ -20,17 +21,25 @@ function ResetPasswordPage(props) {
     password: '',
     confirmPassword: ''
   });
+  const [email, setEmail] = useState('');
 
   const { otp, password, confirmPassword } = formData;
 
-  // Get email from the state passed by the ForgotPassword page
-  const email = location.state ? location.state.email : '';
-
-  if (!email) {
-    // Redirect if no email is provided
-    history.push('/forgot-password');
-    return null;
-  }
+  useEffect(() => {
+    // Get email from URL parameters or location state
+    const urlParams = new URLSearchParams(location.search);
+    const emailFromUrl = urlParams.get('email');
+    const emailFromState = location.state ? location.state.email : '';
+    
+    const userEmail = emailFromUrl || emailFromState;
+    
+    if (userEmail) {
+      setEmail(userEmail);
+    } else {
+      // Redirect if no email is provided
+      history.push('/forgot-password');
+    }
+  }, [location, history]);
 
   const handleBack = () => {
     history.goBack();
@@ -47,8 +56,15 @@ function ResetPasswordPage(props) {
     if (password !== confirmPassword) {
       return setAlert('Passwords do not match.', 'error');
     }
+    if (password.length < 7) {
+      return setAlert('Password must be at least 7 characters long.', 'error');
+    }
     resetPassword({ email, otp, password }, history);
   };
+
+  if (!email) {
+    return null; // Don't render until email is determined
+  }
 
   return (
     <div className={classes.root}>
@@ -69,7 +85,7 @@ function ResetPasswordPage(props) {
                   Reset Your Password
                 </Typography>
                 <Typography variant="body1" className={classes.subtitle}>
-                  Enter the OTP from your email and your new password.
+                  Enter the OTP sent to: {email}
                 </Typography>
                 <div className={classes.fields}>
                   <TextField
@@ -117,6 +133,8 @@ function ResetPasswordPage(props) {
   );
 }
 
-export default withStyles(styles)(
-  connect(null, { resetPassword, setAlert })(ResetPasswordPage)
+export default withRouter(
+  withStyles(styles)(
+    connect(null, { resetPassword, setAlert })(ResetPasswordPage)
+  )
 );

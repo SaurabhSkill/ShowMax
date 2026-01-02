@@ -1,263 +1,711 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { withStyles, Box, Typography, Button, Container } from '@material-ui/core';
+import { withStyles, Box, Typography, Container } from '@material-ui/core';
+import { 
+  PlayArrow as PlayIcon,
+  Info as InfoIcon
+} from '@material-ui/icons';
 import { Link } from 'react-router-dom';
 import { getMovies } from '../../../store/actions/movies';
 import MovieCard from '../components/MovieCard/MovieCard';
-import Slider from 'react-slick';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
+import theme from '../../../theme';
 
 const styles = (theme) => ({
   root: {
-    backgroundColor: theme.palette.background.dark,
-    minHeight: '100vh'
+    background: theme.palette.background.gradient,
+    minHeight: '100vh',
+    position: 'relative'
   },
+  
+  // Hero Section Styles
   heroSection: {
     position: 'relative',
-    height: 500,
-    width: 953,
+    height: '70vh',
+    minHeight: '600px',
+    width: '100%',
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center',
-    margin: '0 auto 4rem',
-    borderRadius: '12px',
+    marginBottom: '4rem',
     overflow: 'hidden',
-    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
+    backgroundColor: theme.palette.background.default,
+    
+    '@media (max-width: 768px)': {
+      height: '60vh',
+      minHeight: '500px'
+    }
   },
-  heroBgWrap: {
+  
+  heroBackground: {
     position: 'absolute',
-    inset: 0,
-    width: '100%',
-    height: '100%',
-    overflow: 'hidden',
-    zIndex: 0,
-    backgroundColor: '#000'
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: 1,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center 20%',
+    backgroundRepeat: 'no-repeat',
+    backgroundColor: theme.palette.background.default
   },
-  heroBg: {
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
-    objectFit: 'cover',
-    objectPosition: 'center'
-  },
+  
   heroOverlay: {
     position: 'absolute',
-    inset: 0,
-    background: 'linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6))',
-    zIndex: 1
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    background: `
+      linear-gradient(135deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.1) 50%, rgba(0, 0, 0, 0.4) 100%),
+      linear-gradient(180deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.6) 100%)
+    `,
+    zIndex: 2
   },
+  
   heroContent: {
-    textAlign: 'left',
+    position: 'relative',
+    zIndex: 10,
+    maxWidth: '1200px',
+    margin: '0 auto',
+    padding: '0 2rem',
+    display: 'flex',
+    alignItems: 'center',
+    height: '100%',
+    width: '100%',
+    
+    '@media (max-width: 768px)': {
+      padding: '0 1rem',
+      textAlign: 'center'
+    }
+  },
+  
+  heroText: {
+    maxWidth: '600px',
     color: '#FFFFFF',
-    zIndex: 2,
-    maxWidth: '800px',
-    position: 'absolute',
-    left: '2rem',
-    bottom: '2rem',
-    paddingRight: '2rem'
+    
+    '@media (max-width: 768px)': {
+      maxWidth: '100%'
+    }
   },
-  heroTitle: {
-    fontSize: '4rem',
-    fontWeight: 700,
-    marginBottom: '1rem',
-    background: 'linear-gradient(45deg, #007BFF, #4FC3F7)',
-    WebkitBackgroundClip: 'text',
-    WebkitTextFillColor: 'transparent',
-    backgroundClip: 'text',
-    lineHeight: 1.2
-  },
-  heroSubtitle: {
-    fontSize: '1.5rem',
-    marginBottom: '2rem',
-    color: '#B0B0B0',
-    fontWeight: 300
-  },
-  dateBadge: {
+  
+  heroCategory: {
     display: 'inline-block',
+    background: 'rgba(218, 165, 32, 0.9)',
+    border: '1px solid rgba(218, 165, 32, 0.8)',
+    color: '#000000',
     padding: '8px 16px',
     borderRadius: '20px',
-    backgroundColor: 'rgba(0, 123, 255, 0.9)',
-    border: '1px solid rgba(255,255,255,0.2)',
-    backdropFilter: 'blur(10px)',
-    color: '#fff',
-    marginBottom: '16px',
-    fontSize: '0.9rem',
+    fontSize: '0.85rem',
     fontWeight: 600,
     letterSpacing: '0.5px',
     textTransform: 'uppercase',
-    boxShadow: '0 4px 12px rgba(0, 123, 255, 0.3)'
+    marginBottom: '1.5rem',
+    backdropFilter: 'blur(10px)',
+    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.3)'
   },
-  searchBar: {
-    maxWidth: '700px',
-    margin: '0 auto',
-    '& .MuiOutlinedInput-input': { color: '#fff' },
-    '& .MuiInputLabel-outlined': { color: '#B0B0B0' },
-    '& .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255,255,255,0.4)' }
+  
+  heroTitle: {
+    fontSize: '4rem',
+    fontWeight: 800,
+    lineHeight: 1.1,
+    marginBottom: '1.5rem',
+    background: 'linear-gradient(135deg, #FFFFFF 0%, #DAA520 100%)',
+    WebkitBackgroundClip: 'text',
+    WebkitTextFillColor: 'transparent',
+    backgroundClip: 'text',
+    letterSpacing: '-0.02em',
+    textShadow: '2px 2px 4px rgba(0, 0, 0, 0.8)',
+    
+    '@media (max-width: 768px)': {
+      fontSize: '2.5rem'
+    },
+    
+    '@media (max-width: 480px)': {
+      fontSize: '2rem'
+    }
   },
-  heroButton: {
-    backgroundColor: '#007BFF',
-    color: '#FFFFFF',
+  
+  heroDescription: {
+    fontSize: '1.25rem',
+    color: '#E5E7EB',
+    lineHeight: 1.6,
+    marginBottom: '2rem',
+    fontWeight: 400,
+    textShadow: '1px 1px 2px rgba(0, 0, 0, 0.8)',
+    
+    '@media (max-width: 768px)': {
+      fontSize: '1.1rem'
+    }
+  },
+  
+  heroMetadata: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '2rem',
+    marginBottom: '2.5rem',
+    fontSize: '0.95rem',
+    color: '#D1D5DB',
+    textShadow: '1px 1px 2px rgba(0, 0, 0, 0.8)',
+    
+    '@media (max-width: 768px)': {
+      justifyContent: 'center',
+      gap: '1.5rem'
+    },
+    
+    '@media (max-width: 480px)': {
+      flexDirection: 'column',
+      gap: '0.5rem'
+    }
+  },
+  
+  heroActions: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '1rem',
+    
+    '@media (max-width: 768px)': {
+      justifyContent: 'center'
+    },
+    
+    '@media (max-width: 480px)': {
+      flexDirection: 'column',
+      width: '100%'
+    }
+  },
+  
+  primaryButton: {
+    background: 'linear-gradient(135deg, #DAA520, #FFD700)',
+    color: theme.palette.primary.contrastText,
+    padding: '1rem 2rem',
+    fontSize: '1.1rem',
+    fontWeight: 700,
+    borderRadius: '12px',
+    textTransform: 'none',
+    border: 'none',
+    cursor: 'pointer',
+    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+    boxShadow: '0 4px 16px rgba(218, 165, 32, 0.3)',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '0.5rem',
+    textDecoration: 'none',
+    
+    '&:hover': {
+      background: 'linear-gradient(135deg, #FFD700, #DAA520)',
+      transform: 'translateY(-2px)',
+      boxShadow: '0 6px 20px rgba(218, 165, 32, 0.4)'
+    },
+    
+    '@media (max-width: 480px)': {
+      width: '100%',
+      justifyContent: 'center'
+    }
+  },
+  
+  secondaryButton: {
+    background: 'rgba(0, 0, 0, 0.1)',
+    color: '#1F2937',
     padding: '1rem 2rem',
     fontSize: '1.1rem',
     fontWeight: 600,
-    borderRadius: '6px',
+    borderRadius: '12px',
     textTransform: 'none',
+    border: '1px solid rgba(218, 165, 32, 0.2)',
+    cursor: 'pointer',
+    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+    backdropFilter: 'blur(10px)',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '0.5rem',
+    textDecoration: 'none',
+    
     '&:hover': {
-      backgroundColor: '#0056B3',
+      background: 'rgba(0, 0, 0, 0.15)',
+      border: '1px solid rgba(218, 165, 32, 0.4)',
       transform: 'translateY(-2px)',
-      boxShadow: '0 8px 25px rgba(0, 123, 255, 0.3)'
+      boxShadow: '0 4px 16px rgba(0, 0, 0, 0.2)'
     },
-    transition: 'all 0.3s ease'
+    
+    '@media (max-width: 480px)': {
+      width: '100%',
+      justifyContent: 'center'
+    }
   },
-  sectionTitle: {
-    fontSize: '2.5rem',
-    fontWeight: 700,
-    color: '#FFFFFF',
+  
+  // Section Styles
+  section: {
+    marginBottom: '4rem',
+    
+    '@media (max-width: 768px)': {
+      marginBottom: '3rem'
+    }
+  },
+  
+  sectionHeader: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     marginBottom: '2rem',
-    textAlign: 'left'
+    padding: '0 2rem',
+    
+    '@media (max-width: 768px)': {
+      padding: '0 1rem'
+    }
   },
-  movieSection: {
-    marginBottom: '4rem'
+  
+  sectionTitle: {
+    fontSize: '2.25rem',
+    fontWeight: 700,
+    color: '#1F2937',
+    letterSpacing: '-0.01em',
+    position: 'relative',
+    
+    '&::after': {
+      content: '""',
+      position: 'absolute',
+      bottom: '-8px',
+      left: 0,
+      width: '60px',
+      height: '3px',
+      background: 'linear-gradient(90deg, #DAA520, #FFD700)',
+      borderRadius: '2px'
+    },
+    
+    '@media (max-width: 768px)': {
+      fontSize: '1.75rem'
+    }
   },
+  
+  viewAllButton: {
+    color: '#DAA520',
+    textDecoration: 'none',
+    fontSize: '1rem',
+    fontWeight: 600,
+    padding: '0.5rem 1rem',
+    border: '1px solid rgba(218, 165, 32, 0.2)',
+    borderRadius: '8px',
+    transition: 'all 0.3s ease',
+    
+    '&:hover': {
+      background: '#DAA520',
+      color: theme.palette.primary.contrastText,
+      transform: 'translateY(-1px)'
+    }
+  },
+  
   movieGrid: {
     display: 'flex',
     gap: '1.5rem',
     overflowX: 'auto',
-    paddingBottom: '1rem',
+    padding: '0 2rem 1rem',
+    scrollbarWidth: 'thin',
+    scrollbarColor: `${theme.palette.primary.main} ${theme.palette.background.default}`,
+    
     '&::-webkit-scrollbar': {
       height: '6px'
     },
+    
     '&::-webkit-scrollbar-track': {
-      backgroundColor: 'rgba(255, 255, 255, 0.1)',
+      background: 'rgba(255, 255, 255, 0.05)',
       borderRadius: '3px'
     },
+    
     '&::-webkit-scrollbar-thumb': {
-      backgroundColor: '#007BFF',
+      background: 'linear-gradient(90deg, #DAA520, #FFD700)',
       borderRadius: '3px'
+    },
+    
+    '@media (max-width: 768px)': {
+      padding: '0 1rem 1rem',
+      gap: '1rem'
     }
   },
-  movieCard: {
-    minWidth: '200px',
-    flexShrink: 0
+  
+  movieCardWrapper: {
+    flexShrink: 0,
+    animation: '$fadeInUp 0.6s ease-out'
+  },
+  
+  // Animations
+  '@keyframes fadeInUp': {
+    from: {
+      opacity: 0,
+      transform: 'translateY(30px)'
+    },
+    to: {
+      opacity: 1,
+      transform: 'translateY(0)'
+    }
   }
 });
 
 class HomePage extends Component {
-  state = { featuredMovies: [] };
+  state = { 
+    featuredMovies: [],
+    currentSlide: 0,
+    isLoading: true
+  };
 
   componentDidMount() {
-    if (!this.props.movies.length) this.props.getMovies();
-    this.randomizeFeatured();
+    console.log('HomePage mounted, movies:', this.props.movies.length);
+    if (!this.props.movies.length) {
+      this.props.getMovies();
+    } else {
+      this.setState({ isLoading: false });
+    }
+    
+    // Start auto-refresh timer for banner
+    this.startBannerTimer();
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.movies !== this.props.movies) {
-      this.randomizeFeatured();
+    console.log('HomePage updated, movies:', this.props.movies.length, 'prev:', prevProps.movies.length);
+    if (prevProps.movies !== this.props.movies && this.props.movies.length > 0) {
+      this.setState({ isLoading: false });
     }
   }
 
-  randomizeFeatured = () => {
-    const { movies } = this.props;
-    if (!movies || movies.length === 0) return;
-    const shuffled = [...movies].sort(() => Math.random() - 0.5);
-    this.setState({ featuredMovies: shuffled.slice(0, 4) });
-  };
+  componentWillUnmount() {
+    // Clear timer when component unmounts
+    if (this.bannerTimer) {
+      clearInterval(this.bannerTimer);
+    }
+  }
 
-  getBannerUrl = (movie) => {
-    if (!movie) return '';
-    const src = movie.bannerImage || movie.backdrop || movie.backdropPath || movie.banner || movie.coverImage || movie.cover || movie.background || movie.posterImage || movie.image;
-    if (!src) return '';
+  startBannerTimer = () => {
+    this.bannerTimer = setInterval(() => {
+      const { movies } = this.props;
+      if (movies.length > 0) {
+        this.setState(prevState => ({
+          currentSlide: (prevState.currentSlide + 1) % Math.min(movies.length, 5)
+        }));
+      }
+    }, 10000); // Change every 10 seconds
+  }
+
+  getBannerImage = (movie) => {
+    // Prioritize bannerImage, fallback to posterImage or image
+    const banner = movie?.bannerImage || movie?.posterImage || movie?.image;
+    if (!banner) return 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80';
+    
     // If already absolute URL, return as-is
-    if (/^https?:\/\//i.test(src)) return src;
+    if (/^https?:\/\//i.test(banner)) return banner;
+    
     // Otherwise, prefix current origin
-    return `${window.location.origin}${src.startsWith('/') ? '' : '/'}${src}`;
-  };
+    return `${window.location.origin}${banner.startsWith('/') ? '' : '/'}${banner}`;
+  }
 
   render() {
     const { classes, movies } = this.props;
-    const { featuredMovies } = this.state;
-    const nowShowing = movies.filter(m => new Date(m.releaseDate) <= new Date() && new Date(m.endDate) >= new Date());
-    const comingSoon = movies.filter(m => new Date(m.releaseDate) > new Date());
+    const { isLoading, currentSlide } = this.state;
+    
+    console.log('HomePage render - movies:', movies.length, 'isLoading:', isLoading);
+    
+    const nowShowing = movies.filter(m => 
+      new Date(m.releaseDate) <= new Date() && 
+      new Date(m.endDate || Date.now()) >= new Date()
+    );
+    
+    const comingSoon = movies.filter(m => 
+      new Date(m.releaseDate) > new Date()
+    );
+
+    const trending = movies.slice(0, 10);
+    
+    // Get featured movies for banner (first 5 movies)
+    const featuredMovies = movies.slice(0, 5);
+    const currentMovie = featuredMovies[currentSlide] || featuredMovies[0];
 
     return (
       <Box className={classes.root}>
-        {/* Hero Slider */}
-        {featuredMovies.length > 0 && (
-          <Slider
-            dots
-            infinite
-            autoplay
-            autoplaySpeed={4000}
-            speed={600}
-            slidesToShow={1}
-            slidesToScroll={1}
-            arrows
-          >
-            {featuredMovies.map(movie => (
-              <Box
-                key={movie._id}
-                className={classes.heroSection}
-              >
-                <Box className={classes.heroBgWrap}>
-                  <img className={classes.heroBg} alt={movie.title} src={this.getBannerUrl(movie)} />
-                  <Box className={classes.heroOverlay} />
-                </Box>
-                <Box className={classes.heroContent}>
-                  {movie.releaseDate && (
-                    <div className={classes.dateBadge}>{new Date(movie.releaseDate).toLocaleDateString(undefined, { day: '2-digit', month: 'short', year: 'numeric' })}</div>
-                  )}
-                  <Typography className={classes.heroTitle} variant="h1">
-                    {movie.title}
-                  </Typography>
-                  <Typography className={classes.heroSubtitle} variant="h5">
-                    {movie.tagline || ''}
-                  </Typography>
-                  <Button 
-                    component={Link} 
-                    to={`/movie/${movie._id}`} 
-                    className={classes.heroButton}
-                    size="large"
+        {/* Hero Section - Movie Banner Carousel */}
+        <div className={classes.heroSection}>
+          {/* Background with current movie banner */}
+          <div 
+            className={classes.heroBackground}
+            style={{
+              backgroundImage: currentMovie 
+                ? `linear-gradient(135deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.1) 50%, rgba(0, 0, 0, 0.3) 100%), url('${this.getBannerImage(currentMovie)}')`
+                : `linear-gradient(135deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.2) 100%), url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center 20%',
+              backgroundRepeat: 'no-repeat',
+              backgroundColor: '#1a1a1a',
+              transition: 'background-image 1s ease-in-out',
+              filter: 'contrast(1.2) saturate(1.3) brightness(0.9)'
+            }}
+          />
+          
+          {/* Overlay */}
+          <div className={classes.heroOverlay} />
+          
+          {/* Movie Info and Book Now Button */}
+          {currentMovie && (
+            <div className={classes.heroContent} style={{ zIndex: 999, position: 'relative' }}>
+              <div className={classes.heroText} style={{ color: '#FFFFFF', zIndex: 999 }}>
+                <div className={classes.heroCategory} style={{ backgroundColor: '#DAA520', color: '#000000' }}>
+                  {currentMovie.genre || 'Featured Movie'}
+                </div>
+                
+                <Typography 
+                  className={classes.heroTitle} 
+                  variant="h1"
+                  style={{ 
+                    color: '#FFFFFF', 
+                    fontSize: '3.5rem', 
+                    fontWeight: 'bold',
+                    textShadow: '3px 3px 6px rgba(0,0,0,0.8), 1px 1px 3px rgba(0,0,0,0.6)',
+                    zIndex: 999,
+                    marginBottom: '1rem'
+                  }}
+                >
+                  {currentMovie.title}
+                </Typography>
+                
+                {currentMovie.tagline && (
+                  <Typography 
+                    className={classes.heroDescription}
+                    style={{ 
+                      color: '#E5E7EB', 
+                      fontSize: '1.2rem',
+                      textShadow: '2px 2px 4px rgba(0,0,0,0.8), 1px 1px 2px rgba(0,0,0,0.6)',
+                      marginBottom: '1.5rem'
+                    }}
                   >
-                    Book Tickets
-                  </Button>
-                </Box>
-              </Box>
-            ))}
-          </Slider>
-        )}
+                    {currentMovie.tagline}
+                  </Typography>
+                )}
+                
+                <div className={classes.heroMetadata} style={{ color: '#D1D5DB', marginBottom: '2rem', textShadow: '1px 1px 2px rgba(0,0,0,0.8)' }}>
+                  {currentMovie.duration && <span>{Math.floor(currentMovie.duration / 60)}h {currentMovie.duration % 60}m</span>}
+                  {currentMovie.releaseDate && <span>{new Date(currentMovie.releaseDate).getFullYear()}</span>}
+                  {currentMovie.rating && <span>★ {currentMovie.rating}</span>}
+                </div>
+                
+                <div className={classes.heroActions}>
+                  <Link 
+                    to={`/movie/${currentMovie._id}`}
+                    className={classes.primaryButton}
+                    style={{ 
+                      backgroundColor: '#DAA520', 
+                      color: theme.palette.primary.contrastText, 
+                      padding: '1rem 2.5rem',
+                      borderRadius: '8px',
+                      textDecoration: 'none',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                      fontSize: '1.1rem',
+                      fontWeight: 'bold'
+                    }}
+                  >
+                    <PlayIcon />
+                    Book Now
+                  </Link>
+                  
+                  <Link 
+                    to="/movie/category/nowShowing" 
+                    className={classes.secondaryButton}
+                    style={{ 
+                      backgroundColor: 'rgba(0,0,0,0.1)', 
+                      color: '#1F2937', 
+                      padding: '1rem 2rem',
+                      borderRadius: '8px',
+                      textDecoration: 'none',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                      marginLeft: '1rem',
+                      border: '1px solid rgba(218, 165, 32, 0.2)'
+                    }}
+                  >
+                    <InfoIcon />
+                    Explore Movies
+                  </Link>
+                </div>
+                
+                {/* Banner indicators */}
+                {featuredMovies.length > 1 && (
+                  <div style={{ 
+                    display: 'flex', 
+                    gap: '0.5rem', 
+                    marginTop: '2rem',
+                    justifyContent: 'center'
+                  }}>
+                    {featuredMovies.map((_, index) => (
+                      <div
+                        key={index}
+                        style={{
+                          width: '12px',
+                          height: '12px',
+                          borderRadius: '50%',
+                          backgroundColor: index === currentSlide ? '#DAA520' : 'rgba(0,0,0,0.3)',
+                          cursor: 'pointer',
+                          transition: 'background-color 0.3s ease'
+                        }}
+                        onClick={() => this.setState({ currentSlide: index })}
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+          
+          {/* Loading state */}
+          {!currentMovie && (
+            <div className={classes.heroContent} style={{ zIndex: 999, position: 'relative' }}>
+              <div className={classes.heroText} style={{ color: '#1F2937', zIndex: 999, textAlign: 'center' }}>
+                <Typography 
+                  className={classes.heroTitle} 
+                  variant="h1"
+                  style={{ 
+                    color: '#1F2937', 
+                    fontSize: '3rem', 
+                    fontWeight: 'bold',
+                    textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
+                    zIndex: 999
+                  }}
+                >
+                  {isLoading ? 'Loading Amazing Movies...' : 'Welcome to ShowMax'}
+                </Typography>
+                
+                <Typography 
+                  className={classes.heroDescription}
+                  style={{ 
+                    color: '#4B5563', 
+                    fontSize: '1.2rem',
+                    textShadow: '1px 1px 2px rgba(0,0,0,0.2)',
+                    marginBottom: '2rem'
+                  }}
+                >
+                  {isLoading 
+                    ? 'Please wait while we prepare your cinematic experience'
+                    : 'Your ultimate destination for movie bookings and cinematic experiences.'
+                  }
+                </Typography>
+                
+                <div className={classes.heroActions}>
+                  <Link 
+                    to="/movie/category/nowShowing" 
+                    className={classes.primaryButton}
+                    style={{ 
+                      backgroundColor: '#DAA520', 
+                      color: theme.palette.primary.contrastText, 
+                      padding: '1rem 2rem',
+                      borderRadius: '8px',
+                      textDecoration: 'none',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.5rem'
+                    }}
+                  >
+                    <PlayIcon />
+                    {isLoading ? 'Loading...' : 'Explore Movies'}
+                  </Link>
+                  
+                  <Link 
+                    to="/cinemas" 
+                    className={classes.secondaryButton}
+                    style={{ 
+                      backgroundColor: 'rgba(0,0,0,0.1)', 
+                      color: '#1F2937', 
+                      padding: '1rem 2rem',
+                      borderRadius: '8px',
+                      textDecoration: 'none',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                      marginLeft: '1rem',
+                      border: '1px solid rgba(218, 165, 32, 0.2)'
+                    }}
+                  >
+                    <InfoIcon />
+                    Find Cinemas
+                  </Link>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
 
         <Container maxWidth="xl">
           {/* Now Playing Section */}
-          <Box className={classes.movieSection}>
-            <Typography className={classes.sectionTitle}>NOW PLAYING</Typography>
-            <Box className={classes.movieGrid}>
-              {nowShowing.slice(0, 10).map(movie => (
-                <Box key={movie._id} className={classes.movieCard}>
-                  <MovieCard movie={movie} />
-                </Box>
-              ))}
-            </Box>
-          </Box>
+          {nowShowing.length > 0 && (
+            <div className={classes.section}>
+              <div className={classes.sectionHeader}>
+                <Typography className={classes.sectionTitle}>
+                  Now Playing
+                </Typography>
+                <Link to="/movies/now-playing" className={classes.viewAllButton}>
+                  View All
+                </Link>
+              </div>
+              
+              <div className={classes.movieGrid}>
+                {nowShowing.slice(0, 10).map((movie) => (
+                  <div key={movie._id} className={classes.movieCardWrapper}>
+                    <MovieCard movie={movie} />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
-          {/* Upcoming Movies Section */}
-          <Box className={classes.movieSection}>
-            <Typography className={classes.sectionTitle}>UPCOMING MOVIES</Typography>
-            <Box className={classes.movieGrid}>
-              {comingSoon.slice(0, 10).map(movie => (
-                <Box key={movie._id} className={classes.movieCard}>
-                  <MovieCard movie={movie} />
-                </Box>
-              ))}
-            </Box>
-          </Box>
+          {/* Coming Soon Section */}
+          {comingSoon.length > 0 && (
+            <div className={classes.section}>
+              <div className={classes.sectionHeader}>
+                <Typography className={classes.sectionTitle}>
+                  Coming Soon
+                </Typography>
+                <Link to="/movies/coming-soon" className={classes.viewAllButton}>
+                  View All
+                </Link>
+              </div>
+              
+              <div className={classes.movieGrid}>
+                {comingSoon.slice(0, 10).map((movie) => (
+                  <div key={movie._id} className={classes.movieCardWrapper}>
+                    <MovieCard movie={movie} />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Trending Section */}
+          {trending.length > 0 && (
+            <div className={classes.section}>
+              <div className={classes.sectionHeader}>
+                <Typography className={classes.sectionTitle}>
+                  Trending Now
+                </Typography>
+                <Link to="/movies/trending" className={classes.viewAllButton}>
+                  View All
+                </Link>
+              </div>
+              
+              <div className={classes.movieGrid}>
+                {trending.map((movie) => (
+                  <div key={movie._id} className={classes.movieCardWrapper}>
+                    <MovieCard movie={movie} />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </Container>
       </Box>
     );
   }
 }
 
-const mapStateToProps = state => ({ movies: state.movieState.movies || [] });
-const mapDispatchToProps = { getMovies };
+const mapStateToProps = state => ({ 
+  movies: state.movieState.movies || [] 
+});
+
+const mapDispatchToProps = { 
+  getMovies 
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(HomePage));

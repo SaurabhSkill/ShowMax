@@ -4,10 +4,9 @@ import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { logout } from '../../../../store/actions';
 import { withStyles } from '@material-ui/core/styles';
-import { Badge, Toolbar, IconButton } from '@material-ui/core';
+import { Toolbar, IconButton } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import CloseIcon from '@material-ui/icons/Close';
-import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
 import InputIcon from '@material-ui/icons/Input';
 
 // Component styles
@@ -56,13 +55,6 @@ class Topbar extends Component {
             ShowMax Admin
           </NavLink>
 
-          <IconButton
-            className={classes.notificationsButton}
-            onClick={() => console.log('Notification')}>
-            <Badge badgeContent={4} color="primary" variant="dot">
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
           <IconButton
             className={classes.signOutButton}
             onClick={this.handleSignOut}>

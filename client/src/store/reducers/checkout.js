@@ -7,7 +7,6 @@ import {
   SHOW_INVITATION_FORM,
   RESET_CHECKOUT,
   SET_INVITATION,
-  SET_SUGGESTED_SEATS,
   SET_QR_CODE
 } from '../types';
 
@@ -59,17 +58,6 @@ const setSelectedSeats = (state, seats) => {
   };
 };
 
-const setSuggestedSeats = (state, seats) => {
-  // Ensure suggestedSeat is always an array
-  const currentSuggestedSeat = Array.isArray(state.suggestedSeat) ? state.suggestedSeat : [];
-  const newSeats = [...currentSuggestedSeat, seats];
-
-  return {
-    ...state,
-    suggestedSeat: newSeats
-  };
-};
-
 const setSelectedCinema = (state, selectedCinema) => ({
   ...state,
   selectedCinema
@@ -114,8 +102,6 @@ export default function(state = initialState, action) {
   switch (type) {
     case SET_SELECTED_SEATS:
       return setSelectedSeats(state, payload);
-    case SET_SUGGESTED_SEATS:
-      return setSuggestedSeats(state, payload);
     case SET_SELECTED_CINEMA:
       return setSelectedCinema(state, payload);
     case SET_SELECTED_DATE:

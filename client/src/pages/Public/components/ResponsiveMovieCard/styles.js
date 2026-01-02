@@ -3,8 +3,8 @@ export default theme => ({
     position: 'relative',
     height: 350,
     width: 800,
-    color: theme.palette.common.white,
-    backgroundColor: theme.palette.background.dark,
+    color: theme.palette.text.primary,
+    backgroundColor: theme.palette.background.paper,
     borderRadius: 10,
     transition: 'all 0.4s',
     '&:hover': {
@@ -17,7 +17,7 @@ export default theme => ({
     width: '100%',
     height: '100%',
     backgroundBlendMode: 'multiply',
-    background: 'linear-gradient(to right, #0d0d0c 50%, transparent 100%)',
+    background: 'linear-gradient(to right, rgba(255, 255, 255, 0.95) 50%, rgba(255, 255, 255, 0.8) 100%)',
     zIndex: 2,
     borderRadius: 10
   },
@@ -29,12 +29,13 @@ export default theme => ({
   },
   movieTitle: {
     fontSize: '25px',
-    fontWeight: 400,
-    textTransform: 'capitalize'
+    fontWeight: 600,
+    textTransform: 'capitalize',
+    color: theme.palette.text.primary
   },
   director: {
-    color: '#9ac7fa',
-    fontWeight: '500',
+    color: theme.palette.cinema.accent.cyan,
+    fontWeight: '600',
     fontSize: '16px',
     marginTop: theme.spacing(1)
   },
@@ -42,12 +43,16 @@ export default theme => ({
     display: 'inline-block',
     marginTop: theme.spacing(2),
     padding: theme.spacing(1),
-    border: '1px solid rgba(255,255,255,0.13)'
+    border: `1px solid ${theme.palette.divider}`,
+    color: theme.palette.text.secondary,
+    backgroundColor: theme.palette.background.default,
+    borderRadius: '4px'
   },
   genre: {
     display: 'inline-block',
-    color: '#cee4fd',
-    marginLeft: theme.spacing(2)
+    color: theme.palette.cinema.accent.purple,
+    marginLeft: theme.spacing(2),
+    fontWeight: 500
   },
   description: {
     padding: theme.spacing(3),
@@ -55,7 +60,8 @@ export default theme => ({
     width: '50%'
   },
   descriptionText: {
-    color: '#cfd6e1'
+    color: theme.palette.text.secondary,
+    lineHeight: 1.5
   },
   footer: {
     height: '10%',
@@ -65,11 +71,11 @@ export default theme => ({
   icons: {
     display: 'inline-block',
     cursor: 'pointer',
-    color: 'rgba(255, 255, 255, 0.4)',
+    color: theme.palette.text.disabled,
     margin: theme.spacing(0, 1),
     transition: 'all 0.3s',
     '&:hover': {
-      color: 'rgba(255, 255, 255, 0.8)',
+      color: theme.palette.primary.main,
       transform: 'scale(1.25)',
       transition: 'all 0.3s',
       transitionDelay: '0.15s'
@@ -106,8 +112,7 @@ export default theme => ({
       width: '100%'
     },
     infoSection: {
-      background:
-        'linear-gradient(to top, rgb(20, 20, 19) 50%, transparent 100%)',
+      background: 'linear-gradient(to top, rgba(255, 255, 255, 0.95) 50%, rgba(255, 255, 255, 0.8) 100%)',
       zIndex: 2,
       borderRadius: 10
     }
