@@ -275,53 +275,46 @@ const styles = (theme) => ({
     }
   },
   
-  viewAllButton: {
-    color: '#DAA520',
+  viewAllLink: {
+    color: theme.palette.primary.main,
     textDecoration: 'none',
     fontSize: '1rem',
     fontWeight: 600,
     padding: '0.5rem 1rem',
-    border: '1px solid rgba(218, 165, 32, 0.2)',
     borderRadius: '8px',
+    border: `1px solid ${theme.palette.primary.main}`,
     transition: 'all 0.3s ease',
     
     '&:hover': {
-      background: '#DAA520',
+      background: theme.palette.primary.main,
       color: theme.palette.primary.contrastText,
-      transform: 'translateY(-1px)'
+      transform: 'translateY(-2px)'
     }
   },
   
   movieGrid: {
-    display: 'flex',
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
     gap: '1.5rem',
-    overflowX: 'auto',
-    padding: '0 2rem 1rem',
-    scrollbarWidth: 'thin',
-    scrollbarColor: `${theme.palette.primary.main} ${theme.palette.background.default}`,
+    padding: '0 2rem 1.5rem',
+    width: '100%',
     
-    '&::-webkit-scrollbar': {
-      height: '6px'
-    },
-    
-    '&::-webkit-scrollbar-track': {
-      background: 'rgba(255, 255, 255, 0.05)',
-      borderRadius: '3px'
-    },
-    
-    '&::-webkit-scrollbar-thumb': {
-      background: 'linear-gradient(90deg, #DAA520, #FFD700)',
-      borderRadius: '3px'
+    '@media (max-width: 1200px)': {
+      gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
     },
     
     '@media (max-width: 768px)': {
-      padding: '0 1rem 1rem',
-      gap: '1rem'
+      padding: '0 1rem 1.5rem',
+      gap: '1rem',
+      gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))'
+    },
+    
+    '@media (max-width: 480px)': {
+      gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))'
     }
   },
   
   movieCardWrapper: {
-    flexShrink: 0,
     animation: '$fadeInUp 0.6s ease-out'
   },
   
@@ -347,14 +340,17 @@ class HomePage extends Component {
 
   componentDidMount() {
     console.log('HomePage mounted, movies:', this.props.movies.length);
-    if (!this.props.movies.length) {
-      this.props.getMovies();
-    } else {
-      this.setState({ isLoading: false });
-    }
+    // Always fetch movies to ensure we have the latest data
+    this.forceRefreshMovies();
     
     // Start auto-refresh timer for banner
     this.startBannerTimer();
+    
+    // Set up periodic refresh every 2 minutes to get latest data (reduced from 5 minutes)
+    this.refreshTimer = setInterval(() => {
+      console.log('Auto-refreshing movies...');
+      this.props.getMovies();
+    }, 2 * 60 * 1000); // 2 minutes
   }
 
   componentDidUpdate(prevProps) {
@@ -365,9 +361,12 @@ class HomePage extends Component {
   }
 
   componentWillUnmount() {
-    // Clear timer when component unmounts
+    // Clear timers when component unmounts
     if (this.bannerTimer) {
       clearInterval(this.bannerTimer);
+    }
+    if (this.refreshTimer) {
+      clearInterval(this.refreshTimer);
     }
   }
 
@@ -380,6 +379,12 @@ class HomePage extends Component {
         }));
       }
     }, 10000); // Change every 10 seconds
+  }
+
+  forceRefreshMovies = () => {
+    console.log('Force refreshing movies...');
+    this.setState({ isLoading: true });
+    this.props.getMovies();
   }
 
   getBannerImage = (movie) => {
@@ -636,13 +641,15 @@ class HomePage extends Component {
                 <Typography className={classes.sectionTitle}>
                   Now Playing
                 </Typography>
-                <Link to="/movies/now-playing" className={classes.viewAllButton}>
-                  View All
-                </Link>
+                {nowShowing.length > 8 && (
+                  <Link to="/movie/category/nowShowing" className={classes.viewAllLink}>
+                    View All ({nowShowing.length})
+                  </Link>
+                )}
               </div>
               
               <div className={classes.movieGrid}>
-                {nowShowing.slice(0, 10).map((movie) => (
+                {nowShowing.slice(0, 8).map((movie) => (
                   <div key={movie._id} className={classes.movieCardWrapper}>
                     <MovieCard movie={movie} />
                   </div>
@@ -658,13 +665,15 @@ class HomePage extends Component {
                 <Typography className={classes.sectionTitle}>
                   Coming Soon
                 </Typography>
-                <Link to="/movies/coming-soon" className={classes.viewAllButton}>
-                  View All
-                </Link>
+                {comingSoon.length > 8 && (
+                  <Link to="/movie/category/comingSoon" className={classes.viewAllLink}>
+                    View All ({comingSoon.length})
+                  </Link>
+                )}
               </div>
               
               <div className={classes.movieGrid}>
-                {comingSoon.slice(0, 10).map((movie) => (
+                {comingSoon.slice(0, 8).map((movie) => (
                   <div key={movie._id} className={classes.movieCardWrapper}>
                     <MovieCard movie={movie} />
                   </div>
@@ -680,13 +689,15 @@ class HomePage extends Component {
                 <Typography className={classes.sectionTitle}>
                   Trending Now
                 </Typography>
-                <Link to="/movies/trending" className={classes.viewAllButton}>
-                  View All
-                </Link>
+                {trending.length > 8 && (
+                  <Link to="/movies" className={classes.viewAllLink}>
+                    View All ({trending.length})
+                  </Link>
+                )}
               </div>
               
               <div className={classes.movieGrid}>
-                {trending.map((movie) => (
+                {trending.slice(0, 8).map((movie) => (
                   <div key={movie._id} className={classes.movieCardWrapper}>
                     <MovieCard movie={movie} />
                   </div>

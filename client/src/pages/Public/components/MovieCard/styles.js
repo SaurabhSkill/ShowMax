@@ -2,7 +2,7 @@ export default theme => ({
   card: {
     display: 'flex',
     flexDirection: 'column',
-    width: '240px', // Increased width for better proportions
+    width: '100%', // Changed from fixed 240px to 100% for grid responsiveness
     background: theme.palette.background.cardGradient,
     borderRadius: '20px',
     overflow: 'hidden',
@@ -291,10 +291,6 @@ export default theme => ({
   
   // Responsive design
   '@media (max-width: 768px)': {
-    card: {
-      width: '200px'
-    },
-    
     imageContainer: {
       height: '280px'
     },
@@ -315,10 +311,6 @@ export default theme => ({
   },
   
   '@media (max-width: 480px)': {
-    card: {
-      width: '180px'
-    },
-    
     imageContainer: {
       height: '240px'
     },

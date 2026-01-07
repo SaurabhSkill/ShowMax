@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const Cinema = require('../models/cinema');
 const auth = require('../middlewares/auth');
-const multer = require('../utils/multer');
 
 // GET /cinemas - Get all cinemas
 router.get('/cinemas', async (req, res) => {

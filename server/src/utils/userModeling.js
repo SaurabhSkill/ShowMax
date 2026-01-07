@@ -2,50 +2,6 @@ const Reservation = require('../models/reservation');
 const Movie = require('../models/movie');
 const Cinema = require('../models/cinema');
 
-// Cinema User modeling (GET ALL CINEMAS)
-// Get all cinemas based on the user's past reservations
-// @return a sorted cinema list
-const cinemaUserModeling = async (cinemas, username) => {
-  const userReservations = await Reservation.find({ username: username });
-
-  if (userReservations.length) {
-    let cinemaResult = {};
-    userReservations.map(userReservation => {
-      const id = userReservation.cinemaId;
-      cinemaResult.hasOwnProperty(id) ? ++cinemaResult[id] : (cinemaResult[id] = 1);
-    });
-    const sortedCinemaResult = [];
-    for (let cinema in cinemaResult) {
-      sortedCinemaResult.push([cinema, cinemaResult[cinema]]);
-    }
-
-    sortedCinemaResult.sort((a, b) => {
-      return b[1] - a[1];
-    });
-    console.log(sortedCinemaResult);
-
-    const newCinemas = JSON.parse(JSON.stringify(cinemas));
-    let i = 0;
-    let extractedObj;
-    for (let sortedCinema of sortedCinemaResult) {
-      newCinemas.forEach((cinema, index) => {
-        if (cinema._id == sortedCinema[0]) {
-          console.log('FOUND');
-          extractedObj = newCinemas.splice(index, 1);
-        }
-      });
-      newCinemas.splice(i, 0, extractedObj[0]);
-      i++;
-    }
-
-    console.log(newCinemas);
-
-    return newCinemas;
-  } else {
-    return cinemas;
-  }
-};
-
 const moviesUserModeling = async username => {
   userPreference = {
     genre: {},
@@ -66,8 +22,6 @@ const moviesUserModeling = async username => {
     }
   });
 
-  //  console.log(moviesWatched);
-
   moviesWatched.map(movie => {
     let genres = movie.genre.replace(/\s*,\s*/g, ',').split(',');
     let directors = movie.director.replace(/\s*,\s*/g, ',').split(',');
@@ -87,20 +41,15 @@ const moviesUserModeling = async username => {
     }
   });
 
-  //console.log(userPreference)
-
-  //find movies that are available for booking
+  // Find movies that are available for booking
   const availableMovies = availableMoviesFilter(Allmovies);
-  //console.log(availableMovies)
   const moviesNotWatched = moviesNotWatchedFilter(availableMovies, userReservations);
-  //console.log(moviesNotWatched)
 
   const moviesRated = findRates(moviesNotWatched, userPreference);
 
   moviesRated.sort((a, b) => {
     return b[1] - a[1];
   });
-  // console.log(moviesRated)
 
   const moviesToObject = moviesRated.map(array => {
     return array[0];
@@ -115,12 +64,10 @@ const findRates = (moviesNotWatched, userPreference) => {
     rate = 0;
     for (let pref in userPreference) {
       rate += getRateOfProperty(pref, userPreference, movie);
-      //TODO we can use weights here
-      console.log(rate, pref);
+      // TODO: we can use weights here
     }
     if (rate !== 0) result.push([movie, rate]);
   }
-  console.log(result);
   return result;
 };
 
@@ -228,7 +175,6 @@ const getPosition = (cinemaRows, seats) => {
 };
 
 const userModeling = {
-  cinemaUserModeling,
   moviesUserModeling,
   reservationSeatsUserModeling,
 };

@@ -44,6 +44,76 @@ code {
   font-size: 0.875em;
 }
 
+// Fix Material-UI Card text color in light theme
+.MuiPaper-root.MuiCard-root {
+  color: #000000 !important;
+  
+  .MuiTypography-root {
+    color: #000000 !important;
+  }
+  
+  .MuiCardContent-root {
+    color: #000000 !important;
+  }
+}
+
+// Fix Material-UI Grid items with white background
+.MuiGrid-root.MuiGrid-item.MuiGrid-grid-xs-12 {
+  background-color: #FFFFFF !important;
+  
+  .MuiTypography-root {
+    color: #000000 !important;
+  }
+}
+
+// Fix Material-UI SVG icons in login form to be white
+.MuiSvgIcon-root.MuiSvgIcon-fontSizeLarge,
+.MuiSvgIcon-root {
+  &.login-icon {
+    color: #FFFFFF !important;
+    fill: #FFFFFF !important;
+  }
+}
+
+// Global override for login form SVG icons
+form .MuiSvgIcon-root {
+  color: #FFFFFF !important;
+  fill: #FFFFFF !important;
+}
+
+// Navbar specific overrides for white background
+nav {
+  // Ensure all text in navbar is black
+  .MuiTypography-root {
+    color: #000000 !important;
+  }
+  
+  // Ensure all links in navbar are black/dark gray
+  a {
+    color: #333333 !important;
+    
+    &:hover {
+      color: #000000 !important;
+    }
+  }
+  
+  // Ensure dropdown text is black
+  .MuiSelect-select {
+    color: #000000 !important;
+  }
+  
+  // Ensure dropdown icons are black
+  .MuiSelect-icon {
+    color: #333333 !important;
+  }
+  
+  // Ensure all SVG icons in navbar are black
+  .MuiSvgIcon-root {
+    color: #000000 !important;
+    fill: #000000 !important;
+  }
+}
+
 // Custom scrollbar styling for cinematic feel
 ::-webkit-scrollbar {
   width: 8px;

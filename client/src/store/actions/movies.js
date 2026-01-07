@@ -1,4 +1,4 @@
-import { GET_MOVIES, SELECT_MOVIE, GET_SUGGESTIONS } from '../types';
+import { GET_MOVIES, SELECT_MOVIE, UPDATE_MOVIE, GET_SUGGESTIONS } from '../types';
 import { setAlert } from './alert';
 
 // --- NEW FUNCTION TO ADD A MOVIE REVIEW ---
@@ -56,26 +56,70 @@ export const uploadMovieImage = (id, image) => async dispatch => {
 // Upload banner and/or poster files together
 export const uploadMovieImages = (id, bannerFile, posterFile) => async dispatch => {
   try {
+    console.log('🔄 uploadMovieImages - Starting upload process');
+    console.log('📁 Files to upload:');
+    console.log('  - Banner:', bannerFile ? `${bannerFile.name} (${bannerFile.size} bytes)` : 'None');
+    console.log('  - Poster:', posterFile ? `${posterFile.name} (${posterFile.size} bytes)` : 'None');
+    
+    if (!bannerFile && !posterFile) {
+      throw new Error('No files provided for upload');
+    }
+    
     const token = localStorage.getItem('jwtToken');
+    if (!token) {
+      throw new Error('Authentication token not found');
+    }
+    
     const data = new FormData();
-    if (bannerFile) data.append('banner', bannerFile, bannerFile.name);
-    if (posterFile) data.append('poster', posterFile, posterFile.name);
+    
+    if (bannerFile) {
+      data.append('banner', bannerFile, bannerFile.name);
+      console.log('✅ Added banner file to FormData');
+    }
+    
+    if (posterFile) {
+      data.append('poster', posterFile, posterFile.name);
+      console.log('✅ Added poster file to FormData');
+    }
+    
+    console.log('🌐 Sending request to server...');
     const url = '/movies/photos/' + id;
     const response = await fetch(url, {
       method: 'POST',
-      headers: { Authorization: `Bearer ${token}` },
+      headers: { 
+        Authorization: `Bearer ${token}`
+        // Don't set Content-Type header - let browser set it with boundary for FormData
+      },
       body: data
     });
-    const responseData = await response.json();
-    if (response.ok) {
-      dispatch(setAlert('Images Uploaded', 'success', 5000));
-      dispatch(getMovies());
+    
+    console.log('📡 Server response status:', response.status);
+    
+    let responseData;
+    try {
+      responseData = await response.json();
+      console.log('📋 Server response data:', responseData);
+    } catch (parseError) {
+      console.error('❌ Failed to parse server response:', parseError);
+      throw new Error('Invalid server response format');
     }
-    if (responseData?.error) {
-      dispatch(setAlert(responseData.error.message, 'error', 5000));
+    
+    if (response.ok) {
+      const uploadedCount = Object.keys(responseData.files || {}).length;
+      dispatch(setAlert(`Successfully uploaded ${uploadedCount} image(s)!`, 'success', 5000));
+      console.log('✅ Images uploaded successfully for movie:', id);
+      return responseData;
+    } else {
+      const errorMessage = responseData?.error || responseData?.message || `Upload failed with status ${response.status}`;
+      console.error('❌ Upload failed:', errorMessage);
+      dispatch(setAlert(errorMessage, 'error', 8000));
+      throw new Error(errorMessage);
     }
   } catch (error) {
-    dispatch(setAlert(error.message, 'error', 5000));
+    console.error('❌ uploadMovieImages error:', error);
+    const errorMessage = error.message || 'Image upload failed';
+    dispatch(setAlert(errorMessage, 'error', 8000));
+    throw error;
   }
 };
 
@@ -102,6 +146,7 @@ export const onSelectMovie = movie => ({
 
 export const getMovie = id => async dispatch => {
   try {
+    console.log('Fetching single movie with ID:', id);
     const url = '/movies/' + id;
     const response = await fetch(url, {
       method: 'GET',
@@ -109,10 +154,17 @@ export const getMovie = id => async dispatch => {
     });
     const movie = await response.json();
     if (response.ok) {
+      console.log('Single movie fetched successfully:', movie);
       dispatch({ type: SELECT_MOVIE, payload: movie });
+      return movie;
+    } else {
+      console.error('Failed to fetch movie:', movie);
+      throw new Error(movie.error || 'Failed to fetch movie');
     }
   } catch (error) {
+    console.error('Error fetching movie:', error);
     dispatch(setAlert(error.message, 'error', 5000));
+    throw error;
   }
 };
 
@@ -174,20 +226,45 @@ export const updateMovie = (movieId, movie, image, bannerFile, posterFile) => as
     let responseData = null;
     try { responseData = await response.json(); } catch (_) {}
     if (response.ok) {
-      dispatch(onSelectMovie(null));
+      console.log('Movie update response:', responseData);
+      
+      // Dispatch UPDATE_MOVIE to update the movie in the state immediately
+      dispatch({ type: UPDATE_MOVIE, payload: responseData });
       dispatch(setAlert('Movie have been saved!', 'success', 5000));
-      if (image) dispatch(uploadMovieImage(movieId, image));
-      if (bannerFile || posterFile) dispatch(uploadMovieImages(movieId, bannerFile, posterFile));
-      dispatch(getMovies());
-      return true;
+      
+      // Handle image uploads after successful movie update
+      if (image) {
+        await dispatch(uploadMovieImage(movieId, image));
+      }
+      if (bannerFile || posterFile) {
+        await dispatch(uploadMovieImages(movieId, bannerFile, posterFile));
+        
+        // After image upload, fetch the updated movie to get new image URLs
+        setTimeout(async () => {
+          try {
+            const movieResponse = await fetch(`/movies/${movieId}`, {
+              headers: { Authorization: `Bearer ${token}` }
+            });
+            if (movieResponse.ok) {
+              const updatedMovieWithImages = await movieResponse.json();
+              console.log('Movie with updated images:', updatedMovieWithImages);
+              dispatch({ type: UPDATE_MOVIE, payload: updatedMovieWithImages });
+            }
+          } catch (error) {
+            console.error('Failed to fetch updated movie with images:', error);
+          }
+        }, 500);
+      }
+      
+      return true; // Return boolean for backward compatibility
     } else {
       const message = responseData?.message || responseData?.error || 'Failed to update movie';
       dispatch(setAlert(message, 'error', 5000));
-      return false;
+      return false; // Return boolean for backward compatibility
     }
   } catch (error) {
     dispatch(setAlert(error.message, 'error', 5000));
-    return false;
+    return false; // Return boolean for backward compatibility
   }
 };
 

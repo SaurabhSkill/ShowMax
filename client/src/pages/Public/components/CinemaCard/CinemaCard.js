@@ -11,6 +11,7 @@ const useStyles = makeStyles(theme => ({
     paddingBottom: theme.spacing(2),
     cursor: 'pointer',
     transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
+    color: '#000000', // Ensure text is black
     '&:hover': {
       transform: 'translateY(-4px)',
       boxShadow: '0 20px 60px 0 rgba(16, 36, 94, 0.3)',
@@ -30,7 +31,8 @@ const useStyles = makeStyles(theme => ({
     'object-fit': 'cover'
   },
   details: { 
-    padding: theme.spacing(3) 
+    padding: theme.spacing(3),
+    color: '#000000' // Ensure text is black
   },
   name: {
     fontSize: '18px',
@@ -38,7 +40,7 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(2),
     textTransform: 'capitalize',
     fontWeight: 'bold',
-    color: theme.palette.text.primary
+    color: '#000000' // Force black color
   },
   city: {
     lineHeight: '16px',
@@ -46,7 +48,7 @@ const useStyles = makeStyles(theme => ({
     overflow: 'hidden',
     whiteSpace: 'nowrap',
     textOverflow: 'ellipsis',
-    color: theme.palette.text.secondary,
+    color: '#666666', // Dark gray for secondary text
     marginTop: theme.spacing(1),
     marginBottom: theme.spacing(2)
   },
@@ -58,11 +60,11 @@ const useStyles = makeStyles(theme => ({
     paddingRight: theme.spacing(3)
   },
   eventIcon: {
-    color: theme.palette.text.secondary
+    color: '#666666' // Dark gray for icons
   },
   eventText: {
     marginLeft: theme.spacing(1),
-    color: theme.palette.text.secondary,
+    color: '#666666', // Dark gray for secondary text
     fontSize: '14px'
   },
   priceTiers: {
@@ -81,7 +83,7 @@ const useStyles = makeStyles(theme => ({
   },
   priceLabel: {
     fontSize: '12px',
-    color: theme.palette.text.secondary,
+    color: '#666666', // Dark gray for labels
     textTransform: 'capitalize'
   },
   priceValue: {

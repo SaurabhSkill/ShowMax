@@ -4,12 +4,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContentWrapper from '../SnackbarContentWrapper';
 
 const CustomizedSnackbar = props => {
-  // const [open, setOpen] = React.useState(false);
   const { isOpen, vertical, horizontal, variant, message } = props;
-
-  // function handleClose(event) {
-  //   setOpen(false);
-  // }
 
   return (
     <Snackbar

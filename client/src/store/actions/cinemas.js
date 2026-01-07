@@ -98,8 +98,12 @@ export const updateCinema = (cinemaId, cinemaData) => async dispatch => {
     if (response.ok) {
       dispatch({ type: CINEMA_ACTIONS.UPDATE_CINEMA, payload: result });
       dispatch(setAlert('Cinema updated successfully!', 'success', 5000));
-      // Refresh the cinemas list
-      dispatch(getCinemas());
+      
+      // Refresh the cinemas list after a short delay to ensure consistency
+      setTimeout(() => {
+        dispatch(getCinemas());
+      }, 100);
+      
       return { status: 'success', data: result };
     } else {
       dispatch({ type: CINEMA_ACTIONS.SET_ERROR, payload: result.error || 'Failed to update cinema' });

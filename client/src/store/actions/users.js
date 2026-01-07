@@ -8,34 +8,6 @@ import {
   SELECT_ALL_USERS
 } from '../types';
 import { setAlert } from './alert';
-import { loadUser } from './auth'; 
-
-// Upload user profile image
-export const uploadImage = (id, image) => async dispatch => {
-  try {
-    const token = localStorage.getItem('jwtToken');
-    const data = new FormData();
-    data.append('file', image);
-    const url = '/users/photo/' + id;
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${token}`
-      },
-      body: data
-    });
-    const responseData = await response.json();
-    if (response.ok) {
-      dispatch(setAlert('Image Uploaded', 'success', 5000));
-      dispatch(loadUser()); // Refresh user data to show new image
-    }
-    if (responseData.error) {
-      dispatch(setAlert(responseData.error.message, 'error', 5000));
-    }
-  } catch (error) {
-    dispatch(setAlert(error.message, 'error', 5000));
-  }
-};
 
 export const toggleUserDialog = () => ({ type: TOGGLE_USER_DIALOG });
 

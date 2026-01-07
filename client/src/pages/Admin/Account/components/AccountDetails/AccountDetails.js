@@ -58,7 +58,7 @@ class Account extends Component {
       });
       if (response.ok) {
         const user = await response.json();
-        if (this.props.file) this.props.uploadImage(user._id, this.props.file);
+        console.log('User updated successfully:', user);
       }
     } catch (error) {
       console.log(error);

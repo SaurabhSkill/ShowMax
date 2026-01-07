@@ -49,15 +49,6 @@ const userSchema = Schema(
       type: String,
       unique: true,
       trim: true,
-      // --- VALIDATION TEMPORARILY REMOVED ---
-      // validate(value) {
-      //   if (!validator.isMobilePhone(value)) {
-      //     throw new Error('Phone is invalid');
-      //   }
-      // },
-    },
-    imageurl: {
-      type: String,
     },
     isVerified: {
       type: Boolean,

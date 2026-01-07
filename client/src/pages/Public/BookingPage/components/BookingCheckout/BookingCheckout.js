@@ -7,13 +7,13 @@ const useStyles = makeStyles(theme => ({
   bannerTitle: {
     fontSize: theme.spacing(1.4),
     textTransform: 'uppercase',
-    color: 'rgb(93, 93, 97)',
+    color: '#6B7280', // Gray color for labels
     marginBottom: theme.spacing(1)
   },
   bannerContent: {
     fontSize: theme.spacing(2),
     textTransform: 'capitalize',
-    color: theme.palette.text.primary
+    color: '#000000' // Black text for content
   },
   [theme.breakpoints.down('sm')]: {
     hideOnSmall: {
@@ -60,27 +60,27 @@ export default function BookingCheckout(props) {
   };
 
   return (
-    <Box marginTop={2} bgcolor="rgb(18, 20, 24)">
+    <Box marginTop={2} bgcolor="#FFFFFF" style={{ border: '1px solid #E5E7EB', borderRadius: '8px' }}>
       <Grid container>
         <Grid item xs={8} md={10}>
           <Grid container spacing={3} style={{ padding: 20 }}>
             {user && user.name && (
               <Grid item className={classes.hideOnSmall}>
                 <Typography className={classes.bannerTitle}>Name</Typography>
-                <Typography className={classes.bannerContent}>
+                <Typography className={classes.bannerContent} style={{ color: '#000000' }}>
                   {user.name}
                 </Typography>
               </Grid>
             )}
             <Grid item>
               <Typography className={classes.bannerTitle}>Tickets</Typography>
-              <Typography className={classes.bannerContent}>
+              <Typography className={classes.bannerContent} style={{ color: '#000000' }}>
                 {safeSelectedSeats} tickets
               </Typography>
             </Grid>
             <Grid item>
               <Typography className={classes.bannerTitle}>Price</Typography>
-              <Typography className={classes.bannerContent}>
+              <Typography className={classes.bannerContent} style={{ color: '#000000' }}>
                 ₹{((ticketPrice || 0) * safeSelectedSeats).toFixed(2)}
               </Typography>
             </Grid>

@@ -14,7 +14,6 @@ import {
 } from '@material-ui/core';
 import { ArrowBack as ArrowBackIcon } from '@material-ui/icons';
 import styles from './styles';
-import FileUpload from '../../../components/FileUpload/FileUpload';
 
 class Register extends React.Component {
   state = {
@@ -24,7 +23,6 @@ class Register extends React.Component {
       email: '',
       phone: '',
       password: '',
-      image: null,
       policy: false
     },
     errors: {}
@@ -179,15 +177,6 @@ class Register extends React.Component {
                       placeholder="Create a strong password"
                       required
                       fullWidth
-                    />
-                    
-                    <FileUpload
-                      className={classes.upload}
-                      file={values.image}
-                      onUpload={event => {
-                        const file = event.target.files[0];
-                        this.handleFieldChange('image', file);
-                      }}
                     />
                     
                     <div className={classes.policy}>

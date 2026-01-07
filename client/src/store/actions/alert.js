@@ -1,8 +1,7 @@
-import uuid from 'uuid';
 import { SET_ALERT, REMOVE_ALERT } from '../types';
 
 export const setAlert = (msg, alertType, timeout = 5000) => dispatch => {
-  const id = uuid.v4();
+  const id = Math.random().toString(36).substr(2, 9); // Simple ID generator
   dispatch({
     type: SET_ALERT,
     payload: { msg, alertType, id }

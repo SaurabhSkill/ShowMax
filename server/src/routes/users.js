@@ -20,7 +20,6 @@ router.get('/users', auth.simple, async (req, res) => {
       email: 1,
       phone: 1,
       role: 1,
-      imageurl: 1,
       isVerified: 1,
       createdAt: 1,
       updatedAt: 1

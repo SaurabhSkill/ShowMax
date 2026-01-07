@@ -27,8 +27,9 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(2)
   },
   ratingText: {
-    color: theme.palette.text.primary,
-    fontWeight: 'bold'
+    color: '#FFFFFF', // Force white text for better visibility
+    fontWeight: 'bold',
+    textShadow: '0 1px 2px rgba(0, 0, 0, 0.8)' // Add text shadow for readability
   },
   rateButton: {
     color: theme.palette.text.primary,

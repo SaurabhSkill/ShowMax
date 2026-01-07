@@ -21,7 +21,7 @@ export default theme => ({
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
-    filter: 'brightness(0.7) contrast(1.3) saturate(1.2)',
+    filter: 'brightness(0.6) contrast(1.3) saturate(1.2)', // Darker for better text contrast
     
     '&::after': {
       content: '""',
@@ -31,8 +31,8 @@ export default theme => ({
       right: 0,
       bottom: 0,
       background: `
-        linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0.5) 100%),
-        linear-gradient(180deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.6) 100%)
+        linear-gradient(135deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.4) 50%, rgba(0, 0, 0, 0.7) 100%),
+        linear-gradient(180deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.8) 100%)
       `
     }
   },
@@ -117,21 +117,22 @@ export default theme => ({
     padding: '0.6rem 1.2rem',
     marginRight: '0.75rem',
     marginBottom: '1rem',
-    border: '1px solid rgba(218, 165, 32, 0.3)',
+    border: '1px solid rgba(218, 165, 32, 0.5)',
     borderRadius: '25px',
     fontSize: '0.85rem',
     fontWeight: 600,
     display: 'inline-block',
-    background: 'rgba(218, 165, 32, 0.15)',
-    color: theme.palette.primary.dark,
+    background: 'rgba(218, 165, 32, 0.25)',
+    color: '#FFFFFF', // Force white text for tags
     backdropFilter: 'blur(10px)',
     textTransform: 'uppercase',
     letterSpacing: '0.5px',
     transition: 'all 0.3s ease',
+    textShadow: '0 1px 2px rgba(0, 0, 0, 0.5)',
     
     '&:hover': {
-      background: 'rgba(218, 165, 32, 0.25)',
-      border: '1px solid rgba(218, 165, 32, 0.5)',
+      background: 'rgba(218, 165, 32, 0.4)',
+      border: '1px solid rgba(218, 165, 32, 0.7)',
       transform: 'translateY(-1px)'
     }
   },
@@ -141,10 +142,8 @@ export default theme => ({
     lineHeight: 1.1,
     fontWeight: 800,
     marginBottom: '1.5rem',
-    background: `linear-gradient(135deg, ${theme.palette.text.primary} 0%, ${theme.palette.primary.main} 100%)`,
-    WebkitBackgroundClip: 'text',
-    WebkitTextFillColor: 'transparent',
-    backgroundClip: 'text',
+    color: '#FFFFFF', // Force white text
+    textShadow: '0 4px 8px rgba(0, 0, 0, 0.8)', // Strong text shadow for readability
     letterSpacing: '-0.02em',
     
     [theme.breakpoints.down('md')]: {
@@ -158,12 +157,13 @@ export default theme => ({
   
   movieMeta: {
     fontSize: '1.1rem',
-    color: theme.palette.text.secondary,
+    color: '#FFFFFF', // Force white text for better visibility
     marginBottom: '2rem',
     display: 'flex',
     alignItems: 'center',
     gap: '1.5rem',
     flexWrap: 'wrap',
+    textShadow: '0 2px 4px rgba(0, 0, 0, 0.7)', // Add text shadow for better readability
     
     [theme.breakpoints.down('md')]: {
       justifyContent: 'center'
@@ -176,11 +176,12 @@ export default theme => ({
   },
   
   descriptionText: {
-    color: theme.palette.text.secondary,
+    color: '#FFFFFF', // Force white text for better visibility
     fontSize: '1.2rem',
     lineHeight: 1.7,
     marginBottom: '2rem',
     fontWeight: 400,
+    textShadow: '0 2px 4px rgba(0, 0, 0, 0.7)', // Add text shadow for better readability
     
     [theme.breakpoints.down('sm')]: {
       fontSize: '1.1rem'
@@ -188,13 +189,14 @@ export default theme => ({
   },
   
   director: {
-    color: theme.palette.text.secondary,
+    color: '#FFFFFF', // Force white text for better visibility
     fontSize: '1.1rem',
     marginBottom: '2rem',
     fontWeight: 500,
+    textShadow: '0 2px 4px rgba(0, 0, 0, 0.7)', // Add text shadow for better readability
     
     '& strong': {
-      color: theme.palette.primary.main,
+      color: '#DAA520', // Gold color for labels
       fontWeight: 600
     }
   },

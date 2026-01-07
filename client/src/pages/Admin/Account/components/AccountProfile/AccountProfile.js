@@ -3,11 +3,10 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import moment from 'moment';
 import { withStyles } from '@material-ui/core';
-import { Avatar, Typography, Button } from '@material-ui/core';
+import { Avatar, Typography } from '@material-ui/core';
 import {
   Portlet,
-  PortletContent,
-  PortletFooter
+  PortletContent
 } from '../../../../../components';
 
 // Component styles
@@ -15,7 +14,7 @@ import styles from './styles';
 
 class AccountProfile extends Component {
   render() {
-    const { user, classes, className, file, onUpload } = this.props;
+    const { user, classes, className } = this.props;
     const safeUser = user || {};
     const rootClassName = classNames(classes.root, className);
 
@@ -34,29 +33,10 @@ class AccountProfile extends Component {
             </div>
             <Avatar
               className={classes.avatar}
-              src={safeUser.imageurl ? safeUser.imageurl : '/images/avatars/avatar.png'}
+              src={'/images/avatars/avatar.png'}
             />
           </div>
         </PortletContent>
-        <PortletFooter>
-          <input
-            accept="image/*"
-            className={classes.input}
-            id="icon-button-file"
-            type="file"
-            onChange={onUpload}
-          />
-          <label htmlFor="icon-button-file">
-            <Button
-              className={classes.uploadButton}
-              component="span"
-              color="primary"
-              variant="text">
-              Upload picture
-            </Button>
-          </label>
-          <span>{file && file.name}</span>
-        </PortletFooter>
       </Portlet>
     );
   }

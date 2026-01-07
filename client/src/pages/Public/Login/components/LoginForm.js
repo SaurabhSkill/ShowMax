@@ -98,10 +98,21 @@ const useStyles = makeStyles(theme => ({
     left: '1.2rem',
     top: '50%',
     transform: 'translateY(-50%)',
-    color: '#FFFFFF',
+    color: '#FFFFFF !important',
     fontSize: '1.1rem',
     pointerEvents: 'none',
-    zIndex: 1
+    zIndex: 1,
+    
+    // Target Material-UI SVG icon classes specifically
+    '&.MuiSvgIcon-root': {
+      color: '#FFFFFF !important',
+      fill: '#FFFFFF !important'
+    },
+    
+    '&.MuiSvgIcon-fontSizeLarge': {
+      color: '#FFFFFF !important',
+      fill: '#FFFFFF !important'
+    }
   },
   
   passwordToggle: {
@@ -258,7 +269,7 @@ function LoginForm(props) {
 
       <div className={classes.fields}>
         <div className={classes.inputWrapper}>
-          {isEmailInput ? <EmailIcon className={classes.inputIcon} /> : <PersonIcon className={classes.inputIcon} />}
+          {isEmailInput ? <EmailIcon className={`${classes.inputIcon} login-icon`} /> : <PersonIcon className={`${classes.inputIcon} login-icon`} />}
           <TextField
             className={classes.textField}
             label="Username or Email"
@@ -274,7 +285,7 @@ function LoginForm(props) {
         </div>
         
         <div className={classes.inputWrapper}>
-          <LockIcon className={classes.inputIcon} />
+          <LockIcon className={`${classes.inputIcon} login-icon`} />
           <TextField
             className={classes.textField}
             label="Password"

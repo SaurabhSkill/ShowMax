@@ -19,9 +19,5 @@ export default theme => ({
   },
   progressWrapper: {
     marginTop: theme.spacing(2)
-  },
-  input: { display: 'none' },
-  uploadButton: {
-    marginRight: theme.spacing(2)
   }
 });

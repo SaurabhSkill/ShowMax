@@ -9,10 +9,10 @@ import {
   KeyboardDatePicker
 } from '@material-ui/pickers';
 import MomentUtils from '@date-io/moment';
+import moment from 'moment';
 import styles from './styles';
 import { genreData, languageData } from '../../../../../data/MovieDataService';
 import { addMovie } from '../../../../../store/actions';
-import FileUpload from '../../../../../components/FileUpload/FileUpload';
 
 class AddMovie extends Component {
   state = {
@@ -25,10 +25,15 @@ class AddMovie extends Component {
     description: '',
     director: '',
     cast: '',
-    releaseDate: new Date(),
-    endDate: new Date(),
+    releaseDate: null, // Will store JS Date for backend
+    endDate: null, // Will store JS Date for backend
     additionalInfo: '',
     loading: false
+  };
+
+  // Helper method to convert JS Date to moment for display
+  getDisplayDate = (jsDate) => {
+    return jsDate ? moment(jsDate) : null;
   };
 
   componentDidMount() {}
@@ -37,12 +42,68 @@ class AddMovie extends Component {
     this.setState({ [field]: value });
   };
 
+  clearFileInput = (inputId) => {
+    const input = document.getElementById(inputId);
+    if (input) {
+      input.value = '';
+    }
+  };
+
   onAddMovie = async () => {
+    // Validate required fields including dates
+    const { title, releaseDate, endDate, director, cast, description } = this.state;
+    
+    if (!title || !director || !cast || !description) {
+      alert('Please fill in all required fields (Title, Director, Cast, Description)');
+      return;
+    }
+    
+    if (!releaseDate || !endDate) {
+      alert('Please select both Release Date and End Date');
+      return;
+    }
+    
+    // Validate that end date is after release date
+    if (new Date(endDate) <= new Date(releaseDate)) {
+      alert('End Date must be after Release Date');
+      return;
+    }
+    
     this.setState({ loading: true });
     const { bannerImage, posterImage, genre, ...rest } = this.state;
     const movie = { ...rest, genre: genre.join(',') };
+    
+    // Debug logging to track file assignments
+    console.log('AddMovie - Files being sent:');
+    console.log('Banner file:', bannerImage?.name || 'No banner file');
+    console.log('Poster file:', posterImage?.name || 'No poster file');
+    
     try {
       await this.props.addMovie(null, movie, bannerImage, posterImage);
+      
+      // Clear the form after successful submission
+      this.setState({
+        title: '',
+        bannerImage: null,
+        posterImage: null,
+        genre: [],
+        language: [],
+        duration: '',
+        description: '',
+        director: '',
+        cast: '',
+        releaseDate: null,
+        endDate: null,
+        additionalInfo: ''
+      });
+      
+      // Clear the file inputs
+      this.clearFileInput('banner-upload-input');
+      this.clearFileInput('poster-upload-input');
+      
+    } catch (error) {
+      console.error('Error adding movie:', error);
+      alert('Error adding movie. Please try again.');
     } finally {
       this.setState({ loading: false });
     }
@@ -208,13 +269,21 @@ class AddMovie extends Component {
                 margin="normal"
                 id="release-date"
                 label="Release Date"
-                value={releaseDate}
-                onChange={date =>
-                  this.handleFieldChange('releaseDate', date._d)
-                }
+                format="MM/DD/YYYY"
+                value={this.getDisplayDate(releaseDate)}
+                onChange={date => {
+                  // Handle null/invalid dates properly - convert to JS Date for backend
+                  const validDate = date && moment.isMoment(date) && date.isValid() ? date.toDate() : null;
+                  this.handleFieldChange('releaseDate', validDate);
+                }}
                 KeyboardButtonProps={{
                   'aria-label': 'change date'
                 }}
+                clearable
+                placeholder="Select release date"
+                autoOk
+                disableToolbar
+                variant="inline"
               />
 
               <KeyboardDatePicker
@@ -223,11 +292,21 @@ class AddMovie extends Component {
                 margin="normal"
                 id="end-date"
                 label="End Date"
-                value={endDate}
-                onChange={date => this.handleFieldChange('endDate', date._d)}
+                format="MM/DD/YYYY"
+                value={this.getDisplayDate(endDate)}
+                onChange={date => {
+                  // Handle null/invalid dates properly - convert to JS Date for backend
+                  const validDate = date && moment.isMoment(date) && date.isValid() ? date.toDate() : null;
+                  this.handleFieldChange('endDate', validDate);
+                }}
                 KeyboardButtonProps={{
                   'aria-label': 'change date'
                 }}
+                clearable
+                placeholder="Select end date"
+                autoOk
+                disableToolbar
+                variant="inline"
               />
             </MuiPickersUtilsProvider>
           </div>
@@ -235,29 +314,53 @@ class AddMovie extends Component {
           <Grid container spacing={2}>
             <Grid item xs={12} md={6}>
               <div className={classes.field}>
-                <Typography variant="subtitle2">Banner Image (Homepage Hero)</Typography>
-                <FileUpload
-                  className={classes.upload}
-                  file={bannerImage}
-                  onUpload={event => {
+                <Typography variant="subtitle2" style={{ color: '#1976d2', fontWeight: 'bold' }}>
+                  <span role="img" aria-label="picture">🖼️</span> Banner Image (Homepage Hero - Wide Format)
+                </Typography>
+                <Typography variant="caption" style={{ color: '#666', display: 'block', marginBottom: '8px' }}>
+                  This image appears as the large background on the homepage
+                </Typography>
+                <input
+                  accept="image/*"
+                  type="file"
+                  onChange={event => {
                     const file = event.target.files[0];
+                    console.log('Banner image selected:', file?.name);
                     this.handleFieldChange('bannerImage', file);
                   }}
+                  style={{ marginBottom: '8px' }}
                 />
+                {bannerImage && (
+                  <div style={{ marginTop: '8px', padding: '8px', backgroundColor: '#e3f2fd', borderRadius: '4px' }}>
+                    <strong>Banner:</strong> {bannerImage.name}
+                  </div>
+                )}
                 {/* No preview for Add mode since no existing image */}
               </div>
             </Grid>
             <Grid item xs={12} md={6}>
               <div className={classes.field}>
-                <Typography variant="subtitle2">Poster Image (Cards/Details)</Typography>
-                <FileUpload
-                  className={classes.upload}
-                  file={posterImage}
-                  onUpload={event => {
+                <Typography variant="subtitle2" style={{ color: '#d32f2f', fontWeight: 'bold' }}>
+                  <span role="img" aria-label="movie camera">🎬</span> Poster Image (Cards/Details - Tall Format)
+                </Typography>
+                <Typography variant="caption" style={{ color: '#666', display: 'block', marginBottom: '8px' }}>
+                  This image appears on movie cards and detail pages
+                </Typography>
+                <input
+                  accept="image/*"
+                  type="file"
+                  onChange={event => {
                     const file = event.target.files[0];
+                    console.log('Poster image selected:', file?.name);
                     this.handleFieldChange('posterImage', file);
                   }}
+                  style={{ marginBottom: '8px' }}
                 />
+                {posterImage && (
+                  <div style={{ marginTop: '8px', padding: '8px', backgroundColor: '#ffebee', borderRadius: '4px' }}>
+                    <strong>Poster:</strong> {posterImage.name}
+                  </div>
+                )}
                 {/* No preview for Add mode since no existing image */}
               </div>
             </Grid>
