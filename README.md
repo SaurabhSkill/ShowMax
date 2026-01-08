@@ -98,6 +98,8 @@ Client libraries:
 - fullcalendar
 - material-ui
 - moment
+
+  <a href="https://deepwiki.com/SaurabhSkill/ShowMax"><img src="https://deepwiki.com/badge.svg" alt="Ask DeepWiki"></a>
 - react
 - react-redux
 - react-router-dom
