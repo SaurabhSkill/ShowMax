@@ -106,15 +106,3 @@ Client libraries:
 
 ### Todos
 
- - Add Light Mode / More themes
-
-
-
-<!-- Screenshots section removed to avoid external repository references -->
-
-
-
-License
-----
-
-MIT — Maintainer: Saurabh Gupta (Email: Saurabhg212003@gmail.com)
