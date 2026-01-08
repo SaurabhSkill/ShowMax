@@ -104,5 +104,3 @@ Client libraries:
 - react-slick
 - redux
 
-### Todos
-
